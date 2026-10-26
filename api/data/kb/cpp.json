@@ -1,0 +1,1403 @@
+[
+ {
+  "id": "cpp-mem-001",
+  "language": "cpp",
+  "topic": "内存管理",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "new/delete 和 malloc/free 的区别？",
+  "answer_points": [
+   "new 是运算符：调用 operator new 分配 + 构造函数；delete 调析构 + operator delete",
+   "malloc 是库函数，只分配原始内存",
+   "new 失败抛 bad_alloc（或 nothrow 版本返回 nullptr），malloc 返回 NULL",
+   "placement new 的用途"
+  ]
+ },
+ {
+  "id": "cpp-mem-002",
+  "language": "cpp",
+  "topic": "内存管理",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "shared_ptr 的实现原理？循环引用怎么解决？",
+  "answer_points": [
+   "控制块：引用计数 + 弱计数，原子操作保证计数线程安全",
+   "对象本身线程安全 ≠ 计数线程安全，要分清",
+   "循环引用：A 持 B、B 持 A 都不释放，用 weak_ptr 打破",
+   "weak_ptr.lock() 提升为 shared_ptr 使用"
+  ]
+ },
+ {
+  "id": "cpp-mem-003",
+  "language": "cpp",
+  "topic": "内存管理",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "unique_ptr 和 shared_ptr 怎么选？什么时候用裸指针？",
+  "answer_points": [
+   "独占所有权用 unique_ptr（零开销），共享才用 shared_ptr",
+   "make_shared/make_unique 的好处：一次分配、异常安全",
+   "观察者、回调参数等不拥有所有权的场景用裸指针/引用",
+   "enable_shared_from_this 解决的问题"
+  ]
+ },
+ {
+  "id": "cpp-mem-004",
+  "language": "cpp",
+  "topic": "内存管理",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "内存泄漏怎么排查？常见的泄漏场景？",
+  "answer_points": [
+   "工具：Valgrind/ASan（AddressSanitizer）/LeakSanitizer",
+   "常见：new 了没 delete、异常路径未释放、容器存指针只 clear 不 delete",
+   "RAII 是根本解法：资源交给对象生命周期管理",
+   "智能指针的 deleter 自定义场景"
+  ]
+ },
+ {
+  "id": "cpp-oop-001",
+  "language": "cpp",
+  "topic": "面向对象",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "多态的实现原理？虚函数表什么时候建立？",
+  "answer_points": [
+   "虚函数表 vtable 编译期生成，对象含 vptr 指针",
+   "构造函数中设置 vptr；构造/析构中调虚函数不多态",
+   "动态绑定通过 vptr 间接寻址，多一次间接开销",
+   "菱形继承与虚继承的 vtable 结构"
+  ]
+ },
+ {
+  "id": "cpp-oop-002",
+  "language": "cpp",
+  "topic": "面向对象",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "为什么基类析构函数要声明为 virtual？",
+  "answer_points": [
+   "delete 基类指针时非虚析构只调基类析构，派生部分泄漏",
+   "纯虚析构也需要提供定义",
+   "标准库容器/线程类大多没有虚析构，不能随意继承做基类",
+   "能用 override/final 关键字说明加分"
+  ]
+ },
+ {
+  "id": "cpp-oop-003",
+  "language": "cpp",
+  "topic": "面向对象",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "深拷贝与浅拷贝？什么时候必须自己写拷贝构造？",
+  "answer_points": [
+   "类持有资源（指针/文件句柄）时默认浅拷贝会双重释放",
+   "三/五法则：需要析构就基本需要拷贝构造和拷贝赋值",
+   "现代做法：优先用智能指针/容器成员，或 =delete 拷贝只提供移动",
+   "写时拷贝 COW 思想"
+  ]
+ },
+ {
+  "id": "cpp-11-001",
+  "language": "cpp",
+  "topic": "C++11/14/17",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "移动语义和右值引用解决了什么问题？",
+  "answer_points": [
+   "避免深拷贝：资源窃取而非复制",
+   "move 只是 cast，真正移动在移动构造/移动赋值",
+   "返回值优化 RVO/NRVO 与 move 的关系",
+   "完美转发：forward + 万能引用，引用折叠规则"
+  ]
+ },
+ {
+  "id": "cpp-11-002",
+  "language": "cpp",
+  "topic": "C++11/14/17",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "lambda 的捕获方式？按引用捕获有什么坑？",
+  "answer_points": [
+   "值捕获拷贝、引用捕获悬垂风险（lambda 比局部变量活得久）",
+   "mutable 与按值捕获的修改",
+   "C++14 广义捕获（移动进 lambda）",
+   "std::function 的开销与模板替代"
+  ]
+ },
+ {
+  "id": "cpp-11-003",
+  "language": "cpp",
+  "topic": "C++11/14/17",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "atomic 和内存序（memory order）了解吗？",
+  "answer_points": [
+   "seq_cst 默认最强，acquire/release 配对，relaxed 只保证原子性",
+   "与 Java volatile/happens-before 对比着讲",
+   "无锁队列里为什么需要精细内存序",
+   "不知道细节就老实说用过默认，别硬编"
+  ]
+ },
+ {
+  "id": "cpp-stl-001",
+  "language": "cpp",
+  "topic": "STL",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "vector 的扩容机制？为什么扩容因子通常是 2 或 1.5？",
+  "answer_points": [
+   "push_back 均摊 O(1)：扩容时搬移元素",
+   "2 倍增长 vs 1.5 倍：内存复用（旧块无法被下次扩容重用）",
+   "迭代器失效：扩容后全部失效",
+   "reserve/resize 区别，shrink_to_fit"
+  ]
+ },
+ {
+  "id": "cpp-stl-002",
+  "language": "cpp",
+  "topic": "STL",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "map 和 unordered_map 的底层与选型？",
+  "answer_points": [
+   "map 红黑树：有序 O(logn)，unordered_map 哈希表 O(1) 均摊",
+   "哈希冲突：链地址法，负载因子触发 rehash",
+   "需要有序遍历/范围查询用 map，纯查用 unordered_map",
+   "C++ 没有内置并发哈希表，并发场景怎么做"
+  ]
+ },
+ {
+  "id": "cpp-stl-003",
+  "language": "cpp",
+  "topic": "STL",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "迭代器失效的场景有哪些？",
+  "answer_points": [
+   "vector：扩容全失效，erase 后当前及之后失效",
+   "deque 中段插入全失效",
+   "list/map/set 只有被删元素失效",
+   "erase-remove 惯用法，遍历时删除的正确写法"
+  ]
+ },
+ {
+  "id": "cpp-stl-004",
+  "language": "cpp",
+  "topic": "STL",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "红黑树的性质？为什么 STL 用红黑树而不是 AVL 或 B+ 树？",
+  "answer_points": [
+   "五条性质，最长路径不超过最短两倍",
+   "插入删除旋转次数少，适合频繁修改",
+   "B+ 树适合磁盘页（矮胖），内存中 logn 差异不大",
+   "能对比哈希表、跳表（Redis zset）说明选型"
+  ]
+ },
+ {
+  "id": "cpp-net-001",
+  "language": "cpp",
+  "topic": "网络编程",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "epoll 的原理？LT 和 ET 的区别？",
+  "answer_points": [
+   "select/poll/epoll 演进：O(n) 轮询 → 事件就绪回调",
+   "epoll_ctl 维护红黑树，epoll_wait 将就绪事件放入链表",
+   "LT 水平触发可重复通知，ET 边缘触发必须一次读完 + 非阻塞",
+   "惊群问题与 SO_REUSEPORT"
+  ]
+ },
+ {
+  "id": "cpp-net-002",
+  "language": "cpp",
+  "topic": "网络编程",
+  "difficulty": "困难",
+  "frequency": "高频",
+  "question": "Reactor 模型是什么？手写一个简易网络库要哪些组件？",
+  "answer_points": [
+   "Reactor：IO 多路复用 + 事件分发 + 回调",
+   "单 Reactor 单线程/多线程、主从 Reactor（netty/muduo 模型）",
+   "组件：EventLoop、Channel、Poller、Buffer、TcpConnection",
+   "线程池处理耗时任务，避免阻塞事件循环"
+  ]
+ },
+ {
+  "id": "cpp-net-003",
+  "language": "cpp",
+  "topic": "网络编程",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "TCP 粘包怎么处理？",
+  "answer_points": [
+   "TCP 是字节流无消息边界",
+   "方案：固定长度、分隔符、长度字段包头（最常用）",
+   "应用层协议设计：header + body",
+   "netty 的解码器思想可类比"
+  ]
+ },
+ {
+  "id": "cpp-linux-001",
+  "language": "cpp",
+  "topic": "Linux",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "进程和线程的区别？上下文切换开销在哪？",
+  "answer_points": [
+   "地址空间独立 vs 共享，线程共享堆/全局变量",
+   "切换开销：TLB 刷新、寄存器保存、调度器",
+   "通信方式：管道/共享内存/消息队列 vs 锁+条件变量",
+   "多进程容错好，多线程效率高，选型看场景"
+  ]
+ },
+ {
+  "id": "cpp-linux-002",
+  "language": "cpp",
+  "topic": "Linux",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "零拷贝是什么？sendfile/mmap 怎么用？",
+  "answer_points": [
+   "传统 read+write：4 次拷贝 4 次上下文切换",
+   "sendfile：内核态直接搬运，2 次拷贝",
+   "mmap+write：用户态与内核共享映射省一次拷贝",
+   "应用：Kafka、nginx 静态文件"
+  ]
+ },
+ {
+  "id": "cpp-linux-003",
+  "language": "cpp",
+  "topic": "Linux",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "常用的线上排查命令？程序 core dump 了怎么定位？",
+  "answer_points": [
+   "top/ps/netstat(ss)/strace/ltrace/vmstat",
+   "gdb + core 文件：bt 看堆栈，ulimit -c 开启",
+   "ASan/Valgrind 离线复现",
+   "日志 + 监控先缩小范围再上工具"
+  ]
+ },
+ {
+  "id": "cpp-conc-001",
+  "language": "cpp",
+  "topic": "并发",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "C++ 的 mutex、condition_variable 怎么配合用？虚假唤醒是什么？",
+  "answer_points": [
+   "wait 要在 while 循环里判断条件，防虚假唤醒",
+   "unique_lock vs lock_guard：前者可手动 unlock、配合 cv",
+   "生产者消费者模型手写",
+   "shared_mutex 读写锁 C++17"
+  ]
+ },
+ {
+  "id": "cpp-conc-002",
+  "language": "cpp",
+  "topic": "并发",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "无锁编程了解吗？CAS 在 C++ 里怎么用？",
+  "answer_points": [
+   "std::atomic compare_exchange_weak/strong",
+   "ABA 问题与 tagged pointer",
+   "无锁队列难点：内存回收（hazard pointer/epoch）",
+   "实际工程权衡：有锁+批处理常常更快更稳"
+  ]
+ },
+ {
+  "id": "cpp-design-001",
+  "language": "cpp",
+  "topic": "场景设计",
+  "difficulty": "困难",
+  "frequency": "高频",
+  "question": "实现一个线程池需要哪些组件？任务队列满了怎么办？",
+  "answer_points": [
+   "任务队列 + 工作线程 + 互斥/条件变量",
+   "future/promise 获取任务返回值",
+   "拒绝策略与队列有界/无界权衡",
+   "动态扩缩容、优雅退出"
+  ]
+ },
+ {
+  "id": "cpp-design-002",
+  "language": "cpp",
+  "topic": "场景设计",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "设计一个高性能内存池/对象池的要点？",
+  "answer_points": [
+   "减少 malloc 调用与碎片：大块预分配 + 空闲链表",
+   "按 size class 分级（tcmalloc/jemalloc 思想）",
+   "线程本地缓存避免锁竞争",
+   "benchmark 验证：没有数据支撑的高性能是空话"
+  ]
+ },
+ {
+  "id": "cpp-lang-001",
+  "language": "cpp",
+  "topic": "语言基础",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "指针和引用有什么区别？",
+  "answer_points": [
+   "指针是变量存地址，可为空、可改指向；引用是别名，必须初始化且不可改绑",
+   "sizeof 指针是地址大小，sizeof 引用是绑定对象的大小",
+   "指针可有多级，引用只有一级",
+   "传参优先 const 引用，需要可空或改指向时才用指针"
+  ]
+ },
+ {
+  "id": "cpp-lang-002",
+  "language": "cpp",
+  "topic": "语言基础",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "const 关键字有哪些用法？指向常量的指针和指针常量怎么区分？",
+  "answer_points": [
+   "修饰变量为只读；修饰参数/返回值避免拷贝时被修改",
+   "const int* p 指向的内容不可改，int* const p 指针本身不可改",
+   "const 成员函数承诺不修改成员，配合 mutable 例外",
+   "顶层 const 与底层 const：传参时顶层可忽略、底层不可忽略"
+  ]
+ },
+ {
+  "id": "cpp-lang-003",
+  "language": "cpp",
+  "topic": "语言基础",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "static 关键字在 C 和 C++ 中各有哪些作用？",
+  "answer_points": [
+   "修饰全局变量/函数：限制链接属性，只在本文件可见",
+   "修饰局部变量：延长生命周期到程序结束，只初始化一次",
+   "修饰类成员：属于类而非对象，静态成员函数无 this 指针",
+   "C++11 起局部静态变量的初始化是线程安全的（magic static）"
+  ]
+ },
+ {
+  "id": "cpp-lang-004",
+  "language": "cpp",
+  "topic": "语言基础",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "volatile 有什么作用？它能保证多线程安全吗？",
+  "answer_points": [
+   "告诉编译器变量可能被外部改变（硬件寄存器、信号处理），禁止把值缓存进寄存器",
+   "每次访问都重新从内存读取",
+   "不保证原子性也不保证访存顺序，不能替代 mutex 或 atomic",
+   "与 Java volatile 对比着讲可加分"
+  ]
+ },
+ {
+  "id": "cpp-lang-005",
+  "language": "cpp",
+  "topic": "语言基础",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "sizeof 的常见考点：空类、含虚函数的类、数组与指针分别是多少？",
+  "answer_points": [
+   "空类大小为 1：编译器插入占位字节保证每个对象地址唯一",
+   "含虚函数的类多一个 vptr（64 位下 8 字节），虚函数再多也只存一个指针",
+   "sizeof 数组是元素大小乘个数，对指针求 sizeof 只是指针本身大小",
+   "sizeof 是编译期运算符，括号内表达式不求值"
+  ]
+ },
+ {
+  "id": "cpp-lang-006",
+  "language": "cpp",
+  "topic": "语言基础",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "什么是内存对齐？为什么要对齐？如何控制对齐？",
+  "answer_points": [
+   "成员按对齐数（自身大小与 pack 值的较小者）放置，结构体大小是最大对齐数的整数倍",
+   "原因：CPU 按字长取址，未对齐访问需要多次读写甚至触发硬件异常",
+   "#pragma pack(n) 或 alignas 可修改对齐方式",
+   "把成员按大小从大到小排列可减少填充字节"
+  ]
+ },
+ {
+  "id": "cpp-lang-007",
+  "language": "cpp",
+  "topic": "语言基础",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "宏和内联函数的区别？为什么 C++ 更推荐 inline 和 constexpr？",
+  "answer_points": [
+   "宏是预处理期纯文本替换，无类型检查、不进符号表、不可调试",
+   "宏有多次求值陷阱（如 MAX(a++, b)），inline 函数有类型检查和作用域",
+   "inline 只是建议，编译器自行决定是否展开",
+   "常量优先用 constexpr 代替 #define，可编译期求值"
+  ]
+ },
+ {
+  "id": "cpp-lang-008",
+  "language": "cpp",
+  "topic": "语言基础",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "extern \"C\" 的作用是什么？为什么需要它？",
+  "answer_points": [
+   "指示按 C 语言的符号规则链接，禁用 C++ 的名字改编（name mangling）",
+   "C++ 支持重载所以符号名带参数信息，C 不带，直接链接会报 undefined reference",
+   "用于 C++ 调用 C 库，或让库同时被 C 和 C++ 使用",
+   "常配合 __cplusplus 条件编译写在公共头文件里"
+  ]
+ },
+ {
+  "id": "cpp-lang-009",
+  "language": "cpp",
+  "topic": "语言基础",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "NULL、0 和 nullptr 有什么区别？",
+  "answer_points": [
+   "NULL 是宏，本质是整数 0 或 (void*)0",
+   "重载 f(int) 与 f(char*) 时传 NULL 会匹配到 int 版本，产生歧义",
+   "nullptr 是关键字，类型为 std::nullptr_t，可隐式转换为任意指针类型",
+   "现代 C++ 一律使用 nullptr"
+  ]
+ },
+ {
+  "id": "cpp-lang-010",
+  "language": "cpp",
+  "topic": "语言基础",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "C++ 四种强制类型转换各自的区别和用途？",
+  "answer_points": [
+   "static_cast：编译期常规转换（数值转换、继承上行），无运行时检查",
+   "dynamic_cast：带运行时检查的多态下行转换，失败返回 nullptr 或抛 bad_cast，依赖 RTTI",
+   "const_cast：去除 const/volatile 属性，修改真正的常量是未定义行为",
+   "reinterpret_cast：按位重解释，最危险，仅用于底层场景"
+  ]
+ },
+ {
+  "id": "cpp-lang-011",
+  "language": "cpp",
+  "topic": "语言基础",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "什么是野指针和悬垂指针？如何避免？",
+  "answer_points": [
+   "野指针：未初始化、指向未知地址；悬垂指针：指向已释放或已失效的对象",
+   "常见来源：delete 后未置空、返回局部变量的地址或引用、多个指针指向同一资源重复释放",
+   "对策：定义即初始化、释放后立即置 nullptr、用智能指针明确所有权",
+   "返回局部变量引用是经典代码找错题"
+  ]
+ },
+ {
+  "id": "cpp-oop-004",
+  "language": "cpp",
+  "topic": "面向对象",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "继承体系中构造函数和析构函数的调用顺序是怎样的？",
+  "answer_points": [
+   "构造：先基类后派生，成员对象按声明顺序构造，与初始化列表书写顺序无关",
+   "析构顺序与构造完全相反：先派生后基类",
+   "虚继承时虚基类最先构造",
+   "常考代码输出题：多继承加成员对象的组合顺序"
+  ]
+ },
+ {
+  "id": "cpp-oop-005",
+  "language": "cpp",
+  "topic": "面向对象",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "虚函数有什么开销？为什么不把所有成员函数都声明成 virtual？",
+  "answer_points": [
+   "每个多态类多一张虚表，每个对象多一个 vptr（64 位下 8 字节）",
+   "调用多一次间接寻址，并且阻碍内联优化",
+   "不需要运行时多态的接口应声明为非虚（NVI 惯用法）",
+   "虚函数还会带来 RTTI 等额外元数据"
+  ]
+ },
+ {
+  "id": "cpp-oop-006",
+  "language": "cpp",
+  "topic": "面向对象",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "纯虚函数和抽象类是什么？有什么用途？",
+  "answer_points": [
+   "virtual void f() = 0 声明纯虚函数，含纯虚函数的类不能实例化",
+   "派生类必须实现所有纯虚函数，否则仍是抽象类",
+   "用于定义接口（类似 Java interface），实现面向接口编程",
+   "纯虚函数也可以有函数体，供派生类显式调用"
+  ]
+ },
+ {
+  "id": "cpp-oop-007",
+  "language": "cpp",
+  "topic": "面向对象",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "什么是对象切片（slicing）？怎么避免？",
+  "answer_points": [
+   "派生类对象按值赋给或传给基类对象时，派生部分被切掉，只剩基类子对象",
+   "典型场景：按值传参、按值存入基类容器，多态失效",
+   "避免：按引用或指针传参，容器存基类智能指针",
+   "按值返回基类对象同样会切片"
+  ]
+ },
+ {
+  "id": "cpp-oop-008",
+  "language": "cpp",
+  "topic": "面向对象",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "菱形继承有什么问题？虚继承如何解决、代价是什么？",
+  "answer_points": [
+   "菱形继承下最派生类含两份公共基类子对象，访问有二义性且浪费空间",
+   "virtual 继承让基类子对象只保留一份，由最派生类负责构造虚基类",
+   "代价：对象布局更复杂，访问虚基类成员需要间接寻址",
+   "工程上更推荐用组合或纯接口继承避免菱形结构"
+  ]
+ },
+ {
+  "id": "cpp-oop-009",
+  "language": "cpp",
+  "topic": "面向对象",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "构造或析构函数中抛出异常会怎样？为什么析构函数不应抛异常？",
+  "answer_points": [
+   "构造中抛异常：对象未构造完成，其析构不会执行，但已构造的成员会正常析构",
+   "构造函数要用 RAII 成员管理资源，否则异常路径泄漏",
+   "栈展开过程中析构再抛异常会直接调用 std::terminate",
+   "析构函数默认 noexcept，错误应吞掉或记日志"
+  ]
+ },
+ {
+  "id": "cpp-oop-010",
+  "language": "cpp",
+  "topic": "面向对象",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "成员初始化列表的作用？哪些成员必须用它初始化？",
+  "answer_points": [
+   "const 成员、引用成员、无默认构造函数的成员对象必须在初始化列表中初始化",
+   "初始化列表是真正的初始化，构造函数体内只是赋值，对类类型多一次默认构造开销",
+   "初始化顺序由成员声明顺序决定，与列表书写顺序无关",
+   "带参基类子对象也只能在初始化列表中构造"
+  ]
+ },
+ {
+  "id": "cpp-oop-011",
+  "language": "cpp",
+  "topic": "面向对象",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "手写一个单例模式？Meyers 单例为什么线程安全？",
+  "answer_points": [
+   "饿汉式：程序启动即初始化，线程安全但可能浪费资源",
+   "懒汉式需要加锁加双重检查，C++11 前因指令重排有坑，需配合 atomic",
+   "Meyers Singleton：函数内局部 static，C++11 起初始化保证线程安全，最推荐",
+   "别忘把拷贝构造和拷贝赋值 =delete"
+  ]
+ },
+ {
+  "id": "cpp-mem-005",
+  "language": "cpp",
+  "topic": "内存管理",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "堆和栈的区别？",
+  "answer_points": [
+   "栈：编译器自动分配释放，存局部变量和函数帧，速度快、容量小（MB 级）",
+   "堆：new/delete 手动管理，容量大但分配慢、会产生碎片",
+   "栈溢出即 stack overflow；堆耗尽抛 bad_alloc",
+   "栈对象生命周期随作用域结束，堆对象可跨作用域存活"
+  ]
+ },
+ {
+  "id": "cpp-mem-006",
+  "language": "cpp",
+  "topic": "内存管理",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "malloc 的底层实现原理？brk 和 mmap 分别什么时候用？",
+  "answer_points": [
+   "小内存（默认小于 128KB）走 brk 调整堆顶，大内存走 mmap 匿名映射",
+   "free 后 brk 的内存一般留在空闲链表复用不还给内核，mmap 的直接 munmap 归还",
+   "glibc 用空闲链表和 bins 管理；tcmalloc/jemalloc 用线程缓存加 size class 分级",
+   "brk 频繁伸缩代价高，mmap 每次有系统调用和缺页开销，各有取舍"
+  ]
+ },
+ {
+  "id": "cpp-mem-007",
+  "language": "cpp",
+  "topic": "内存管理",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "段错误（Segmentation Fault）的常见原因有哪些？",
+  "answer_points": [
+   "解引用空指针、野指针或已释放的内存",
+   "数组越界、缓冲区溢出踩坏栈",
+   "栈溢出：无限递归或超大局部数组",
+   "写只读段（如修改字符串常量）",
+   "排查手段：core dump 加 gdb，或用 ASan 直接定位"
+  ]
+ },
+ {
+  "id": "cpp-mem-008",
+  "language": "cpp",
+  "topic": "内存管理",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "operator new 可以重载吗？placement new 是什么、用在哪里？",
+  "answer_points": [
+   "operator new/delete 可全局或类级重载，用于接入内存池、统计、自定义对齐分配",
+   "placement new 在已分配的内存上就地构造对象，不分配新内存",
+   "对应的对象要手动调 p->~T() 析构，内存由调用方负责释放",
+   "典型场景：内存池、嵌入式固定地址、vector 的 allocator 实现"
+  ]
+ },
+ {
+  "id": "cpp-mem-009",
+  "language": "cpp",
+  "topic": "内存管理",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "new[] 和 delete[] 为什么必须配对使用？混用会怎样？",
+  "answer_points": [
+   "new[] 会记录元素个数并逐个调用构造函数，delete[] 才能逐个析构",
+   "类类型混用会导致析构次数错误、内存损坏",
+   "实现上数组分配常多存一个计数字头，delete 不知道偏移会释放错误地址",
+   "现代 C++ 优先用 vector 或 unique_ptr<T[]> 规避"
+  ]
+ },
+ {
+  "id": "cpp-mem-010",
+  "language": "cpp",
+  "topic": "内存管理",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "什么是 RAII？举几个典型应用？",
+  "answer_points": [
+   "资源获取即初始化：构造时获取资源，析构时自动释放",
+   "利用栈对象的作用域保证异常安全，离开作用域必然释放",
+   "典型应用：智能指针、lock_guard、fstream、unique_fd",
+   "是 C++ 区别于 C 手工管理资源的核心惯用法"
+  ]
+ },
+ {
+  "id": "cpp-11-004",
+  "language": "cpp",
+  "topic": "C++11/14/17",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "auto 和 decltype 的区别？decltype(auto) 是什么？",
+  "answer_points": [
+   "auto 从初始化表达式推导，推导时丢弃顶层 const 和引用",
+   "decltype 保留表达式的精确类型（含 const 和引用），对变量名与表达式规则不同",
+   "decltype(auto) 按 decltype 规则推导，常见于转发返回类型",
+   "auto 推导 initializer_list 的坑：auto x{1} 得到 initializer_list"
+  ]
+ },
+ {
+  "id": "cpp-11-005",
+  "language": "cpp",
+  "topic": "C++11/14/17",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "constexpr 和 const 的区别？",
+  "answer_points": [
+   "const 只保证只读，初始化可以在运行期；constexpr 要求编译期可求值",
+   "constexpr 函数参数是常量表达式时编译期计算，否则退化为普通函数",
+   "constexpr 变量隐含 const，可用于数组长度、模板参数等编译期上下文",
+   "C++20 还有 consteval（必须编译期）和 constinit（静态初始化）"
+  ]
+ },
+ {
+  "id": "cpp-11-006",
+  "language": "cpp",
+  "topic": "C++11/14/17",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "std::move 之后对象还能用吗？",
+  "answer_points": [
+   "move 只做类型转换，真正发生移动的是移动构造函数",
+   "移动后对象处于有效但未定义状态（valid but unspecified），只能析构或重新赋值",
+   "标准库类型移动后通常变为空（如 string、vector），但不该依赖具体值",
+   "移后使用（use after move）是常见 bug，静态检查工具能抓"
+  ]
+ },
+ {
+  "id": "cpp-11-007",
+  "language": "cpp",
+  "topic": "C++11/14/17",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "std::function 和函数指针有什么区别？",
+  "answer_points": [
+   "std::function 是类型擦除的可调用对象包装，能装函数指针、lambda、仿函数、bind 结果",
+   "函数指针只能指向普通函数，不能带状态",
+   "std::function 有堆分配和间接调用开销，热路径可用模板参数代替",
+   "捕获列表非空的 lambda 不能隐式转函数指针"
+  ]
+ },
+ {
+  "id": "cpp-11-008",
+  "language": "cpp",
+  "topic": "C++11/14/17",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "enum class 相比 C 风格枚举有什么优势？",
+  "answer_points": [
+   "强类型：不会隐式转换为 int，比较和赋值更安全",
+   "有作用域：枚举值不外泄到外层命名空间，避免名字冲突",
+   "可指定底层类型（如 enum class E : uint8_t）",
+   "与旧枚举互操作需显式 static_cast"
+  ]
+ },
+ {
+  "id": "cpp-11-009",
+  "language": "cpp",
+  "topic": "C++11/14/17",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "C++17 结构化绑定是什么？有什么限制？",
+  "answer_points": [
+   "auto [a, b] = pair/tuple/结构体，一次解包多个成员",
+   "遍历 map 时 auto& [key, value] 是高频实用写法",
+   "绑定的是别名而非新对象，改它会改原对象（除非按值拷贝）",
+   "不能直接在结构化绑定声明中指定每个元素的类型"
+  ]
+ },
+ {
+  "id": "cpp-11-010",
+  "language": "cpp",
+  "topic": "C++11/14/17",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "std::string_view 解决了什么问题？有什么坑？",
+  "answer_points": [
+   "只读视图：指针加长度，传字符串零拷贝，替代 const string& 还能接子串",
+   "统一接口：string、char 数组、字面量都能隐式构造",
+   "不拥有内存，生命周期比源对象长就悬垂（如返回局部 string 的 view）",
+   "不保证以 \\0 结尾，不能传给需要 C 字符串的接口"
+  ]
+ },
+ {
+  "id": "cpp-11-011",
+  "language": "cpp",
+  "topic": "C++11/14/17",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "std::optional、variant、any 分别解决什么问题？",
+  "answer_points": [
+   "optional：表示可能无值的返回值，替代魔法值和异常",
+   "variant：类型安全的联合体，编译期知道所有候选类型，配合 std::visit 访问",
+   "any：可装任意类型，运行时检查，开销最大",
+   "选型优先级：能 optional/variant 就不用 any"
+  ]
+ },
+ {
+  "id": "cpp-11-012",
+  "language": "cpp",
+  "topic": "C++11/14/17",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "C++20 协程了解吗？co_await 背后做了什么？",
+  "answer_points": [
+   "无栈协程：编译器把函数改造成状态机，挂起点保存局部变量到堆上 coroutine frame",
+   "三要素：promise_type、coroutine_handle、awaiter（await_ready/suspend/resume）",
+   "价值：异步代码写成同步形式，避免回调地狱，适合 IO 密集型服务",
+   "了解不到细节就讲清概念和应用场景，别硬背概念说错"
+  ]
+ },
+ {
+  "id": "cpp-stl-005",
+  "language": "cpp",
+  "topic": "STL",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "deque 的底层实现是什么？和 vector 怎么取舍？",
+  "answer_points": [
+   "分段连续：中控数组（map）管理多个固定大小的缓冲区，不是真连续内存",
+   "双端 O(1) 插入删除，下标访问比 vector 多一次间接",
+   "首尾高频操作用 deque，追求缓存友好和纯尾插用 vector",
+   "stack 和 queue 默认底层容器就是 deque"
+  ]
+ },
+ {
+  "id": "cpp-stl-006",
+  "language": "cpp",
+  "topic": "STL",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "vector 和 list 怎么选？为什么实践中 vector 常常更快？",
+  "answer_points": [
+   "vector 连续内存支持随机访问，list 双向链表任意位置 O(1) 插入删除",
+   "vector 缓存友好：遍历预取命中率高；list 节点散落堆上，指针跳转 cache miss 多",
+   "list 每节点额外两个指针，内存开销大",
+   "只有频繁中段插删且迭代器需稳定时才考虑 list"
+  ]
+ },
+ {
+  "id": "cpp-stl-007",
+  "language": "cpp",
+  "topic": "STL",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "string 的 SSO 和 COW 是什么？现在主流实现用哪种？",
+  "answer_points": [
+   "SSO 小字符串优化：短字符串直接存在对象内部，不分配堆内存",
+   "COW 写时拷贝：拷贝共享底层缓冲区，修改时才复制",
+   "COW 与 C++11 的线程安全要求冲突，libstdc++ 已弃用改用 SSO",
+   "SSO 阈值一般 15/22 字节，了解对象大小构成可加分"
+  ]
+ },
+ {
+  "id": "cpp-stl-008",
+  "language": "cpp",
+  "topic": "STL",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "emplace_back 和 push_back 的区别？",
+  "answer_points": [
+   "emplace_back 用参数在容器内就地构造，push_back 先构造临时对象再拷贝/移动",
+   "对多参数构造函数 emplace 可省一次临时对象创建",
+   "对简单类型两者差别不大，移动构造便宜时收益有限",
+   "注意 emplace 用 explicit 构造函数也能直接初始化，可能掩盖类型错误"
+  ]
+ },
+ {
+  "id": "cpp-stl-009",
+  "language": "cpp",
+  "topic": "STL",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "vector<bool> 为什么特殊？有什么坑？",
+  "answer_points": [
+   "它是特化版本，用位压缩存储，一个 bool 只占 1 bit",
+   "operator[] 返回代理对象而非 bool&，无法取元素地址",
+   "代理对象的隐式转换在泛型代码里会导致编译错误或行为意外",
+   "需要真正的 bool 容器时改用 deque<bool> 或 vector<char>"
+  ]
+ },
+ {
+  "id": "cpp-stl-010",
+  "language": "cpp",
+  "topic": "STL",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "allocator 的作用是什么？为什么日常很少自定义？",
+  "answer_points": [
+   "把内存分配与对象构造分离：allocate/deallocate 管内存，construct/destroy 管对象",
+   "vector 扩容先 allocate 原始内存再逐个 placement new 构造",
+   "自定义场景：内存池、共享内存、对齐分配、统计埋点",
+   "默认 allocator 足够通用，自定义要处理传播、rebind 等繁琐规则，收益需实测"
+  ]
+ },
+ {
+  "id": "cpp-template-001",
+  "language": "cpp",
+  "topic": "模板与泛型",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "函数模板和类模板的实例化发生在什么时候？为什么模板代码通常写在头文件？",
+  "answer_points": [
+   "编译期按需实例化：用到哪个类型就生成哪个版本",
+   "实例化需要看到完整定义，只声明在头文件、定义在 .cpp 会导致链接错误",
+   "显式实例化声明（extern template）可把定义移出头文件减少编译时间",
+   "模板代码膨胀是二进制体积的常见问题"
+  ]
+ },
+ {
+  "id": "cpp-template-002",
+  "language": "cpp",
+  "topic": "模板与泛型",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "模板的全特化和偏特化是什么？函数模板支持偏特化吗？",
+  "answer_points": [
+   "全特化：所有模板参数都指定具体类型，如 template<> class A<int>",
+   "偏特化：只固定部分参数或模式，如 T* 版本，仅类模板支持",
+   "函数模板不支持偏特化，用重载或转发到类模板实现",
+   "特化版本不参与重载决议的顺序是常考陷阱"
+  ]
+ },
+ {
+  "id": "cpp-template-003",
+  "language": "cpp",
+  "topic": "模板与泛型",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "模板代码中 typename 的两种用法是什么？",
+  "answer_points": [
+   "声明模板类型参数：template<typename T>，与 class 关键字等价",
+   "声明依赖名是类型：T::iterator 前必须加 typename，否则编译器当静态成员变量处理",
+   "嵌套依赖类型如 typename std::vector<T>::size_type 是高频写法",
+   "C++20 起部分上下文可省略 typename"
+  ]
+ },
+ {
+  "id": "cpp-template-004",
+  "language": "cpp",
+  "topic": "模板与泛型",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "什么是 SFINAE？std::enable_if 怎么用？",
+  "answer_points": [
+   "替换失败不是错误：模板参数替换失败只是从候选集移除，不报错",
+   "enable_if 根据编译期条件启用或禁用某个重载",
+   "典型用途：区分迭代器版本与标量版本的构造函数",
+   "C++20 的 concepts/requires 是更可读的现代替代"
+  ]
+ },
+ {
+  "id": "cpp-template-005",
+  "language": "cpp",
+  "topic": "模板与泛型",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "变参模板如何展开参数包？",
+  "answer_points": [
+   "递归展开：处理第一个参数，剩余参数递归调用自身，用空终止版本收尾",
+   "C++17 折叠表达式：(args + ...) 一行求和",
+   "sizeof...(args) 取参数个数",
+   "应用：printf 安全封装、make_unique、tuple 实现"
+  ]
+ },
+ {
+  "id": "cpp-net-004",
+  "language": "cpp",
+  "topic": "网络编程",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "TCP 三次握手和四次挥手的过程？为什么握手三次、挥手四次？",
+  "answer_points": [
+   "三次握手：SYN、SYN+ACK、ACK，确认双方收发能力并交换初始序列号",
+   "两次不够：无法防止历史失效连接请求突然到达造成误连",
+   "四次挥手：FIN、ACK、FIN、ACK，被动方 ACK 与 FIN 不能合并因为还有数据要发",
+   "主动关闭方进入 TIME_WAIT，等 2MSL 保证最后一个 ACK 可达"
+  ]
+ },
+ {
+  "id": "cpp-net-005",
+  "language": "cpp",
+  "topic": "网络编程",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "服务器出现大量 TIME_WAIT 或 CLOSE_WAIT 怎么排查？",
+  "answer_points": [
+   "TIME_WAIT 多：主动关闭方，多为短连接频繁建连，改长连接或连接池",
+   "TIME_WAIT 是正常状态，参数可调 tcp_tw_reuse，慎用 tcp_tw_recycle",
+   "CLOSE_WAIT 多：对端已关但本端没 close，基本是代码漏关 fd 的 bug",
+   "排查命令：ss/netstat 统计状态分布，再定位到具体连接和代码路径"
+  ]
+ },
+ {
+  "id": "cpp-net-006",
+  "language": "cpp",
+  "topic": "网络编程",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "阻塞/非阻塞、同步/异步 IO 的区别？Linux 有哪些 IO 模型？",
+  "answer_points": [
+   "阻塞/非阻塞指调用是否等待数据就绪立即返回；同步/异步指数据拷贝由谁完成",
+   "五种模型：阻塞、非阻塞轮询、IO 多路复用、信号驱动、异步 IO",
+   "select/poll/epoll 都是同步 IO，应用自己负责读写拷贝",
+   "真正的异步是 aio/io_uring，内核完成拷贝后通知应用"
+  ]
+ },
+ {
+  "id": "cpp-net-007",
+  "language": "cpp",
+  "topic": "网络编程",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "listen 的 backlog 参数是什么含义？",
+  "answer_points": [
+   "内核为每个监听 socket 维护半连接队列和全连接队列",
+   "现代内核中 backlog 主要限制全连接队列（已握手完成等 accept 的连接数）",
+   "队列满时新连接被丢弃或忽略，客户端表现为超时或 RST",
+   "相关内核参数：somaxconn、tcp_max_syn_backlog"
+  ]
+ },
+ {
+  "id": "cpp-net-008",
+  "language": "cpp",
+  "topic": "网络编程",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "TCP 和 UDP 的区别？如何让 UDP 实现可靠传输？",
+  "answer_points": [
+   "TCP：面向连接、可靠有序、有流量控制和拥塞控制，字节流",
+   "UDP：无连接、不保证可靠，报文边界保留，头部开销小、延迟低",
+   "UDP 可靠化：应用层加序号、ACK、超时重传、滑动窗口（如 QUIC、KCP）",
+   "选型：实时音视频、游戏常用 UDP 加自定义可靠层"
+  ]
+ },
+ {
+  "id": "cpp-net-009",
+  "language": "cpp",
+  "topic": "网络编程",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "TCP 长连接为什么需要心跳？怎么设计心跳机制？",
+  "answer_points": [
+   "NAT 会话超时、防火墙会静默断掉空闲连接，半开状态 TCP 自己感知不到",
+   "应用层定时发心跳包保活并检测对端存活",
+   "TCP keepalive 默认两小时才触发，基本不够用",
+   "设计要点：心跳间隔、超时倍数、断线重连与退避策略"
+  ]
+ },
+ {
+  "id": "cpp-net-010",
+  "language": "cpp",
+  "topic": "网络编程",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "socket 编程的基本调用流程（TCP 服务端和客户端）？",
+  "answer_points": [
+   "服务端：socket、bind、listen、accept，然后 read/write、close",
+   "客户端：socket、connect，然后 read/write、close",
+   "常设 SO_REUSEADDR 避免重启时地址占用",
+   "服务端每个连接一个 fd，配合 IO 多路复用管理并发连接"
+  ]
+ },
+ {
+  "id": "cpp-linux-004",
+  "language": "cpp",
+  "topic": "Linux",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "fork、vfork、clone 的区别？fork 的写时复制是什么？",
+  "answer_points": [
+   "fork 复制整个进程映像，借助 COW 写时复制，页表共享直到一方写入",
+   "vfork 暂停父进程并共享地址空间，子进程应先 exec，现代场景少用",
+   "clone 可精细控制共享哪些资源，是 Linux 线程（pthread）的实现基础",
+   "fork 后只复制调用线程，多线程程序 fork 有锁状态不一致的坑"
+  ]
+ },
+ {
+  "id": "cpp-linux-005",
+  "language": "cpp",
+  "topic": "Linux",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "什么是僵尸进程和孤儿进程？如何避免僵尸进程？",
+  "answer_points": [
+   "僵尸进程：子进程已退出但父进程未 wait 回收，残留 PCB 占用进程号",
+   "孤儿进程：父进程先退出，子进程被 init/systemd 收养，无害",
+   "避免：父进程 wait/waitpid，或处理 SIGCHLD 异步回收，或 signal(SIGCHLD, SIG_IGN)",
+   "两级 fork 可让守护进程不产生僵尸"
+  ]
+ },
+ {
+  "id": "cpp-linux-006",
+  "language": "cpp",
+  "topic": "Linux",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "进程间通信（IPC）有哪些方式？各自适用场景？",
+  "answer_points": [
+   "管道/命名管道：父子或无关进程的单向字节流",
+   "消息队列、信号量：System V 或 POSIX，带类型的小消息",
+   "共享内存：大量数据高性能交换，需自己配合同步（信号量/锁）",
+   "socket：可跨机器，通用性最强；信号用于异步通知"
+  ]
+ },
+ {
+  "id": "cpp-linux-007",
+  "language": "cpp",
+  "topic": "Linux",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "为什么说共享内存是最快的 IPC？要注意什么？",
+  "answer_points": [
+   "数据映射到多个进程的地址空间，读写不走内核拷贝，零拷贝",
+   "其他 IPC 至少两次拷贝：用户态到内核再到用户态",
+   "缺点是没有同步机制，需配信号量、互斥锁或原子操作",
+   "shmget/mmap 共享文件是两种常见实现"
+  ]
+ },
+ {
+  "id": "cpp-linux-008",
+  "language": "cpp",
+  "topic": "Linux",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "信号处理要注意什么？什么是异步信号安全函数？",
+  "answer_points": [
+   "信号处理函数随时打断主流程，只能调用异步信号安全函数（如 write），不能 printf/malloc",
+   "全局标志要用 volatile sig_atomic_t 通知主循环",
+   "sigaction 比 signal 语义更可控",
+   "工程实践：signalfd 或 self-pipe 把信号转成 IO 事件统一处理"
+  ]
+ },
+ {
+  "id": "cpp-linux-009",
+  "language": "cpp",
+  "topic": "Linux",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "虚拟内存的作用？mmap 的原理和用途？",
+  "answer_points": [
+   "每个进程独立虚拟地址空间：隔离、安全、按需调页，物理内存可超售",
+   "页表加 TLB 做地址翻译，缺页中断按需加载",
+   "mmap 把文件或设备映射进地址空间，读写内存即读写文件",
+   "用途：共享内存、动态库加载、大文件随机访问、配合 write 实现零拷贝"
+  ]
+ },
+ {
+  "id": "cpp-linux-010",
+  "language": "cpp",
+  "topic": "Linux",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "系统调用和库函数的区别？",
+  "answer_points": [
+   "系统调用是内核提供的服务入口，需要用户态到内核态切换（trap/syscall 指令）",
+   "库函数运行在用户态，可能封装系统调用（如 printf 到 write）也可能纯用户态（如 strcpy）",
+   "上下文切换有开销，所以有了缓冲区、futex 用户态快速路径等优化",
+   "strace 可观察进程的系统调用序列，是排查利器"
+  ]
+ },
+ {
+  "id": "cpp-conc-003",
+  "language": "cpp",
+  "topic": "并发",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "死锁的四个必要条件？怎么避免死锁？",
+  "answer_points": [
+   "互斥、持有并等待、不可剥夺、循环等待，四者同时成立才死锁",
+   "破坏循环等待：所有线程按固定顺序加锁",
+   "用 try_lock 超时回退、std::lock/scoped_lock 一次锁多把",
+   "排查：gdb 看所有线程栈，pstack，或日志记录加锁顺序"
+  ]
+ },
+ {
+  "id": "cpp-conc-004",
+  "language": "cpp",
+  "topic": "并发",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "自旋锁和互斥锁的区别？各自适用场景？",
+  "answer_points": [
+   "互斥锁抢不到就睡眠让出 CPU，有上下文切换开销",
+   "自旋锁忙等轮询，不切上下文但烧 CPU",
+   "临界区极短、竞争少（如无锁队列兜底、内核短临界区）用自旋锁",
+   "临界区长或可能阻塞（含 IO）必须互斥锁；futex 是两者折中"
+  ]
+ },
+ {
+  "id": "cpp-conc-005",
+  "language": "cpp",
+  "topic": "并发",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "读写锁适用什么场景？写者饥饿问题怎么理解？",
+  "answer_points": [
+   "读共享、写独占：读多写少场景显著优于互斥锁",
+   "C++17 提供 std::shared_mutex / shared_lock",
+   "读优先实现下持续有读者则写者饥饿，写优先则读者吞吐下降",
+   "读写成比例接近或临界区很短时，互斥锁往往更简单更快"
+  ]
+ },
+ {
+  "id": "cpp-conc-006",
+  "language": "cpp",
+  "topic": "并发",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "thread_local 的作用和使用场景？",
+  "answer_points": [
+   "每个线程拥有变量的独立副本，随线程创建销毁",
+   "免去加锁：线程私有的缓存、随机数引擎、统计计数器",
+   "典型应用：errno 的实现、线程局部内存池（tcmalloc 思路）",
+   "注意初始化开销与线程频繁创建销毁时的成本"
+  ]
+ },
+ {
+  "id": "cpp-conc-007",
+  "language": "cpp",
+  "topic": "并发",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "std::async 和 std::thread 的区别？future/promise 怎么用？",
+  "answer_points": [
+   "thread 手动管理生命周期，无返回值通道；async 返回 future 可取结果和异常",
+   "async 默认策略可能新建线程也可能延迟到 get 时执行（deferred）",
+   "future/promise 是跨线程的一次性结果传递通道",
+   "注意 future 析构的隐式 join 行为（C++14 起 async 返回的 future 不再阻塞）"
+  ]
+ },
+ {
+  "id": "cpp-conc-008",
+  "language": "cpp",
+  "topic": "并发",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "什么是伪共享（false sharing）？如何避免？",
+  "answer_points": [
+   "不同线程写的变量落在同一缓存行，MESI 协议导致缓存行在核间来回失效",
+   "本身无数据竞争也会严重拖慢性能",
+   "对策：按缓存行（64 字节）对齐填充，C++17 用 std::hardware_destructive_interference_size",
+   "或把每线程数据做成 thread_local/线程局部数组"
+  ]
+ },
+ {
+  "id": "cpp-perf-001",
+  "language": "cpp",
+  "topic": "调试与性能",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "如何用 perf 定位 CPU 热点？火焰图怎么看？",
+  "answer_points": [
+   "perf top 实时看热点，perf record -g 采样调用栈，perf report 分析",
+   "火焰图：宽度代表采样占比，纵向是调用栈，找宽而平的帧",
+   "区分 on-CPU（计算瓶颈）与 off-CPU（锁、IO 等待）问题",
+   "符号缺失时编进 -g 或用 frame pointer 编译选项"
+  ]
+ },
+ {
+  "id": "cpp-perf-002",
+  "language": "cpp",
+  "topic": "调试与性能",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "Valgrind 能查哪些问题？原理和开销是什么？",
+  "answer_points": [
+   "memcheck：内存泄漏、越界读写、使用未初始化值、重复释放",
+   "原理是动态二进制插桩，影子内存跟踪每字节的合法性",
+   "开销巨大（10~50 倍减速），只用于测试环境",
+   "线上/CI 更常用编译期插桩的 ASan/LSan/UBSan"
+  ]
+ },
+ {
+  "id": "cpp-perf-003",
+  "language": "cpp",
+  "topic": "调试与性能",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "缓存局部性对性能有什么影响？怎么写 cache-friendly 的代码？",
+  "answer_points": [
+   "CPU 按缓存行（64B）加载，顺序访问可预取，随机访问大量 cache miss",
+   "连续内存容器（vector）遍历远快于链表、指针跳转结构",
+   "按行优先遍历二维数组，避免跨步访问",
+   "数据布局优化：结构体拆冷热字段、SoA 替代 AoS"
+  ]
+ },
+ {
+  "id": "cpp-perf-004",
+  "language": "cpp",
+  "topic": "调试与性能",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "如何做微基准测试（benchmark）？要注意什么？",
+  "answer_points": [
+   "用 chrono::steady_clock 计时，多轮取均值或分位数，别只看单次",
+   "防止编译器把被测代码优化掉（结果要消费掉或用 benchmark::DoNotOptimize）",
+   "控制变量：关闭 CPU 降频干扰、固定核、排除首次缓存冷启动",
+   "工具：Google Benchmark，性能结论必须有数据支撑"
+  ]
+ },
+ {
+  "id": "cpp-gdb-001",
+  "language": "cpp",
+  "topic": "调试与性能",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "常用 gdb 命令有哪些？条件断点和观察点怎么用？",
+  "answer_points": [
+   "基础：b 断点、r 运行、c 继续、n/s 单步、p 打印、bt 看栈、info locals",
+   "条件断点：b file.cpp:100 if i == 5，只命中特定条件",
+   "watch 观察点：变量被改写时中断，查内存被谁踩",
+   "tui enable 或 layout src 可边看源码边调"
+  ]
+ },
+ {
+  "id": "cpp-gdb-002",
+  "language": "cpp",
+  "topic": "调试与性能",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "线上程序跑着出问题了，如何用 gdb attach 到运行中的进程排查？",
+  "answer_points": [
+   "gdb -p <pid> 附加进程，attach 后进程暂停，注意对线上服务的影响",
+   "info threads 看所有线程，thread apply all bt 抓全部栈找死锁/卡死点",
+   "detach 让进程继续运行，q 退出前确认已 detach",
+   "生成式排查可先用 gcore 导 core 再离线分析，减少线上停顿"
+  ]
+ },
+ {
+  "id": "cpp-design-003",
+  "language": "cpp",
+  "topic": "场景设计",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "如何实现一个 LRU 缓存？",
+  "answer_points": [
+   "哈希表 + 双向链表：O(1) 查找和 O(1) 移动/淘汰",
+   "get 命中后把节点移到头部，put 满了淘汰尾部节点",
+   "C++ 可用 unordered_map + list（splice 移动节点）",
+   "并发版：加锁粒度、分片（shard）降低竞争"
+  ]
+ },
+ {
+  "id": "cpp-design-004",
+  "language": "cpp",
+  "topic": "场景设计",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "海量定时任务怎么管理？时间轮（Timing Wheel）的原理？",
+  "answer_points": [
+   "小顶堆/红黑树：取最近超时 O(1)，插入 O(logn)，timerfd 常见实现",
+   "时间轮：环形槽位加链表，tick 推进，插入删除接近 O(1)",
+   "多级时间轮模拟时钟的时分秒，处理长超时任务",
+   "应用：netty HashedWheelTimer、Kafka 延迟队列"
+  ]
+ },
+ {
+  "id": "cpp-design-005",
+  "language": "cpp",
+  "topic": "场景设计",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "设计一个数据库/Redis 连接池要考虑哪些点？",
+  "answer_points": [
+   "核心参数：初始/最小/最大连接数、获取超时时间",
+   "空闲连接保活与有效性校验（借出前 ping、空闲超时回收）",
+   "借还语义用 RAII 封装，防止忘记归还",
+   "连接泄漏检测：借出超时告警，监控活跃/空闲数"
+  ]
+ },
+ {
+  "id": "cpp-design-006",
+  "language": "cpp",
+  "topic": "场景设计",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "一致性哈希解决什么问题？虚拟节点的作用？",
+  "answer_points": [
+   "普通取模哈希在节点增减时几乎全部重新映射，缓存雪崩",
+   "一致性哈希把节点和 key 映射到哈希环，增删只影响相邻节点",
+   "数据倾斜问题：引入虚拟节点让物理节点分布更均匀",
+   "应用：分布式缓存、负载均衡、分库分表路由"
+  ]
+ },
+ {
+  "id": "cpp-design-007",
+  "language": "cpp",
+  "topic": "场景设计",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "设计一个高性能异步日志库的关键点？",
+  "answer_points": [
+   "前端只格式化参数并写入无锁/双缓冲区，后端线程批量落盘",
+   "双缓冲 + 条件变量通知，避免每次写日志都系统调用",
+   "关注每日志行开销：字符串格式化（fmt）、时间戳缓存、线程名缓存",
+   "崩溃丢日志权衡：关键日志可同步刷盘或配 setvbuf 策略"
+  ]
+ }
+]

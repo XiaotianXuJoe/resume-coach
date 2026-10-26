@@ -1,0 +1,1325 @@
+[
+{
+  "id": "data-sql-001",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "SQL 中 WHERE 和 HAVING 有什么区别？",
+  "answer_points": [
+    "WHERE 在分组前过滤行，不能使用聚合函数；HAVING 在 GROUP BY 分组后过滤，可搭配聚合函数使用。",
+    "执行顺序上 WHERE 先于 GROUP BY，HAVING 晚于分组和聚合，因此 HAVING 的过滤成本通常更高。",
+    "能用 WHERE 解决的条件尽量写在 WHERE 里，先缩小数据量再分组聚合，查询性能更好。",
+    "典型场景：筛选单条记录用 WHERE，筛选订单总额大于 1 万的用户分组时用 HAVING。"
+  ]
+},
+{
+  "id": "data-sql-002",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "INNER JOIN、LEFT JOIN、RIGHT JOIN 和 FULL JOIN 有什么区别？",
+  "answer_points": [
+    "INNER JOIN 只保留两表键值匹配的行；LEFT JOIN 保留左表全部行，右表无匹配时补 NULL。",
+    "RIGHT JOIN 与 LEFT JOIN 镜像，保留右表全部行；FULL JOIN 保留两表所有行，不匹配处补 NULL。",
+    "LEFT JOIN 常用于保留主表口径的场景，如统计所有用户的订单数，无订单用户记为 0。",
+    "注意一对多 JOIN 会造成行数膨胀导致重复计数，聚合前需确认关联键的粒度是否唯一。"
+  ]
+},
+{
+  "id": "data-sql-003",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "UNION 和 UNION ALL 有什么区别？",
+  "answer_points": [
+    "UNION 会对合并结果去重并排序，UNION ALL 直接拼接不去重，性能更好。",
+    "两者都要求各 SELECT 的列数一致、对应列的数据类型兼容。",
+    "确定结果集本身无重复或允许重复时优先用 UNION ALL，避免不必要的去重开销。",
+    "列名以第一个 SELECT 为准，常与 CASE WHEN 配合做分层数据的合并汇总。"
+  ]
+},
+{
+  "id": "data-sql-004",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "请说出一条 SQL 查询语句的逻辑执行顺序。",
+  "answer_points": [
+    "逻辑执行顺序为 FROM/JOIN → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT。",
+    "因为 SELECT 在 WHERE 之后执行，所以 WHERE 中不能引用 SELECT 里定义的列别名。",
+    "理解执行顺序有助于解释报错原因，也能指导先过滤后聚合的写法优化。"
+  ]
+},
+{
+  "id": "data-sql-005",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "SQL 中如何对查询结果去重？如何找出表中的重复记录？",
+  "answer_points": [
+    "DISTINCT 对整行去重；GROUP BY 也可去重且能同时聚合，语义更清晰时优先使用。",
+    "查找重复记录用 GROUP BY 关键列后 HAVING COUNT(*) > 1，即可定位重复的键值组合。",
+    "删除重复行保留一条可用窗口函数：ROW_NUMBER() 按重复组编号，删除 rn > 1 的行。"
+  ]
+},
+{
+  "id": "data-sql-006",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "ROW_NUMBER、RANK 和 DENSE_RANK 三个窗口函数有什么区别？",
+  "answer_points": [
+    "ROW_NUMBER 为每行生成连续唯一序号，不考虑并列；RANK 并列同名次且跳过后续名次。",
+    "DENSE_RANK 并列同名次但不跳号，例如排名为 1、1、2 而不是 1、1、3。",
+    "求每组 TopN 且不允许并列时用 ROW_NUMBER；需要保留并列名次时用 RANK 或 DENSE_RANK。"
+  ]
+},
+{
+  "id": "data-sql-007",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "如何用 SQL 求每个分组（如每个省）GMV 排名前 3 的商品？",
+  "answer_points": [
+    "标准写法是 ROW_NUMBER() OVER (PARTITION BY 分组列 ORDER BY 指标 DESC) 编号后筛选 rn <= 3。",
+    "先在子查询或 CTE 中完成窗口编号，外层再过滤，这是大厂手写 SQL 面试的经典题型。",
+    "注意处理指标相同的并列情况，并说明先按分区裁剪数据或建索引可以提升性能。"
+  ]
+},
+{
+  "id": "data-sql-008",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "如何用 SQL 找出连续登录 N 天及以上的用户？",
+  "answer_points": [
+    "核心思路是用 ROW_NUMBER 按用户排序，登录日期减去序号得到分组键，连续日期会落入同一组。",
+    "再按 user_id 和分组键 GROUP BY 统计每段连续天数，HAVING 过滤出连续 N 天以上的记录。",
+    "注意先用 DISTINCT 去掉同一天多次登录的重复记录，否则序号偏移会导致分组错误。"
+  ]
+},
+{
+  "id": "data-sql-009",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "如何用 SQL 计算次日留存率、3 日留存率和 7 日留存率？",
+  "answer_points": [
+    "先求每个用户的首次活跃日期作为注册日，再关联原表计算活跃日期与注册日的时间差。",
+    "次日留存率等于注册次日仍活跃的去重用户数除以当日注册用户数，常用 LEFT JOIN 加 CASE WHEN 计算。",
+    "关键是统一活跃与新用户的口径，并明确日期差为 1、3、7 天分别对应不同留存指标。"
+  ]
+},
+{
+  "id": "data-sql-010",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "LAG 和 LEAD 窗口函数有什么用途？请举例说明。",
+  "answer_points": [
+    "LAG/LEAD 可在当前行访问分区内前一行或后一行的值，避免自连接，适合计算环比与行为间隔。",
+    "典型应用是计算相邻两次登录的日期间隔、本月 GMV 与上月 GMV 的环比增速。",
+    "可指定偏移量和默认值处理首行无前值的情况，常与 PARTITION BY 配合按用户独立计算。"
+  ]
+},
+{
+  "id": "data-sql-011",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "SQL 中如何实现行列转换（行转列）？",
+  "answer_points": [
+    "行转列用 CASE WHEN 加聚合：SUM(CASE WHEN 条件 THEN 值 END) 将类别展开为多个指标列。",
+    "也可用条件计数 COUNT(CASE WHEN ...) 实现按维度透视，如按性别或渠道展开订单量。",
+    "列转行在标准 SQL 中用 UNION ALL 拼接，Hive/Spark 中可用 LATERAL VIEW explode 实现。"
+  ]
+},
+{
+  "id": "data-sql-012",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "什么是自连接？请举例说明自连接的应用场景。",
+  "answer_points": [
+    "自连接是表与自身做 JOIN，典型场景是在员工表中查询每个员工的直属上级姓名。",
+    "另一个常见用法是比较同表记录，如找出工资高于同部门平均值的员工，也可用窗口函数替代。",
+    "自连接会产生较大中间结果，数据量大时优先考虑窗口函数或先聚合再关联。"
+  ]
+},
+{
+  "id": "data-sql-013",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "SQL 中处理 NULL 值有哪些需要注意的坑？",
+  "answer_points": [
+    "NULL 与任何值比较结果均为 UNKNOWN，判断空值必须用 IS NULL 或 IS NOT NULL。",
+    "COUNT(列名) 忽略 NULL 而 COUNT(*) 不忽略，SUM/AVG 也忽略 NULL，容易导致分母口径不一致。",
+    "NOT IN 子查询若含 NULL 会整体返回空结果，应改用 NOT EXISTS 或先过滤 NULL。",
+    "可用 COALESCE 或 IFNULL 将 NULL 替换为默认值，保证关联与聚合结果符合业务预期。"
+  ]
+},
+{
+  "id": "data-sql-014",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "COUNT(*)、COUNT(列名) 和 COUNT(DISTINCT 列名) 有什么区别？",
+  "answer_points": [
+    "COUNT(*) 统计所有行数含 NULL 行，COUNT(列名) 只统计该列非 NULL 的行数。",
+    "COUNT(DISTINCT 列名) 统计去重后的非 NULL 值个数，常用于 UV 和去重用户数计算。",
+    "LEFT JOIN 后用 COUNT(右表列) 可以统计匹配行数，无匹配时该列为 NULL 不会被计入。"
+  ]
+},
+{
+  "id": "data-sql-015",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "一条 SQL 查询跑得很慢，你会从哪些方面优化？",
+  "answer_points": [
+    "先用 EXPLAIN 查看执行计划，确认是否全表扫描、索引是否命中、JOIN 顺序是否合理。",
+    "常见手段是为过滤和关联字段建索引、只 SELECT 需要的列、先聚合再 JOIN 减少中间数据量。",
+    "避免对索引列做函数运算或隐式类型转换，避免 SELECT 星号和深分页，大表按分区裁剪扫描范围。",
+    "在 Hive/Spark 场景还需关注数据倾斜与小文件问题，必要时调整并行度或对热点 key 加盐打散。"
+  ]
+},
+{
+  "id": "data-sql-016",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "什么是数据倾斜？在 Hive 或 Spark 中如何处理数据倾斜？",
+  "answer_points": [
+    "数据倾斜指部分 key 的数据量远超其他 key，导致少数节点处理大部分数据、任务长尾。",
+    "定位方法是统计各 key 的 COUNT 分布，观察倾斜 key 的占比与各任务运行时长分布。",
+    "常见解法是热点 key 单独处理后 UNION、对倾斜 key 加盐拆散再聚合、小表用 MapJoin 广播。"
+  ]
+},
+{
+  "id": "data-sql-017",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "MySQL 索引的底层原理是什么？哪些情况会导致索引失效？",
+  "answer_points": [
+    "MySQL InnoDB 索引基于 B+ 树，叶子节点有序且相连，适合等值查询与范围查询。",
+    "联合索引遵循最左前缀原则，查询条件跳过左侧列会导致索引失效或只能部分利用。",
+    "索引失效常见情况包括对列做函数运算、隐式类型转换、LIKE 以百分号开头、OR 连接无索引列。",
+    "索引并非越多越好，会占用存储并拖慢写入，应结合查询频率和字段选择性来设计。"
+  ]
+},
+{
+  "id": "data-sql-018",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "如何用窗口函数实现累计求和与 7 日移动平均？",
+  "answer_points": [
+    "用 SUM(指标) OVER (PARTITION BY 维度 ORDER BY 日期) 可实现按日期递增的累计求和。",
+    "指定窗口帧 ROWS BETWEEN 6 PRECEDING AND CURRENT ROW 可计算 7 日滑动窗口求和或 AVG 移动平均。",
+    "典型应用包括累计 GMV、7 日平均活跃、同期群留存矩阵的逐日累计口径。"
+  ]
+},
+{
+  "id": "data-sql-019",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "如何用 SQL 求中位数或用户复购间隔？",
+  "answer_points": [
+    "MySQL 无原生中位数函数，可用 ROW_NUMBER 编号后取中间位置的值，Hive 中可用 PERCENTILE 函数。",
+    "复购间隔可用 LAG 求每个用户相邻订单的日期差，再对差值做 AVG 或分位数统计。",
+    "这类题考察窗口函数组合运用，需说明分区键选择、排序字段和边界行的处理逻辑。"
+  ]
+},
+{
+  "id": "data-sql-020",
+  "language": "data",
+  "topic": "SQL",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "视图和表有什么区别？DELETE、TRUNCATE 和 DROP 有什么区别？",
+  "answer_points": [
+    "视图是保存的查询逻辑，不实际存储数据，物化视图除外；表是物理存储的数据实体。",
+    "DELETE 逐行删除可回滚可带 WHERE，TRUNCATE 整表清空更快，DROP 连表结构一起删除。",
+    "视图可简化复杂查询并做权限隔离，但嵌套视图可能带来性能问题，需关注底层 SQL。"
+  ]
+},
+{
+  "id": "data-stat-001",
+  "language": "data",
+  "topic": "统计学基础",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "什么是假设检验？请描述它的基本步骤。",
+  "answer_points": [
+    "假设检验是先提出原假设 H0 与备择假设 H1，再用样本数据判断是否有足够证据拒绝 H0 的方法。",
+    "基本步骤是提出假设、选择检验统计量、设定显著性水平 α、计算 p 值并与 α 比较得出结论。",
+    "原假设通常设为无差异或无效果，采用小概率反证法的逻辑，是 AB 测试的理论基础。"
+  ]
+},
+{
+  "id": "data-stat-002",
+  "language": "data",
+  "topic": "统计学基础",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "p 值的含义是什么？有哪些常见误解？",
+  "answer_points": [
+    "p 值是在原假设成立的前提下，观察到当前样本结果或更极端结果的概率。",
+    "p 值小于显著性水平 α（常取 0.05）时拒绝原假设，认为差异在统计上显著。",
+    "常见误解是把 p 值当成原假设为真的概率，也不能用 p 值衡量效应大小，需结合置信区间判断实际意义。"
+  ]
+},
+{
+  "id": "data-stat-003",
+  "language": "data",
+  "topic": "统计学基础",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "什么是第一类错误和第二类错误？二者有什么关系？",
+  "answer_points": [
+    "第一类错误是弃真，H0 实际为真却被拒绝，概率由显著性水平 α 控制，相当于误报。",
+    "第二类错误是取伪，H0 实际为假却未被拒绝，概率记为 β，1-β 称为统计功效，衡量检出真实差异的能力。",
+    "样本量固定时 α 与 β 此消彼长，通常通过增大样本量来同时降低两类错误。"
+  ]
+},
+{
+  "id": "data-stat-004",
+  "language": "data",
+  "topic": "统计学基础",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "什么是置信区间？95% 置信区间应如何解读？",
+  "answer_points": [
+    "置信区间是按一定置信水平构造的参数估计范围，如均值或转化率的区间估计。",
+    "95% 置信区间表示用同样方法重复抽样构造的区间中约 95% 会覆盖真实参数。",
+    "样本量越大、数据方差越小，置信区间越窄，它同时反映了估计的点值与不确定性。"
+  ]
+},
+{
+  "id": "data-stat-005",
+  "language": "data",
+  "topic": "统计学基础",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "请解释中心极限定理的内容及其意义。",
+  "answer_points": [
+    "中心极限定理指无论总体分布如何，独立同分布样本的均值在样本量足够大时近似服从正态分布。",
+    "样本均值分布的均值等于总体均值，标准误为 σ/√n，随样本量增大而收窄。",
+    "它是大样本下进行均值检验、比例检验和构造置信区间的理论依据，AB 测试依赖该定理。"
+  ]
+},
+{
+  "id": "data-stat-006",
+  "language": "data",
+  "topic": "统计学基础",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "什么是大数定律？它和中心极限定理有什么区别？",
+  "answer_points": [
+    "大数定律指随着试验次数增加，样本均值依概率收敛于总体期望，频率趋于真实概率。",
+    "它解释了为什么样本量越大估计越稳定，也是小样本波动大不能轻信的理论依据。",
+    "区别在于大数定律保证收敛方向，中心极限定理刻画收敛后样本均值的分布形态。"
+  ]
+},
+{
+  "id": "data-stat-007",
+  "language": "data",
+  "topic": "统计学基础",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "什么是辛普森悖论？工作中如何避免？",
+  "answer_points": [
+    "辛普森悖论指分组数据中成立的趋势，在合并后的总体数据中反而消失或反转的现象。",
+    "产生原因通常是各组样本量等混杂因子分布不均，如新旧版本的用户结构不同。",
+    "规避方法是分析时按关键维度分层、对比时保持口径一致，必要时用分层加权或 AB 实验消除混杂。"
+  ]
+},
+{
+  "id": "data-stat-008",
+  "language": "data",
+  "topic": "统计学基础",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "相关关系和因果关系有什么区别？如何论证因果？",
+  "answer_points": [
+    "相关只说明两个变量存在统计关联，不代表一方导致另一方，可能由混杂变量或反向因果造成。",
+    "论证因果的金标准是随机对照实验即 AB 测试，通过随机分组排除混杂因素的影响。",
+    "无法实验时可用 DID、PSM、断点回归等准实验方法，相关不等于因果是分析的基本素养。"
+  ]
+},
+{
+  "id": "data-stat-009",
+  "language": "data",
+  "topic": "统计学基础",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "t 检验、z 检验、卡方检验分别适用于什么场景？",
+  "answer_points": [
+    "比较两组均值用 t 检验，大样本时可近似用 z 检验，比较转化率等比例指标用双比例 z 检验。",
+    "多组均值比较用方差分析 ANOVA，分类变量的关联性检验用卡方检验。",
+    "选择依据主要看指标类型是连续还是离散、组数、样本量以及是否满足正态性与方差齐性假设。"
+  ]
+},
+{
+  "id": "data-stat-010",
+  "language": "data",
+  "topic": "统计学基础",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "请解释条件概率与贝叶斯公式，并举一个实际例子。",
+  "answer_points": [
+    "条件概率 P(A|B) 表示在 B 发生条件下 A 的概率，贝叶斯公式用于由 P(B|A) 反推 P(A|B)。",
+    "经典例子是疾病检测：即使检测准确率 99%，因患病率这个先验很低，阳性者真正患病的后验概率可能并不高。",
+    "要点是区分 P(阳性|患病) 与 P(患病|阳性)，先验概率对后验结论有决定性影响。"
+  ]
+},
+{
+  "id": "data-stat-011",
+  "language": "data",
+  "topic": "统计学基础",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "均值、中位数和众数有什么区别？各适用于什么场景？",
+  "answer_points": [
+    "均值受极端值影响大，收入、消费金额等右偏分布中常被少数高值拉高。",
+    "中位数对异常值稳健，描述客单价、使用时长等偏态分布的集中趋势更合适。",
+    "众数是出现次数最多的值，适合类别数据，分析时应结合分布形态选择合适指标。"
+  ]
+},
+{
+  "id": "data-stat-012",
+  "language": "data",
+  "topic": "统计学基础",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "什么是幸存者偏差？常见的抽样偏差还有哪些，如何避免？",
+  "answer_points": [
+    "幸存者偏差指只观察到幸存样本而忽略被淘汰样本，导致结论系统性偏差，如只调研留存用户。",
+    "常见抽样偏差还包括自选样本偏差和无应答偏差，都会破坏样本对总体的代表性。",
+    "规避方法是随机抽样、明确总体框，并对无应答和流失样本做补充分析或加权修正。"
+  ]
+},
+{
+  "id": "data-ab-001",
+  "language": "data",
+  "topic": "AB实验",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "请描述一个 AB 测试的完整流程。",
+  "answer_points": [
+    "完整流程是明确目标与假设、选定核心指标与护栏指标、计算样本量与周期、随机分流、回收数据做假设检验并决策。",
+    "原假设通常设为新旧策略无差异，通过 p 值与显著性水平比较来判断是否拒绝。",
+    "实验结束后要复盘：显著则评估是否全量，不显著则分析是功效不足还是确实无效果。"
+  ]
+},
+{
+  "id": "data-ab-002",
+  "language": "data",
+  "topic": "AB实验",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "AB 实验的样本量如何估算？受哪些因素影响？",
+  "answer_points": [
+    "样本量由显著性水平 α、统计功效 1-β、最小可检测效应 MDE 和指标基线方差共同决定。",
+    "MDE 越小、功效要求越高、基线比例越接近 0.5，所需样本量越大，MDE 与样本量近似平方反比。",
+    "实践中用历史数据估算方差，结合业务可接受的最小提升倒推 MDE，再代入公式或在线计算器得出每组样本量。"
+  ]
+},
+{
+  "id": "data-ab-003",
+  "language": "data",
+  "topic": "AB实验",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "AB 实验中如何选择实验指标？什么是护栏指标？",
+  "answer_points": [
+    "核心指标要直接反映实验假设的预期效果，且对改动足够敏感，如转化率、人均时长。",
+    "护栏指标用于监控副作用，保证核心指标提升不以伤害留存、收入等其他维度为代价。",
+    "避免选择方差过大或反馈周期过长的指标，指标需预先固定，防止事后挑选指标造成口径偏差。"
+  ]
+},
+{
+  "id": "data-ab-004",
+  "language": "data",
+  "topic": "AB实验",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "AB 实验有哪些分流方式？如何保证分流的随机性？",
+  "answer_points": [
+    "常见分流方式是按用户 ID 哈希取模，保证同一用户始终落入同一组、组间同质且互斥。",
+    "分层分流可在互不干扰的层上并行多个实验，正交实验则用于同时测试多个因素的组合。",
+    "分流后要检查组间用户画像是否均衡，可结合 AA 检验，避免选择偏差污染实验结论。"
+  ]
+},
+{
+  "id": "data-ab-005",
+  "language": "data",
+  "topic": "AB实验",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "什么是 AA 测试？为什么要做 AA 测试？",
+  "answer_points": [
+    "AA 测试是让两组使用完全相同的版本，检验分流机制与数据链路是否存在系统性差异。",
+    "若 AA 组间指标出现显著差异，说明分流不均、埋点或统计口径有问题，此时 AB 结果不可信。",
+    "AA 测试还可用于估计指标的自然波动与方差，为 MDE 和样本量设定提供依据。"
+  ]
+},
+{
+  "id": "data-ab-006",
+  "language": "data",
+  "topic": "AB实验",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "什么是多重检验问题？如何解决？",
+  "answer_points": [
+    "同时检验多个指标或分组时假阳性概率会累积，20 次检验在 α=0.05 下至少一次假阳性的概率约 64%。",
+    "常用校正方法是 Bonferroni 将 α 除以检验次数，以及控制错误发现率的 FDR/BH 方法。",
+    "更根本的做法是实验前预注册核心指标，把其余指标仅作为探索性结果看待。"
+  ]
+},
+{
+  "id": "data-ab-007",
+  "language": "data",
+  "topic": "AB实验",
+  "difficulty": "困难",
+  "frequency": "高频",
+  "question": "AB 实验结果不显著时应该怎么办？",
+  "answer_points": [
+    "先检查统计功效是否不足，样本量未达标、实验周期过短或 MDE 设置过小都会导致不显著。",
+    "其次检查实验执行质量，分流是否均匀、样本是否被污染、指标口径是否正确。",
+    "若功效充足仍不显著，应接受策略无效果的结论，并可做分层分析寻找异质性效果。"
+  ]
+},
+{
+  "id": "data-ab-008",
+  "language": "data",
+  "topic": "AB实验",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "什么是 SRM（样本比例不匹配）？发现 SRM 后怎么办？",
+  "answer_points": [
+    "SRM 指实际分流比例显著偏离设计比例（如 50:50），是实验可信度的重要检查项。",
+    "常用卡方检验判断各组样本量分布是否与预期一致，出现 SRM 说明分流或埋点链路存在 bug。",
+    "发生 SRM 时实验结论不可信，应排查分流逻辑、上报丢失、异常流量等原因后重新实验。"
+  ]
+},
+{
+  "id": "data-ab-009",
+  "language": "data",
+  "topic": "AB实验",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "AB 实验跑多久合适？为什么不能每天盯着结果随时叫停？",
+  "answer_points": [
+    "实验周期至少覆盖一个完整业务周期（通常 1 到 2 周），以消除周末与工作日的周期性波动，并避开大促等异常时段。",
+    "频繁中途查看结果并在显著时提前停止会放大假阳性概率，应预先固定结束时间或采用序贯检验方法。",
+    "还需保证累计样本量达到预估的最小样本量后再读数，三者缺一不可。"
+  ]
+},
+{
+  "id": "data-ab-010",
+  "language": "data",
+  "topic": "AB实验",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "如果业务场景无法做 AB 实验，还有哪些方法可以评估策略效果？",
+  "answer_points": [
+    "无法随机分流时可采用双重差分 DID，对比干预组与可比对照组在干预前后的变化差异。",
+    "也可用 PSM 倾向得分匹配构造相似对照组，或用合成控制法、CausalImpact 等时间序列因果推断方法。",
+    "准实验方法的核心是尽可能满足平行趋势等假设，并在结论中说明残余混杂的局限性。"
+  ]
+},
+{
+  "id": "data-metric-001",
+  "language": "data",
+  "topic": "指标体系与埋点",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "什么是北极星指标？请举例说明。",
+  "answer_points": [
+    "北极星指标是最能代表产品长期核心价值、能牵引全团队方向的单一关键指标。",
+    "好的北极星指标应反映用户获得的价值、可被层层拆解驱动、具备领先性，如电商的 GMV、内容产品的总消费时长。",
+    "选择时要结合产品阶段与商业模式，避免用累计注册数这类虚荣指标充当北极星。"
+  ]
+},
+{
+  "id": "data-metric-002",
+  "language": "data",
+  "topic": "指标体系与埋点",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "请介绍 AARRR 模型及各环节的关键指标。",
+  "answer_points": [
+    "AARRR 将用户生命周期分为获取、激活、留存、收入、推荐五个环节，每个环节对应一组关键指标。",
+    "获客看新增量与渠道 ROI，激活看关键行为完成率，留存看次日与 7 日留存，收入看 ARPU 与付费率，推荐看分享率与 K 因子。",
+    "实际搭建时常与 UJM 用户旅程地图结合，按用户路径逐层拆解指标定位薄弱环节。"
+  ]
+},
+{
+  "id": "data-metric-003",
+  "language": "data",
+  "topic": "指标体系与埋点",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "DAU 和 MAU 如何定义？DAU/MAU 比值有什么含义？",
+  "answer_points": [
+    "DAU 是当日去重活跃用户数，MAU 是近 30 天去重活跃用户数，活跃必须明确定义为启动、登录还是关键行为。",
+    "DAU/MAU 比值反映用户粘性与访问频次，比值越高说明用户打开越频繁，社交产品通常高于工具产品。",
+    "看 DAU 要结合新增、留存、回流拆解，单纯看总量容易掩盖用户结构变化带来的问题。"
+  ]
+},
+{
+  "id": "data-metric-004",
+  "language": "data",
+  "topic": "指标体系与埋点",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "留存率如何定义？有哪些常见的留存口径需要注意？",
+  "answer_points": [
+    "留存率等于第 N 日仍活跃的新增用户数除以当日新增用户数，常见口径有次日、3 日、7 日、30 日留存。",
+    "需区分 N 日留存即恰在第 N 日活跃，与 N 日内留存即区间内活跃即可，不同口径数值差异很大。",
+    "还可按周、月或按行为定义留存，如下单留存，关键是口径统一并在同期群之间可比。"
+  ]
+},
+{
+  "id": "data-metric-005",
+  "language": "data",
+  "topic": "指标体系与埋点",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "如果让你为一个产品从零搭建指标体系，你会怎么做？",
+  "answer_points": [
+    "第一步用 OSM 模型明确业务目标 O，再确定达成目标的策略 S，最后为策略选择可度量的指标 M。",
+    "结合 UJM 或 AARRR 梳理用户路径，自上而下搭建北极星指标、一级指标、二级过程指标的分级体系。",
+    "对核心指标做乘法或加法拆解，如 GMV 等于流量乘转化率乘客单价，并建立指标字典统一口径、责任到人。"
+  ]
+},
+{
+  "id": "data-metric-006",
+  "language": "data",
+  "topic": "指标体系与埋点",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "某个核心指标（如 GMV）突然下降，你的归因分析框架是什么？",
+  "answer_points": [
+    "第一步校验数据真实性，排查埋点上报异常、ETL 延迟、口径变更，确认异动不是技术噪声。",
+    "第二步定性波动类型，结合同比环比判断是突发、周期性还是趋势性变化。",
+    "第三步维度下钻，按新老用户、渠道、端、版本、地区拆解，用波动贡献度定位拉低大盘的细分群体。",
+    "最后结合内部发版活动与外部节假日竞品因素提出假设，并用数据逐项验证根因。"
+  ]
+},
+{
+  "id": "data-metric-007",
+  "language": "data",
+  "topic": "指标体系与埋点",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "什么是漏斗分析？如何用漏斗定位转化问题？",
+  "answer_points": [
+    "漏斗分析把用户完成目标的关键步骤串联，计算各步骤转化率与流失率，如浏览、加购、下单、支付。",
+    "定位短板看相邻步骤转化率最低或显著低于历史与行业水平的环节，再对该环节做维度下钻。",
+    "注意漏斗步骤需严格按时间顺序去重统计，并区分整体转化率与分步转化率两个口径。"
+  ]
+},
+{
+  "id": "data-metric-008",
+  "language": "data",
+  "topic": "指标体系与埋点",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "什么是埋点？如何设计一套埋点方案？",
+  "answer_points": [
+    "埋点是在关键行为位置植入数据采集代码，分为前端埋点、后端埋点和全埋点，各有精度与成本权衡。",
+    "设计时常用事件模型：谁在何时何地通过什么方式做了什么，即 Who、When、Where、How、What。",
+    "埋点方案要输出事件名、触发时机、属性字段的埋点文档，并在上线前做数据校验保证采集准确。"
+  ]
+},
+{
+  "id": "data-metric-009",
+  "language": "data",
+  "topic": "指标体系与埋点",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "如何对 GMV 进行指标拆解？",
+  "answer_points": [
+    "常用乘法拆解：GMV 等于访问用户数乘支付转化率乘客单价，客单价还可再拆为件单价乘连带率。",
+    "也可用加法拆解为新客 GMV 加老客 GMV，或按渠道、品类、地区拆分定位贡献变化。",
+    "拆解后计算各因子的环比变化及其对 GMV 波动的贡献度，即可定位增长或下滑的主要来源。"
+  ]
+},
+{
+  "id": "data-metric-010",
+  "language": "data",
+  "topic": "指标体系与埋点",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "为什么指标口径统一很重要？指标字典应该包含哪些内容？",
+  "answer_points": [
+    "指标口径不一致会导致同名指标不同数值，典型分歧如活跃用户按启动、登录还是关键行为定义。",
+    "指标字典记录每个指标的业务定义、统计逻辑、数据来源、更新频率与负责人，是口径统一的保障。",
+    "新指标上线前需评审口径并与已有指标对齐，避免数出多门影响决策可信度。"
+  ]
+},
+{
+  "id": "data-metric-011",
+  "language": "data",
+  "topic": "指标体系与埋点",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "LTV 如何计算？LTV 和 CAC 的关系是什么？",
+  "answer_points": [
+    "LTV 是用户生命周期内贡献的总价值，常用 ARPU 乘平均生命周期或对留存曲线积分来估算。",
+    "CAC 是获取单个用户的平均成本，等于渠道投放费用除以新增用户数，衡量获客效率。",
+    "健康的商业模型要求 LTV/CAC 大于 3 且回本周期可控，分析时要按渠道分层对比两者。"
+  ]
+},
+{
+  "id": "data-metric-012",
+  "language": "data",
+  "topic": "指标体系与埋点",
+  "difficulty": "困难",
+  "frequency": "高频",
+  "question": "什么是同期群分析（Cohort 分析）？它解决了什么问题？",
+  "answer_points": [
+    "同期群分析把同一时间或同一行为进入的用户归为一组，跟踪其后续各周期的留存或价值表现。",
+    "Cohort 矩阵可横向比较不同批次用户的留存质量，判断产品改版或渠道变化是否带来真实改善。",
+    "它能剥离用户结构变化的影响，避免用整体留存掩盖各批次表现的差异，是留存分析的标准工具。"
+  ]
+},
+{
+  "id": "data-case-001",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "昨天 DAU 突然下降了 10%，你会如何分析排查？",
+  "answer_points": [
+    "先校验数据，确认不是埋点故障、统计延迟或口径调整造成的假性下跌。",
+    "再看波动形态，结合同比环比区分突发下跌、周期波动与持续趋势，并检查是否对应发版或活动节点。",
+    "然后维度拆解，按新老用户、渠道、平台、版本、地区计算波动贡献度，定位跌幅最大的细分人群。",
+    "最后归因验证，内部排查产品改动与运营动作，外部考虑节假日、竞品与舆情，提出假设并用数据验证。"
+  ]
+},
+{
+  "id": "data-case-002",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "如何评估一次运营活动（如大促、拉新活动）的效果？",
+  "answer_points": [
+    "活动前明确目标与衡量指标，如拉新、GMV、留存，并设定预期值与对照基准。",
+    "优先用 AB 实验或留出对照组隔离活动影响，无法实验时用前后对比加同期群或 DID 控制自然波动。",
+    "评估不仅看活动期增量，还要看活动后的留存与复购，警惕透支未来消费的虚假繁荣。",
+    "最终计算 ROI 即活动增量收益除以活动成本，输出结论并沉淀可复用的策略经验。"
+  ]
+},
+{
+  "id": "data-case-003",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "某产品的支付转化率下降了，你会如何定位原因？",
+  "answer_points": [
+    "先确认口径与数据无误，再画出漏斗看是整体下降还是个别环节的分步转化率恶化。",
+    "按维度拆解，低质流量渠道占比上升会稀释整体转化率，需区分结构效应与环节恶化。",
+    "对恶化环节下钻到页面与版本，结合发版记录、加载性能、价格与库存变化排查原因。",
+    "用贡献度量化各因素影响大小，提出改进假设并通过 AB 实验验证优化方案。"
+  ]
+},
+{
+  "id": "data-case-004",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "请介绍 RFM 模型及其在用户运营中的应用。",
+  "answer_points": [
+    "RFM 用最近一次消费时间 R、消费频次 F、消费金额 M 三个维度衡量用户价值。",
+    "对每个维度打分并划分高低，组合出八类用户，如重要价值用户、重要挽留用户、一般维持用户等。",
+    "运营上对不同分层差异化施策：高价值用户做权益维护，高 R 低 F 用户做提频促活，流失预警用户做召回。",
+    "注意分箱阈值应结合业务分布确定，且 RFM 适用于交易型业务，内容产品需替换对应指标。"
+  ]
+},
+{
+  "id": "data-case-005",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "如何做用户分层？有哪些常见的分层方法？",
+  "answer_points": [
+    "用户分层是按价值、生命周期或行为特征把用户分组以便差异化运营，常见方法有 RFM、生命周期分层和金字塔分层。",
+    "分层维度要与业务目标相关：电商常用消费价值，内容产品常用活跃度与贡献度如创作者和消费者。",
+    "流程上先选维度与阈值，再验证各层规模与贡献分布是否合理，最后配套运营动作并跟踪层间流转。",
+    "好的分层应满足组内同质、组间异质、可执行可衡量，并随业务发展定期迭代。"
+  ]
+},
+{
+  "id": "data-case-006",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "平台 GMV 环比下降了 15%，请说明你的归因分析思路。",
+  "answer_points": [
+    "先按公式拆解 GMV 等于流量乘转化率乘客单价，计算各因子环比变化与对降幅的贡献度。",
+    "再按加法拆解定位结构，分渠道、品类、地区、新老客看哪个板块拖累了大盘。",
+    "对核心拖累因子继续下钻，转化率下降走漏斗分析，客单价下降看品类结构与补贴变化。",
+    "结合大促节奏、竞争环境和内部动作给出归因结论，并提出可量化的恢复方案。"
+  ]
+},
+{
+  "id": "data-case-007",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "一个新功能上线后，如何评估它的效果好坏？",
+  "answer_points": [
+    "上线前明确功能目标与指标体系，包括核心指标如功能渗透率、过程指标和护栏指标如留存与崩溃率。",
+    "有条件时用 AB 实验量化因果效应，全量上线时用前后对比加同期群，并用未使用用户作近似对照。",
+    "分析渗透率到使用率再到留存贡献的链路，渗透低可能是入口问题，使用低可能是体验问题。",
+    "注意区分尝鲜效应与长期价值，观察至少一个完整周期后再下结论。"
+  ]
+},
+{
+  "id": "data-case-008",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "如何分析用户流失并搭建流失预警体系？",
+  "answer_points": [
+    "先定义流失口径如连续 N 天未活跃，口径需结合产品使用周期确定，工具类产品通常长于社交类。",
+    "描述流失画像，按生命周期、渠道、价值分层看流失集中度，定位高流失人群。",
+    "挖掘流失前兆行为如活跃度下降、关键行为减少、投诉等信号，用于搭建流失预警模型。",
+    "对预警用户做分层召回如 push、优惠券、电话，并用 AB 实验评估召回策略的增量效果与 ROI。"
+  ]
+},
+{
+  "id": "data-case-009",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "如何评估补贴或优惠券策略的 ROI？",
+  "answer_points": [
+    "补贴 ROI 等于补贴带来的增量收益除以补贴成本，核心是区分增量订单与不发券也会买的订单。",
+    "用 AB 实验或人群对照即发券组对比未发券组估计增量转化，避免把自然转化算作补贴功劳。",
+    "关注补贴的边际效应递减与羊毛党风险，可按 RFM 分层做定向补贴提升资金使用效率。",
+    "还要观察补贴停止后的留存与复购，评估是否培养了用户习惯还是形成了补贴依赖。"
+  ]
+},
+{
+  "id": "data-case-010",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "什么是费米估算？请用一个例子说明你的估算思路。",
+  "answer_points": [
+    "费米估算通过把大问题拆解为可估计的小因子连乘，快速得到数量级合理的答案，如估算某城市的奶茶店数量。",
+    "答题框架是明确口径与边界，自上而下或自下而上拆解公式，对每个因子给出有依据的假设值。",
+    "例如用城市人口乘人均奶茶消费频次除以单店日均出杯量估算门店数，最后做合理性校验。",
+    "面试官重点看拆解逻辑与商业常识而非精确数值，应边说边算并保持结构清晰。"
+  ]
+},
+{
+  "id": "data-case-011",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "某产品新用户次日留存率很高但 7 日留存率很低，说明什么？怎么改进？",
+  "answer_points": [
+    "次日留存高说明新用户首体验达标、激活流程有效，产品第一印象没有问题。",
+    "7 日留存低说明产品缺乏持续使用价值或周期性场景，用户没有被培养成使用习惯。",
+    "应下钻看新用户来源渠道与新手行为路径，定位关键行为即 aha 行为未完成的人群。",
+    "改进方向包括完善新手引导、增加周期性触达场景，用留存曲线观察干预后曲线是否抬升。"
+  ]
+},
+{
+  "id": "data-case-012",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "某渠道带来的新增用户很多，如何衡量这个渠道的质量？",
+  "answer_points": [
+    "不能只看新增量，要构建渠道质量指标，包括留存率、活跃度、付费率、LTV 与获客成本 CAC。",
+    "用同期群方法按渠道追踪各批次用户的留存曲线与 LTV，计算各渠道的 LTV/CAC 比值。",
+    "警惕刷量与羊毛渠道，异常低的留存、集中的设备或 IP、行为模式单一是典型特征。",
+    "最终按质量分层调整预算分配，把预算向高 LTV/CAC 渠道倾斜并持续复盘。"
+  ]
+},
+{
+  "id": "data-case-013",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "如果让你提升某产品的付费转化率，你会怎么分析和推进？",
+  "answer_points": [
+    "先拆解付费漏斗即曝光、详情、下单、支付各环节，定位流失最严重的环节作为主攻方向。",
+    "从用户侧分层分析，对比付费与未付费用户的行为差异，找出影响转化的关键特征与门槛。",
+    "从商品侧分析价格锚点、权益感知与促销机制，提出优化假设。",
+    "用 AB 实验验证方案效果，同时监控客单价与退款率等护栏指标，防止转化率提升带来质量下滑。"
+  ]
+},
+{
+  "id": "data-case-014",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "写好一份数据分析报告并汇报给业务方，需要注意什么？",
+  "answer_points": [
+    "结论先行，开头直接给核心结论与建议，再展开论据，符合金字塔原理。",
+    "数据支撑要口径清晰、图表恰当，关键数字要有对比基准如环比、同比、目标值。",
+    "面向业务方要用业务语言而非技术术语，说明结论对应的行动建议，即所以呢。",
+    "注明数据口径、时间范围与局限假设，重要结论需经过交叉验证，保证报告可信可复用。"
+  ]
+},
+{
+  "id": "data-case-015",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "如何为核心业务指标设计一套监控与预警体系？",
+  "answer_points": [
+    "先梳理核心指标清单与责任分工，确定各指标的统计频率与正常波动区间。",
+    "预警规则可结合固定阈值、同比环比波动和统计方法如 3σ 或基于历史分布的分位数。",
+    "设计分级告警机制，按影响程度分渠道通知，避免告警泛滥导致狼来了效应。",
+    "配套异动处理 SOP，告警后自动下钻报表定位维度，形成发现、定位、处理的闭环并持续校准阈值。"
+  ]
+},
+{
+  "id": "data-case-016",
+  "language": "data",
+  "topic": "业务分析Case",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "对于打车、外卖这类双边平台，你会如何分析供需匹配问题？",
+  "answer_points": [
+    "供需平台的核心是匹配效率，常用指标有应答率、履约时长、取消率、供需比。",
+    "分析时先分时空下钻，按城市、时段、区域网格看供需缺口分布，定位失衡热点。",
+    "供给侧看在线司机或骑手数与活跃度，需求侧看下单量与转化率，区分是缺供给还是需求波动。",
+    "治理手段包括动态定价、调度激励、补贴引导，效果用 AB 或时空对照评估，避免补贴破坏长期平衡。"
+  ]
+},
+{
+  "id": "data-py-001",
+  "language": "data",
+  "topic": "Python数据处理",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "pandas 中 merge 和 concat 有什么区别？",
+  "answer_points": [
+    "merge 按一个或多个键做横向连接，类似 SQL 的 JOIN，支持 inner、left、right、outer 四种方式。",
+    "concat 沿行或列方向直接堆叠拼接，按索引对齐但不做键值匹配逻辑。",
+    "merge 前要确认连接键的唯一性与缺失值，防止一对多连接导致行数膨胀。"
+  ]
+},
+{
+  "id": "data-py-002",
+  "language": "data",
+  "topic": "Python数据处理",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "pandas 中 groupby 有哪些常用用法？",
+  "answer_points": [
+    "groupby 按列分组后可接 sum、mean、count 等聚合方法，对应 SQL 的 GROUP BY。",
+    "agg 支持对每个分组同时计算多个统计量，也可对不同列指定不同聚合函数。",
+    "transform 返回与原表等长的分组统计结果适合做组内占比，apply 更灵活但性能较低。"
+  ]
+},
+{
+  "id": "data-py-003",
+  "language": "data",
+  "topic": "Python数据处理",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "pandas 中如何处理缺失值？",
+  "answer_points": [
+    "先用 isnull().sum() 统计各列缺失情况，结合业务判断缺失机制与影响。",
+    "处理手段包括 dropna 删除缺失行或列，fillna 用均值、中位数、众数、固定值或前后值填充。",
+    "关键原则是依据缺失原因与业务含义选择策略，关键字段缺失应溯源数据采集问题而非简单填充。"
+  ]
+},
+{
+  "id": "data-py-004",
+  "language": "data",
+  "topic": "Python数据处理",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "pandas 中如何处理重复值？",
+  "answer_points": [
+    "duplicated() 标记重复行，drop_duplicates() 删除重复行，可按子集列判断并保留首条或末条。",
+    "对主键级重复要保留最新记录时，可先按时间排序再 drop_duplicates(keep='last')。",
+    "发现重复后应先追查产生原因如重复上报或 JOIN 膨胀，而不是直接删除掩盖问题。"
+  ]
+},
+{
+  "id": "data-py-005",
+  "language": "data",
+  "topic": "Python数据处理",
+  "difficulty": "中等",
+  "frequency": "高频",
+  "question": "pandas 的 pivot_table 怎么用？和 crosstab 有什么区别？",
+  "answer_points": [
+    "pivot_table 按 index 和 columns 对 values 做聚合透视，等价于 Excel 数据透视表，实现行列转换。",
+    "可通过 aggfunc 指定聚合方式，用 fill_value 填充缺失、margins 添加合计行列。",
+    "crosstab 专门用于分类变量的交叉频次统计，常用于列联表与卡方检验前处理。"
+  ]
+},
+{
+  "id": "data-py-006",
+  "language": "data",
+  "topic": "Python数据处理",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "pandas 中 apply、map 和 applymap 有什么区别？",
+  "answer_points": [
+    "map 作用于 Series 的元素级映射，可传字典或函数，常用于数值替换与编码。",
+    "apply 对 Series 逐元素或对 DataFrame 按行列应用函数，applymap 对 DataFrame 逐元素应用，二者灵活但速度慢。",
+    "能用向量化运算如 np.where 或 str 访问器替代时优先向量化，性能可提升一个数量级。"
+  ]
+},
+{
+  "id": "data-py-007",
+  "language": "data",
+  "topic": "Python数据处理",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "pandas 的常见操作如何与 SQL 语句对应？",
+  "answer_points": [
+    "WHERE 筛选对应布尔索引 df[df.col>0]，SELECT 列对应 df[['a','b']]。",
+    "GROUP BY 聚合对应 groupby().agg()，JOIN 对应 merge，ORDER BY 对应 sort_values。",
+    "UNION 对应 concat 后去重，窗口函数中的编号可用 groupby().rank() 或 cumcount() 实现。"
+  ]
+},
+{
+  "id": "data-py-008",
+  "language": "data",
+  "topic": "Python数据处理",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "用 pandas 处理的数据量太大、内存不够时怎么办？",
+  "answer_points": [
+    "读取阶段优化：read_csv 指定 dtype、只加载需要的列、用 chunksize 分块逐批处理聚合。",
+    "存储优化：把低基数文本列转 category 类型、用更小的数值类型，可显著降低内存占用。",
+    "超出单机内存时改用 Dask、Polars 或把计算下推到数据库与数仓，只取回聚合后的结果。"
+  ]
+},
+{
+  "id": "data-py-009",
+  "language": "data",
+  "topic": "Python数据处理",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "numpy 数组和 Python 原生列表有什么区别？",
+  "answer_points": [
+    "numpy 数组基于连续内存与 C 实现，支持向量化运算，数值计算速度远快于 Python 原生列表。",
+    "数组元素类型统一，支持广播机制与多维矩阵操作，是 pandas 和机器学习库的底层基础。",
+    "列表可存混合类型、增删灵活适合通用容器，数值计算场景应优先使用 numpy。"
+  ]
+},
+{
+  "id": "data-py-010",
+  "language": "data",
+  "topic": "Python数据处理",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "pandas 中 loc 和 iloc 有什么区别？链式赋值有什么问题？",
+  "answer_points": [
+    "loc 按行索引标签与列名选取数据，切片包含右端点；iloc 按整数位置选取，与 Python 切片一致不含右端点。",
+    "布尔索引常与 loc 搭配使用，如 df.loc[df.a>0, 'b'] 完成筛选与赋值。",
+    "链式赋值如 df[df.a>0]['b']=x 可能作用在副本上导致 SettingWithCopyWarning，应统一用 loc 一次定位赋值。"
+  ]
+},
+{
+  "id": "data-excel-001",
+  "language": "data",
+  "topic": "Excel与BI工具",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "VLOOKUP 函数怎么用？有哪些常见错误？XLOOKUP 有什么改进？",
+  "answer_points": [
+    "VLOOKUP 语法为查找值、查找区域、返回列序号、匹配方式，精确匹配时第四个参数必须写 FALSE 或 0。",
+    "常见错误包括查找值不在区域首列、区域未绝对引用导致下拉偏移、文本型数字与数值不一致导致查不到。",
+    "XLOOKUP 支持向左查找、默认精确匹配、可自定义未找到时的返回值，是 VLOOKUP 的升级替代。"
+  ]
+},
+{
+  "id": "data-excel-002",
+  "language": "data",
+  "topic": "Excel与BI工具",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "Excel 数据透视表有什么作用？适用于什么场景？",
+  "answer_points": [
+    "数据透视表可对明细数据按维度拖拽分组，快速完成求和、计数、平均值等聚合，无需写公式。",
+    "典型场景是按月份和地区汇总销售额、按渠道统计订单量，配合切片器可做交互式分析。",
+    "注意源数据需为规范的一维明细表，无合并单元格、无空行，否则透视结果会出错。"
+  ]
+},
+{
+  "id": "data-excel-003",
+  "language": "data",
+  "topic": "Excel与BI工具",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "Excel 中如何快速删除重复值？如何验证删除是否彻底？",
+  "answer_points": [
+    "通过数据选项卡中的删除重复值功能勾选关键列即可去重，操作前建议先备份原始数据。",
+    "验证是否去重彻底可用 COUNTIF 统计关键值出现次数，大于 1 的即为仍重复的记录。",
+    "也可配合条件格式突出显示重复值，先定位产生重复的业务原因再处理。"
+  ]
+},
+{
+  "id": "data-excel-004",
+  "language": "data",
+  "topic": "Excel与BI工具",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "SUMIF、COUNTIF 与 SUMIFS、COUNTIFS 有什么区别？",
+  "answer_points": [
+    "SUMIF 和 COUNTIF 按单个条件对区域求和或计数，SUMIFS 和 COUNTIFS 支持多条件组合。",
+    "注意条件区域与求和区域的行数必须一致，文本条件中的通配符星号和问号有特殊含义。",
+    "典型应用是按渠道统计 GMV、按月份统计订单数，是考察 Excel 基本功的高频题。"
+  ]
+},
+{
+  "id": "data-excel-005",
+  "language": "data",
+  "topic": "Excel与BI工具",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "INDEX+MATCH 组合相比 VLOOKUP 有什么优势？",
+  "answer_points": [
+    "INDEX+MATCH 通过行号定位取值，可实现向左查找，不受 VLOOKUP 查找列必须在首列的限制。",
+    "列数变化时 MATCH 自动适应，不像 VLOOKUP 的列序号容易因插入列而错乱。",
+    "在大数据量下 INDEX+MATCH 的计算效率也优于 VLOOKUP，是更健壮的查找组合。"
+  ]
+},
+{
+  "id": "data-excel-006",
+  "language": "data",
+  "topic": "Excel与BI工具",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "Excel 处理大数据量有什么局限？有什么替代方案？",
+  "answer_points": [
+    "Excel 单表上限约 104 万行，且数万行复杂公式后即明显卡顿，不适合明细级大数据处理。",
+    "大数据场景应把计算下推到数据库用 SQL 或用 Python pandas 处理，Excel 只做结果展示。",
+    "也可用 Power Query 连接外部数据源做清洗建模，突破手工公式处理的性能瓶颈。"
+  ]
+},
+{
+  "id": "data-excel-007",
+  "language": "data",
+  "topic": "Excel与BI工具",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "Power BI 和 Tableau 有什么差异？企业选型时怎么考虑？",
+  "answer_points": [
+    "Power BI 与微软生态集成好、性价比高、上手快，适合已使用 Office 或 Azure 的企业。",
+    "Tableau 可视化表现力与交互探索能力更强、图表美观度高，但授权成本更高。",
+    "选型看数据规模、预算、现有技术栈与使用者水平，国内场景也常考虑 FineBI、Quick BI 等本土产品。"
+  ]
+},
+{
+  "id": "data-excel-008",
+  "language": "data",
+  "topic": "Excel与BI工具",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "Excel 中绝对引用和相对引用有什么区别？$ 符号怎么用？",
+  "answer_points": [
+    "$ 符号用于锁定行或列，$A$1 是绝对引用，$A1 锁列，A$1 锁行，下拉填充时锁定部分不变。",
+    "写查找或比率公式时分母区域与查找区域必须绝对引用，否则填充后引用区域错位出错。",
+    "选中引用后按 F4 键可快速切换引用方式，这是判断 Excel 熟练度的细节考点。"
+  ]
+},
+{
+  "id": "data-vis-001",
+  "language": "data",
+  "topic": "数据可视化",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "常见的图表类型有哪些？分别适用于什么分析场景？",
+  "answer_points": [
+    "比较类数据用柱状图或条形图，趋势变化用折线图，占比构成用饼图或堆叠柱图。",
+    "分布特征用直方图或箱线图，两个变量的关系用散点图，多维密度或相关性用热力图。",
+    "选型原则是先明确要表达的信息类型是比较、趋势、构成、分布还是关系，再选最直观的图表。"
+  ]
+},
+{
+  "id": "data-vis-002",
+  "language": "data",
+  "topic": "数据可视化",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "什么时候不应该使用饼图？",
+  "answer_points": [
+    "人对面积和角度的感知弱于长度，饼图类别超过 5 个或占比接近时难以比较大小。",
+    "类别多时应改用条形图，排序后各类别差异一目了然。",
+    "饼图仅适合展示 2 到 5 个类别、合计为 100% 的构成关系，且应标注百分比避免误读。"
+  ]
+},
+{
+  "id": "data-vis-003",
+  "language": "data",
+  "topic": "数据可视化",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "设计一个数据看板（仪表盘）时应遵循哪些原则？",
+  "answer_points": [
+    "先明确看板受众与决策场景，核心指标置顶突出，按总览、拆解、明细分层组织。",
+    "每个图表回答一个明确问题，指标口径统一，并提供筛选下钻能力支持自助探索。",
+    "控制信息密度避免图表堆砌，加上对比基准如环比与目标线以及异常高亮，让异常一眼可见。"
+  ]
+},
+{
+  "id": "data-vis-004",
+  "language": "data",
+  "topic": "数据可视化",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "向管理层汇报数据时，可视化和表达上应注意什么？",
+  "answer_points": [
+    "面向管理层汇报应结论先行，每页只讲一个观点，图表服务于结论而非展示工作量。",
+    "减少装饰性元素与 3D 效果，突出关键数字，用颜色引导视线聚焦核心信息。",
+    "讲好数据故事，用背景、问题、分析、建议的叙事结构，比罗列图表更能驱动决策。"
+  ]
+},
+{
+  "id": "data-vis-005",
+  "language": "data",
+  "topic": "数据可视化",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "数据可视化中有哪些常见的误导性做法或陷阱？",
+  "answer_points": [
+    "截断 Y 轴起点会夸大差异，柱状图应从 0 开始或明确标注截断。",
+    "双轴图容易制造虚假相关，3D 饼图的透视会扭曲面积比例，都应谨慎使用。",
+    "其他常见陷阱包括口径不一的对比、选择性展示时间区间、用绝对值掩盖基数差异，审图时需警惕。"
+  ]
+},
+{
+  "id": "data-vis-006",
+  "language": "data",
+  "topic": "数据可视化",
+  "difficulty": "困难",
+  "frequency": "中频",
+  "question": "如何评价一个数据看板做得好还是不好？",
+  "answer_points": [
+    "好的看板首先要被使用，有稳定访问量和明确的决策场景，而不是做完没人看。",
+    "指标层面评价口径是否统一、数据是否及时准确、核心指标是否突出且能下钻定位问题。",
+    "可量化的评价方式包括看板打开率、用户从发现问题到定位原因的时长，以及业务方的定期反馈。"
+  ]
+},
+{
+  "id": "data-ml-001",
+  "language": "data",
+  "topic": "机器学习基础",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "分类、回归和聚类有什么区别？各有哪些典型算法？",
+  "answer_points": [
+    "分类预测离散标签如是否流失，回归预测连续数值如 GMV，二者都属于有监督学习。",
+    "聚类是无监督学习，在无标签数据中按相似度自动分组，典型应用是用户分群。",
+    "典型算法上分类有逻辑回归、决策树、XGBoost，回归有线性回归，聚类有 K-Means。"
+  ]
+},
+{
+  "id": "data-ml-002",
+  "language": "data",
+  "topic": "机器学习基础",
+  "difficulty": "基础",
+  "frequency": "高频",
+  "question": "什么是过拟合？如何判断和解决过拟合？",
+  "answer_points": [
+    "过拟合指模型在训练集表现很好但在新数据上泛化差，本质是记住了噪声而非规律。",
+    "判断方法是对比训练集与验证集的效果差距，或使用交叉验证评估稳定性。",
+    "常见对策包括增加数据、简化模型、L1/L2 正则化、特征筛选，树模型还可剪枝与早停。"
+  ]
+},
+{
+  "id": "data-ml-003",
+  "language": "data",
+  "topic": "机器学习基础",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "分类模型有哪些常用评估指标？各自的含义是什么？",
+  "answer_points": [
+    "准确率是整体预测正确的比例，但在类别不均衡时会严重失真。",
+    "精确率是预测为正样本中真正为正的比例，召回率是实际正样本中被抓出的比例，F1 是两者的调和平均。",
+    "AUC 衡量模型对正负样本的整体排序能力，不受阈值影响，是不均衡场景下常用的综合指标。"
+  ]
+},
+{
+  "id": "data-ml-004",
+  "language": "data",
+  "topic": "机器学习基础",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "精确率和召回率如何权衡？业务中如何选择？",
+  "answer_points": [
+    "提高分类阈值会提升精确率但降低召回率，二者存在此消彼长的权衡关系。",
+    "业务选择看代价：流失召回、欺诈检测宁可误报也要抓全，优先高召回；营销触达为避免打扰用户优先高精确率。",
+    "可通过调整分类阈值、设置代价敏感权重或使用 Fβ 指标，按业务偏好平衡两者。"
+  ]
+},
+{
+  "id": "data-ml-005",
+  "language": "data",
+  "topic": "机器学习基础",
+  "difficulty": "中等",
+  "frequency": "中频",
+  "question": "特征工程包含哪些内容？为什么重要？",
+  "answer_points": [
+    "特征工程包括特征构造如衍生时间、统计、交叉特征，与特征变换如归一化、分箱、编码。",
+    "类别变量常用 One-Hot 或标签编码，连续变量按模型需要做标准化或离散化。",
+    "还包括缺失值与异常值处理、特征选择，业界共识是特征质量对效果的影响往往大于模型选择。"
+  ]
+},
+{
+  "id": "data-ml-006",
+  "language": "data",
+  "topic": "机器学习基础",
+  "difficulty": "基础",
+  "frequency": "中频",
+  "question": "监督学习和无监督学习有什么区别？",
+  "answer_points": [
+    "监督学习使用带标签数据学习输入到输出的映射，典型任务是分类与回归。",
+    "无监督学习从无标签数据中发现结构，典型任务是聚类与降维如 PCA。",
+    "数据分析岗位常在用户分群、异常检测等场景用到无监督方法，在预测场景用到监督方法。"
+  ]
+}
+]

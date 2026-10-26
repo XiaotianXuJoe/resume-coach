@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* shadcn 变量（暖色化，hsl 三元组） */
+    --background: 38 52% 96%;        /* #FAF6EF 宣纸米白 */
+    --foreground: 33 14% 15%;        /* #2D2822 暖墨黑 */
+    --card: 40 100% 99%;             /* #FFFDF9 */
+    --card-foreground: 33 14% 15%;
+    --popover: 40 100% 99%;
+    --popover-foreground: 33 14% 15%;
+    --primary: 17 60% 45%;           /* #B9552E 赤陶 */
+    --primary-foreground: 40 100% 99%;
+    --secondary: 38 42% 91%;         /* #F2EBDF */
+    --secondary-foreground: 33 14% 15%;
+    --muted: 38 42% 91%;
+    --muted-foreground: 36 13% 38%;  /* #6E6455 */
+    --accent: 38 42% 91%;
+    --accent-foreground: 33 14% 15%;
+    --destructive: 8 59% 45%;        /* #B4402F 柔红 */
+    --destructive-foreground: 40 100% 99%;
+    --border: 36 36% 85%;            /* #E7DCCC 暖灰描边 */
+    --input: 36 36% 85%;
+    --ring: 17 60% 45%;
+    --radius: 0.625rem;
+    --sidebar-background: 38 42% 91%;
+    --sidebar-foreground: 33 14% 15%;
+    --sidebar-primary: 17 60% 45%;
+    --sidebar-primary-foreground: 40 100% 99%;
+    --sidebar-accent: 40 100% 99%;
+    --sidebar-accent-foreground: 33 14% 15%;
+    --sidebar-border: 36 36% 85%;
+    --sidebar-ring: 17 60% 45%;
+
+    /* 设计文档 token（hex，供 var() 直接使用） */
+    --bg: #FAF6EF;
+    --surface: #FFFDF9;
+    --sidebar-warm: #F2EBDF;
+    --line: #E7DCCC;
+    --ink: #2D2822;
+    --ink-2: #6E6455;
+    --ink-3: #A3988A;
+    --terra: #B9552E;
+    --terra-deep: #A04724;
+    --pine: #5C7A67;
+    --brass: #B8892E;
+    --dusty: #5E7FA0;
+    --softred: #B4402F;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-paper text-ink font-sans;
+    font-size: 15px;
+    line-height: 1.75;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  /* 纸张纹理全局叠加（multiply，极浅） */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url("/paper-texture.png");
+    background-repeat: repeat;
+    background-size: 512px 512px;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+  }
+  #root {
+    position: relative;
+    z-index: 1;
+  }
+  ::selection {
+    background: rgba(185, 85, 46, 0.18);
+  }
+  /* 细滚动条（暖色） */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #E0D3BF;
+    border-radius: 8px;
+    border: 2px solid #FAF6EF;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}

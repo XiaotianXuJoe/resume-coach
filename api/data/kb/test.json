@@ -1,0 +1,1427 @@
+[
+  {
+    "id": "qa-base-001",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是软件测试？软件测试的目的是什么？",
+    "answer_points": [
+      "软件测试是使用人工或自动手段运行或评估系统，验证其是否满足规定需求、发现实际结果与预期结果之间差异的过程",
+      "根本目的是尽早、尽多地发现缺陷，降低软件上线后的质量风险和修复成本",
+      "通过测试活动评估软件质量，为发布决策提供依据，增强对产品的信心",
+      "测试只能证明缺陷的存在，不能证明软件没有缺陷"
+    ]
+  },
+  {
+    "id": "qa-base-002",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "软件测试的基本流程是什么？",
+    "answer_points": [
+      "需求分析：评审需求，提取测试点，保证需求正确、完整、无二义性",
+      "制定测试计划：明确范围、策略、资源、进度与风险",
+      "设计测试用例并搭建测试环境、准备测试数据",
+      "执行用例，提交并跟踪缺陷，缺陷修复后回归验证",
+      "测试总结：评估覆盖率与遗留风险，输出测试报告"
+    ]
+  },
+  {
+    "id": "qa-base-003",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "黑盒测试和白盒测试有什么区别？",
+    "answer_points": [
+      "黑盒测试不关心内部实现，只依据需求规格从输入输出验证功能，常用方法有等价类、边界值、场景法、判定表",
+      "白盒测试基于代码内部逻辑设计用例，关注语句、分支、路径等覆盖率",
+      "黑盒主要由测试人员执行，白盒多由开发在单元测试阶段完成",
+      "两者互补：黑盒发现功能与需求偏差，白盒发现逻辑覆盖不足"
+    ]
+  },
+  {
+    "id": "qa-base-004",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "一个缺陷（Bug）的生命周期是怎样的？",
+    "answer_points": [
+      "测试提交缺陷（New），包含复现步骤、预期与实际结果、环境、截图日志",
+      "开发确认并分配（Open/Assigned），进行修复（Fixed）",
+      "测试回归验证：通过则关闭（Closed），未通过则重新打开（Reopen）",
+      "特殊状态：无法复现、非缺陷（Rejected）、延期处理（Deferred）、重复缺陷（Duplicate）"
+    ]
+  },
+  {
+    "id": "qa-base-005",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "单元测试、集成测试、系统测试、验收测试有什么区别？",
+    "answer_points": [
+      "单元测试：针对最小代码单元（函数/类），多由开发执行，属于白盒",
+      "集成测试：验证模块间接口与交互是否正确，可采用自顶向下或自底向上策略",
+      "系统测试：在完整环境中对整体功能与非功能（性能、安全、兼容性）进行验证，多为黑盒",
+      "验收测试：以用户视角确认系统是否满足业务需求，决定是否可交付（如 UAT）"
+    ]
+  },
+  {
+    "id": "qa-base-006",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是回归测试？回归测试的范围如何确定？",
+    "answer_points": [
+      "回归测试指代码修改后重新执行测试，确认缺陷已修复且未引入新问题",
+      "范围包括：本次修改涉及的模块、与修改有耦合的上下游模块、核心业务主流程",
+      "可结合代码变更影响分析（diff 分析）圈定回归范围，提高效率",
+      "稳定的核心回归用例适合自动化执行，降低重复成本"
+    ]
+  },
+  {
+    "id": "qa-base-007",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "什么是冒烟测试？它和回归测试有什么区别？",
+    "answer_points": [
+      "冒烟测试是在版本提测后对主功能、主流程做的快速验证，决定版本是否可测",
+      "冒烟不通过则打回版本，避免在不可用的版本上浪费测试资源",
+      "回归测试针对代码修改做更全面的验证，范围大于冒烟",
+      "冒烟用例少而精，通常优先自动化并接入 CI"
+    ]
+  },
+  {
+    "id": "qa-base-008",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "软件质量模型（如 ISO/IEC 25010）包含哪些质量特性？",
+    "answer_points": [
+      "功能适合性：功能是否完整、正确、恰当",
+      "性能效率：响应时间、资源利用率、容量",
+      "兼容性、易用性：互操作、界面与浏览器兼容，易学易用",
+      "可靠性：成熟性、容错性、可恢复性",
+      "安全性、可维护性、可移植性：保密与完整性、可测试可修改、可迁移可安装"
+    ]
+  },
+  {
+    "id": "qa-base-009",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "软件测试有哪些常见的分类维度？",
+    "answer_points": [
+      "按阶段：单元测试、集成测试、系统测试、验收测试",
+      "按是否运行程序：静态测试（评审、走查）与动态测试",
+      "按是否了解内部结构：黑盒、白盒、灰盒测试",
+      "按执行方式：手工测试与自动化测试",
+      "其他常见类型：回归、冒烟、性能、安全、兼容性、A/B 测试"
+    ]
+  },
+  {
+    "id": "qa-base-010",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "一条完整的测试用例包含哪些要素？",
+    "answer_points": [
+      "用例编号、所属模块、用例标题（简明描述测试点）",
+      "优先级、前置条件、测试数据",
+      "操作步骤：清晰可复现",
+      "预期结果：明确、可判断通过与否",
+      "实际结果与执行状态（执行时填写）"
+    ]
+  },
+  {
+    "id": "qa-base-011",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "软件测试有哪些基本原则？",
+    "answer_points": [
+      "尽早测试：缺陷发现越早，修复成本越低，测试应贯穿整个研发周期",
+      "穷尽测试不可能：需基于风险优先级选择测试重点",
+      "缺陷集群效应：大部分缺陷集中在少数模块，应重点测试",
+      "杀虫剂悖论：同一批用例反复执行发现缺陷的能力下降，需定期更新用例",
+      "测试依赖于上下文：不同产品（如金融与游戏）测试策略不同"
+    ]
+  },
+  {
+    "id": "qa-base-012",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "什么是探索性测试？与脚本化测试有什么区别？",
+    "answer_points": [
+      "探索性测试是将测试设计、执行、学习同时进行的活动，依赖测试人员经验边测边想",
+      "脚本化测试按预先设计的用例严格执行，可复现、可度量覆盖",
+      "探索性适合需求不明确、时间紧张或补充脚本测试未覆盖的风险区域",
+      "实践中两者结合：用例保障基线覆盖，探索发现意外缺陷"
+    ]
+  },
+  {
+    "id": "qa-base-013",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "缺陷的严重级别（Severity）和优先级（Priority）有什么区别？",
+    "answer_points": [
+      "严重级别描述缺陷对系统功能的破坏程度，如致命、严重、一般、轻微",
+      "优先级描述缺陷需要被修复的紧急程度，由项目进度与业务影响决定",
+      "两者不一定一致：如首页 Logo 错别字严重级别低但优先级高；偶发的极端场景崩溃严重级别高但可延后",
+      "优先级通常由测试、产品、开发共同评估确定"
+    ]
+  },
+  {
+    "id": "qa-base-014",
+    "language": "test",
+    "topic": "测试基础",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "敏捷开发模式下测试人员的工作方式有什么变化？",
+    "answer_points": [
+      "迭代开始前参与需求梳理与验收标准（AC）定义，测试左移",
+      "迭代内与开发并行：边开发边设计用例、做接口测试，及时反馈缺陷",
+      "强调自动化回归与持续集成，保障短迭代快速交付的质量",
+      "迭代结束参与回顾，持续改进测试过程与质量度量"
+    ]
+  },
+  {
+    "id": "qa-case-001",
+    "language": "test",
+    "topic": "用例设计",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是等价类划分法？如何使用它设计测试用例？",
+    "answer_points": [
+      "把所有可能的输入划分为若干等价类，同一类中任意数据对发现缺陷等效",
+      "区分有效等价类（符合规格的输入）与无效等价类（不符合规格的输入）",
+      "从每个等价类中选取少量代表数据设计用例，大幅减少用例数量",
+      "示例：手机号输入框，有效类为 11 位数字；无效类包括位数不足、超长、含字母、为空等"
+    ]
+  },
+  {
+    "id": "qa-case-002",
+    "language": "test",
+    "topic": "用例设计",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是边界值分析法？边界值如何选取？",
+    "answer_points": [
+      "经验表明缺陷多发生在输入输出的边界处，边界值分析是对等价类的补充",
+      "选取正好等于、刚刚大于、刚刚小于边界的值作为测试数据",
+      "示例：长度限制 1~200，则测 0、1、2、199、200、201",
+      "同样适用于输出边界、循环次数边界、数据结构（空表/满表）等"
+    ]
+  },
+  {
+    "id": "qa-case-003",
+    "language": "test",
+    "topic": "用例设计",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "常用的黑盒测试用例设计方法有哪些？",
+    "answer_points": [
+      "等价类划分法与边界值分析法：处理输入域，常结合使用",
+      "场景法：按业务流程（基本流+备选流）设计端到端用例",
+      "判定表/因果图：处理多条件组合的逻辑规则",
+      "错误推测法：基于经验推测易错点，如空值、并发、网络中断",
+      "正交实验/Pairwise：多参数组合时的抽样覆盖"
+    ]
+  },
+  {
+    "id": "qa-case-004",
+    "language": "test",
+    "topic": "用例设计",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是场景法？如何用场景法设计测试用例？",
+    "answer_points": [
+      "场景法模拟用户真实业务流程，通过分析基本流和备选流来设计用例",
+      "先画出业务流程图，识别主成功场景（基本流）和异常分支（备选流）",
+      "每个独立路径对应一个测试场景，组合生成用例",
+      "示例：电商下单流程——浏览、加购、提交订单、支付成功/失败/超时、取消等场景"
+    ]
+  },
+  {
+    "id": "qa-case-005",
+    "language": "test",
+    "topic": "用例设计",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "什么是错误推测法？举例说明。",
+    "answer_points": [
+      "基于测试人员的经验和直觉，推测程序容易出错的地方并针对性设计用例",
+      "常见易错点：输入为空、超长输入、特殊字符、重复提交",
+      "环境异常：网络中断/弱网、服务超时、磁盘写满、并发操作",
+      "示例：文件上传功能推测空文件、超大文件、格式不符、文件名含特殊字符等场景"
+    ]
+  },
+  {
+    "id": "qa-case-006",
+    "language": "test",
+    "topic": "用例设计",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "什么是判定表法？它适用于什么场景？",
+    "answer_points": [
+      "判定表由条件桩、动作桩、条件项、动作项组成，每列是一条规则",
+      "适用于多个输入条件组合决定不同处理逻辑的场景，如优惠规则、审批流",
+      "条件数为 n 时理论上最多 2^n 条规则，可合并无关条件简化",
+      "示例：登录校验中账号存在与密码正确两条件组合出登录成功、密码错误、账号不存在等规则"
+    ]
+  },
+  {
+    "id": "qa-case-007",
+    "language": "test",
+    "topic": "用例设计",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "因果图法和判定表法是什么关系？",
+    "answer_points": [
+      "因果图用于梳理输入条件（因）与输出结果（果）之间的逻辑关系，如与、或、非",
+      "因果图适合处理条件间有约束（互斥、唯一、要求、屏蔽）的复杂逻辑",
+      "通常先将因果图转化为判定表，再由判定表生成测试用例",
+      "适用于规格说明中输入输出关系复杂、难以直接枚举的场景"
+    ]
+  },
+  {
+    "id": "qa-case-008",
+    "language": "test",
+    "topic": "用例设计",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "什么是正交实验法（Pairwise）？解决什么问题？",
+    "answer_points": [
+      "解决多参数多取值组合爆炸问题：全组合用例数随参数指数增长，无法穷尽",
+      "正交实验利用正交表从全组合中选取均匀分散、整齐可比的代表性子集",
+      "Pairwise（两两组合覆盖）保证任意两个参数的取值组合至少出现一次",
+      "实践表明两两组合能覆盖大部分缺陷，常用于兼容性矩阵与配置组合测试"
+    ]
+  },
+  {
+    "id": "qa-case-009",
+    "language": "test",
+    "topic": "用例设计",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "什么是状态迁移法？适用于什么场景？",
+    "answer_points": [
+      "针对有多个状态且状态随事件迁移的对象，绘制状态迁移图设计用例",
+      "关注每条迁移路径、非法迁移（不允许的状态跳转）和循环路径",
+      "典型场景：订单状态机（待支付→已支付→已发货→已完成/已取消）、审批流",
+      "也适合电梯、播放器等状态驱动的系统"
+    ]
+  },
+  {
+    "id": "qa-case-010",
+    "language": "test",
+    "topic": "用例设计",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "评审测试用例时重点关注什么？如何判断用例质量？",
+    "answer_points": [
+      "覆盖性：是否覆盖全部需求点，正常、异常、边界场景是否齐全",
+      "正确性：预期结果是否明确且与需求一致，步骤是否可执行",
+      "独立性：用例间是否相互独立、可单独执行",
+      "可读性与可维护性：命名规范、粒度适中、无冗余重复"
+    ]
+  },
+  {
+    "id": "qa-case-011",
+    "language": "test",
+    "topic": "用例设计",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "如何保证测试的覆盖率？",
+    "answer_points": [
+      "需求覆盖：建立需求-用例追踪矩阵（RTM），确保每个需求点都有用例",
+      "场景覆盖：用等价类、边界值、场景法覆盖正常、异常、边界路径",
+      "代码覆盖：借助 JaCoCo 等工具度量行/分支覆盖率，反向补充遗漏逻辑",
+      "评审机制：用例评审加交叉评审，结合线上缺陷复盘持续补齐盲区"
+    ]
+  },
+  {
+    "id": "qa-case-012",
+    "language": "test",
+    "topic": "用例设计",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "拿到一个新需求后，你设计测试用例的整体思路是什么？",
+    "answer_points": [
+      "先分析需求：确认需求正确、完整、无二义性，不明确处与产品确认",
+      "拆分功能点，提炼测试点，区分功能需求与非功能需求（性能、安全、兼容性）",
+      "针对测试点选择合适方法：等价类、边界值、场景法、判定表等",
+      "补充异常与发散场景：错误操作、并发、弱网、数据一致性",
+      "组织用例评审并根据反馈修订"
+    ]
+  },
+  {
+    "id": "qa-linux-001",
+    "language": "test",
+    "topic": "Linux基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "测试工作中常用的 Linux 命令有哪些？（查看日志与文件）",
+    "answer_points": [
+      "查看文件：cat、less、more；查看日志尾部：tail -f 实时跟踪",
+      "搜索过滤：grep 关键字过滤日志，如 grep -n 'ERROR' app.log",
+      "查找文件：find / -name '*.log'；按类型与时间过滤",
+      "文件统计与处理：wc 统计行数，awk/sed 提取字段、sort/uniq 去重统计"
+    ]
+  },
+  {
+    "id": "qa-linux-002",
+    "language": "test",
+    "topic": "Linux基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "如何查看进程状态与端口占用情况？",
+    "answer_points": [
+      "ps -ef | grep 进程名 查看进程；top/htop 动态查看 CPU 与内存占用",
+      "netstat -tunlp | grep 端口号 或 ss -tunlp 查看端口监听与占用进程",
+      "lsof -i:端口号 查看占用该端口的进程",
+      "kill -9 PID 强制结束进程（测试环境重启服务时常用）"
+    ]
+  },
+  {
+    "id": "qa-linux-003",
+    "language": "test",
+    "topic": "Linux基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "如何在日志中定位一次接口报错的详细信息？",
+    "answer_points": [
+      "用 grep 按关键字（traceId、接口名、ERROR）定位：grep -n 关键字 日志文件",
+      "结合 -A/-B/-C 参数查看报错行前后上下文，如 grep -C 20",
+      "按时间段过滤：awk 或 sed 提取指定时间范围的日志行",
+      "tail -f 实时跟踪日志，复现问题时同步观察输出"
+    ]
+  },
+  {
+    "id": "qa-linux-004",
+    "language": "test",
+    "topic": "Linux基础",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "如何查看服务器的 CPU、内存、磁盘等资源占用？",
+    "answer_points": [
+      "top/htop：实时查看 CPU、内存及各进程资源占用",
+      "free -h：查看内存总量与使用情况；vmstat 查看整体负载",
+      "df -h：查看磁盘分区使用率；du -sh 目录 查看目录大小",
+      "iostat、iftop 等查看磁盘 IO 与网络流量（性能定位时常用）"
+    ]
+  },
+  {
+    "id": "qa-linux-005",
+    "language": "test",
+    "topic": "Linux基础",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "Linux 文件权限 rwx 与 chmod 755 的含义是什么？",
+    "answer_points": [
+      "权限分三组：所有者、所属组、其他用户，每组含读 r(4)、写 w(2)、执行 x(1)",
+      "chmod 755 表示所有者可读写执行（7），组与其他用户只读可执行（5）",
+      "chmod 644 常用于普通文件：所有者可读写，其他人只读",
+      "脚本无执行权限报 Permission denied 时需 chmod +x 或调整权限"
+    ]
+  },
+  {
+    "id": "qa-linux-006",
+    "language": "test",
+    "topic": "Linux基础",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "统计 Nginx 访问日志中请求量最高的前 10 个 IP，怎么做？",
+    "answer_points": [
+      "用 awk 提取 IP 字段：awk '{print $1}' access.log（IP 通常在首列）",
+      "配合 sort | uniq -c 统计每个 IP 出现次数",
+      "再 sort -rn 按次数倒序，head -10 取前 10",
+      "完整命令：awk '{print $1}' access.log | sort | uniq -c | sort -rn | head -10"
+    ]
+  },
+  {
+    "id": "qa-db-001",
+    "language": "test",
+    "topic": "数据库与SQL",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "SQL 查询中 WHERE、GROUP BY、HAVING、ORDER BY 的区别与执行顺序是什么？",
+    "answer_points": [
+      "WHERE 在分组前过滤行；HAVING 在分组后过滤聚合结果",
+      "执行顺序：FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY",
+      "GROUP BY 按字段分组，配合 COUNT、SUM、AVG 等聚合函数",
+      "ORDER BY 最后排序，DESC 降序、ASC 升序，LIMIT 限制返回行数"
+    ]
+  },
+  {
+    "id": "qa-db-002",
+    "language": "test",
+    "topic": "数据库与SQL",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "内连接、左连接、右连接有什么区别？",
+    "answer_points": [
+      "INNER JOIN：只返回两表匹配上的记录",
+      "LEFT JOIN：返回左表全部记录，右表无匹配时对应字段为 NULL",
+      "RIGHT JOIN：返回右表全部记录，左表无匹配时为 NULL",
+      "校验数据一致性时常用 LEFT JOIN 加 IS NULL 找出孤儿数据"
+    ]
+  },
+  {
+    "id": "qa-db-003",
+    "language": "test",
+    "topic": "数据库与SQL",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "如何查询表中重复的数据？如何去重？",
+    "answer_points": [
+      "查重复：SELECT 字段, COUNT(*) FROM 表 GROUP BY 字段 HAVING COUNT(*) > 1",
+      "查询结果去重：SELECT DISTINCT 字段 FROM 表",
+      "删除重复行：可用窗口函数 ROW_NUMBER 或临时表保留最小 id 的行",
+      "测试场景：校验业务唯一约束是否生效，如重复提交订单是否产生脏数据"
+    ]
+  },
+  {
+    "id": "qa-db-004",
+    "language": "test",
+    "topic": "数据库与SQL",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "如何用 SQL 修改表结构？（如给字段扩容、加字段）",
+    "answer_points": [
+      "加字段：ALTER TABLE 表名 ADD COLUMN 字段名 类型",
+      "修改字段类型或长度：ALTER TABLE 表名 MODIFY COLUMN 字段名 VARCHAR(8)",
+      "删字段：ALTER TABLE 表名 DROP COLUMN 字段名",
+      "测试关注：变更后历史数据兼容、默认值、应用读写是否正常"
+    ]
+  },
+  {
+    "id": "qa-db-005",
+    "language": "test",
+    "topic": "数据库与SQL",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "有一张订单表，如何统计每个用户的订单总数和总金额？",
+    "answer_points": [
+      "SELECT user_id, COUNT(*) AS order_cnt, SUM(amount) AS total_amount FROM orders GROUP BY user_id",
+      "筛选消费大户可加 HAVING SUM(amount) > 阈值",
+      "按总金额排序取前列：ORDER BY total_amount DESC LIMIT n",
+      "测试关注：NULL 金额处理、退款单是否计入、与接口返回数据比对一致性"
+    ]
+  },
+  {
+    "id": "qa-db-006",
+    "language": "test",
+    "topic": "数据库与SQL",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "什么是数据库索引？索引的作用和代价是什么？",
+    "answer_points": [
+      "索引是帮助数据库快速定位数据的数据结构（如 B+ 树），类似书的目录",
+      "作用：显著加速 WHERE、JOIN、ORDER BY 查询，避免全表扫描",
+      "代价：占用额外存储；增删改时需维护索引，写入变慢",
+      "不是越多越好：低区分度字段收益小，联合索引注意最左前缀原则"
+    ]
+  },
+  {
+    "id": "qa-db-007",
+    "language": "test",
+    "topic": "数据库与SQL",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "什么是数据库事务？事务的 ACID 特性指什么？",
+    "answer_points": [
+      "事务是一组要么全部成功、要么全部回滚的操作，如转账的扣款与入账",
+      "原子性：操作不可分割，全部成功或全部失败",
+      "一致性：事务前后数据满足完整性约束",
+      "隔离性：并发事务互不干扰，有读未提交/读已提交/可重复读/串行化等级别",
+      "持久性：提交后的修改永久保存，宕机不丢失"
+    ]
+  },
+  {
+    "id": "qa-db-008",
+    "language": "test",
+    "topic": "数据库与SQL",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "发现一条慢查询 SQL，你会如何定位和优化？",
+    "answer_points": [
+      "开启慢查询日志定位慢 SQL，用 EXPLAIN 查看执行计划（是否走索引、扫描行数）",
+      "常见原因：缺索引、索引失效（函数计算、隐式类型转换、前导模糊匹配）、返回字段过多、深分页",
+      "优化：建合适索引、改写 SQL（避免 SELECT *、深分页改用游标）、加缓存或分库分表",
+      "优化后用压测和 EXPLAIN 对比验证效果"
+    ]
+  },
+  {
+    "id": "qa-api-001",
+    "language": "test",
+    "topic": "接口测试",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "GET 和 POST 请求有什么区别？",
+    "answer_points": [
+      "语义：GET 用于获取资源，POST 用于提交/创建资源",
+      "参数位置：GET 参数拼在 URL query 中，POST 参数放在请求体",
+      "安全性与长度：GET 参数暴露在 URL、长度受限；POST 相对隐蔽、长度限制宽松",
+      "幂等性：GET 幂等可缓存，POST 非幂等；浏览器回退刷新时 POST 会提示重复提交"
+    ]
+  },
+  {
+    "id": "qa-api-002",
+    "language": "test",
+    "topic": "接口测试",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "常见的 HTTP 状态码有哪些？分别代表什么含义？",
+    "answer_points": [
+      "2xx 成功：200 请求成功，201 创建成功，204 无返回内容",
+      "3xx 重定向：301 永久重定向，302 临时重定向，304 资源未修改走缓存",
+      "4xx 客户端错误：400 参数错误，401 未认证，403 无权限，404 资源不存在",
+      "5xx 服务端错误：500 服务器内部错误，502 网关错误，503 服务不可用，504 网关超时"
+    ]
+  },
+  {
+    "id": "qa-api-003",
+    "language": "test",
+    "topic": "接口测试",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "Cookie、Session、Token 有什么区别？",
+    "answer_points": [
+      "Cookie 是客户端存储的小段数据，随请求自动携带，可设置过期时间与域",
+      "Session 是服务端保存的会话状态，客户端通过 Cookie 中的 sessionId 关联",
+      "Token（如 JWT）是无状态凭证，服务端不存会话，通过签名校验合法性，适合分布式与移动端",
+      "安全对比：Session 占用服务端存储；Token 需防泄露，常配合 HTTPS 与过期刷新机制"
+    ]
+  },
+  {
+    "id": "qa-api-004",
+    "language": "test",
+    "topic": "接口测试",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "HTTP 和 HTTPS 有什么区别？",
+    "answer_points": [
+      "HTTPS 在 HTTP 之上加 TLS/SSL 加密层，传输内容加密防窃听、防篡改",
+      "HTTPS 需要 CA 证书做身份认证，默认端口 443，HTTP 默认 80",
+      "TLS 握手涉及证书校验、密钥协商（非对称加密交换对称密钥）",
+      "测试关注：抓包 HTTPS 需安装并信任抓包工具证书；混合内容、证书过期问题"
+    ]
+  },
+  {
+    "id": "qa-api-005",
+    "language": "test",
+    "topic": "接口测试",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "接口测试主要测什么？接口测试用例如何设计？",
+    "answer_points": [
+      "功能正确性：正常入参返回符合文档；参数校验：必填缺失、类型错误、边界值、非法字符",
+      "异常场景：错误码与提示是否合理、超时、重复请求（幂等性）",
+      "安全与鉴权：未登录、越权访问、SQL 注入与 XSS 参数",
+      "业务逻辑与数据一致性：接口返回与数据库落库比对、多接口组合流程",
+      "方法上同样使用等价类、边界值、场景法设计用例"
+    ]
+  },
+  {
+    "id": "qa-api-006",
+    "language": "test",
+    "topic": "接口测试",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "用 Postman 做接口测试时，如何做断言和参数关联？",
+    "answer_points": [
+      "断言：在 Tests 中用 pm.test 校验状态码、响应体字段、响应时间，如 pm.expect(pm.response.code).to.eql(200)",
+      "参数关联：用 pm.response.json() 提取返回值（如 token），存入环境变量 pm.environment.set",
+      "后续接口通过 {{变量名}} 引用该变量，实现接口间依赖传递",
+      "批量执行：Collection Runner 或 Newman 命令行跑集合并生成报告"
+    ]
+  },
+  {
+    "id": "qa-api-007",
+    "language": "test",
+    "topic": "接口测试",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "接口常见的鉴权方式有哪些？",
+    "answer_points": [
+      "Session-Cookie：登录后服务端种 sessionId，后续请求自动携带",
+      "Token/JWT：登录换取 token，请求头 Authorization 携带 Bearer Token",
+      "API Key/签名：AppKey+AppSecret 对参数加时间戳签名（如 HMAC），防篡改防重放",
+      "OAuth2.0：第三方授权获取 access_token，用于开放平台场景",
+      "测试点：无 token、过期 token、错误签名、越权访问其他用户资源"
+    ]
+  },
+  {
+    "id": "qa-api-008",
+    "language": "test",
+    "topic": "接口测试",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "没有接口文档的情况下如何做接口测试？",
+    "answer_points": [
+      "用 Fiddler/Charles/浏览器 F12 抓包，分析请求的 URL、方法、参数、鉴权方式",
+      "梳理参数取值规则与接口间的依赖关系，自行整理成接口清单",
+      "与开发确认关键参数含义、加解密与签名规则",
+      "按正常、异常、边界设计用例，优先覆盖核心业务流程接口"
+    ]
+  },
+  {
+    "id": "qa-api-009",
+    "language": "test",
+    "topic": "接口测试",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "接口请求中常见的 Content-Type 有哪些？区别是什么？",
+    "answer_points": [
+      "application/json：JSON 格式请求体，REST 接口最常用",
+      "application/x-www-form-urlencoded：表单键值对，传统表单提交默认",
+      "multipart/form-data：多部分表单，用于文件上传",
+      "text/plain、application/xml 等较少见",
+      "测试关注：Content-Type 与实际 body 格式不匹配会导致 400 或参数解析失败"
+    ]
+  },
+  {
+    "id": "qa-api-010",
+    "language": "test",
+    "topic": "接口测试",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "如何用 pytest + requests 搭建一个接口自动化框架？",
+    "answer_points": [
+      "分层设计：用例层（pytest）、接口封装层（API 对象）、公共层（请求封装、鉴权、日志）、数据层（YAML/Excel 用例数据）",
+      "用 requests.Session 复用连接并统一管理 header 与 token",
+      "用 fixture 管理前置登录与数据准备，conftest.py 共享；YAML 数据驱动参数化",
+      "断言封装：状态码、业务码、关键字段、数据库比对；Allure 生成报告",
+      "配置多环境（dev/test）切换，接入 CI 定时执行并通知结果"
+    ]
+  },
+  {
+    "id": "qa-api-011",
+    "language": "test",
+    "topic": "接口测试",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "接口自动化中如何处理测试数据的准备与清理，避免用例间相互影响？",
+    "answer_points": [
+      "前置造数：fixture 中通过 API 或 SQL 准备数据，用例结束自动清理（yield 后置）",
+      "数据隔离：每条用例使用独立数据（唯一标识后缀），避免共用账号/数据互相污染",
+      "优先调用业务接口造数而非直接插库，保证数据状态一致",
+      "对无法清理的数据采用幂等设计或独立测试环境/租户隔离"
+    ]
+  },
+  {
+    "id": "qa-api-012",
+    "language": "test",
+    "topic": "接口测试",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "如何判断一个 bug 是前端问题还是后端问题？",
+    "answer_points": [
+      "抓包看请求：前端发出的请求 URL、参数是否正确，参数错多为前端问题",
+      "看响应：后端返回数据错误或与数据库不符，为后端问题；返回正确但页面展示错，为前端问题",
+      "看状态码与日志：5xx 或后端报错日志指向后端；JS 控制台报错指向前端",
+      "必要时直接调接口（Postman）绕过前端复现，进一步确认归属"
+    ]
+  },
+  {
+    "id": "qa-auto-001",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "Selenium 中常用的元素定位方式有哪些？",
+    "answer_points": [
+      "id、name、class name、tag name：属性定位，id 优先（唯一且快）",
+      "link text、partial link text：按链接文本定位",
+      "xpath：按 DOM 路径与属性组合定位，最灵活，支持轴与函数",
+      "css selector：按样式选择器定位，效率高、语法简洁",
+      "原则：优先稳定唯一属性，避免使用易变的绝对路径与下标"
+    ]
+  },
+  {
+    "id": "qa-auto-002",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "Selenium 中显式等待和隐式等待有什么区别？",
+    "answer_points": [
+      "隐式等待：全局设置一次，查找元素时在超时时间内轮询 DOM，找不到才报错",
+      "显式等待：针对某个元素设置条件（如可点击、可见），用 WebDriverWait 配合 expected_conditions",
+      "强制等待 sleep 不智能，浪费时间且不可靠，应避免",
+      "实践：以显式等待为主处理动态加载，隐式等待作兜底，两者混用注意叠加效果"
+    ]
+  },
+  {
+    "id": "qa-auto-003",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "Selenium WebDriver 的工作原理是什么？",
+    "answer_points": [
+      "测试脚本通过 HTTP 协议（WebDriver 协议/W3C 标准）向浏览器驱动发送指令",
+      "浏览器驱动（如 chromedriver）接收指令并操控真实浏览器执行",
+      "执行结果以 HTTP 响应返回给客户端脚本",
+      "因此 Selenium 是真实浏览器驱动，行为接近真实用户，但速度相对较慢"
+    ]
+  },
+  {
+    "id": "qa-auto-004",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "Playwright 相比 Selenium 有哪些优势？",
+    "answer_points": [
+      "自动等待：操作前自动等待元素可用，减少手写等待代码和用例抖动",
+      "多浏览器统一 API：Chromium、Firefox、WebKit 一套代码覆盖",
+      "原生支持网络拦截与 Mock、多页面/多上下文隔离、移动端模拟",
+      "安装简单（自带浏览器）、执行速度快，提供录制与 Trace 调试工具"
+    ]
+  },
+  {
+    "id": "qa-auto-005",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "什么是 PO（Page Object）模式？为什么要用它？",
+    "answer_points": [
+      "将每个页面的元素定位和操作封装成 Page 类，用例只调用页面方法不直接接触元素",
+      "分层：用例层、页面对象层、基础封装层，定位器集中管理",
+      "好处：页面变化只需改 Page 类，降低维护成本；用例可读性高、代码复用",
+      "常配合继承 BasePage（封装等待、点击、输入等通用操作）使用"
+    ]
+  },
+  {
+    "id": "qa-auto-006",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "什么是数据驱动测试？如何实现？",
+    "answer_points": [
+      "数据驱动将测试数据与测试逻辑分离，同一段脚本用多组数据反复执行",
+      "pytest 中常用 @pytest.mark.parametrize 传多组参数",
+      "数据可放在 YAML/Excel/CSV/数据库中，读取后参数化执行",
+      "好处：一套逻辑覆盖大量数据场景，新增数据不改代码"
+    ]
+  },
+  {
+    "id": "qa-auto-007",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "pytest 的 fixture 是什么？scope 有哪些？",
+    "answer_points": [
+      "fixture 提供测试的前置准备与后置清理（依赖注入），用 @pytest.fixture 定义",
+      "scope 决定生命周期：function（默认，每个用例）、class、module、session（整个会话）",
+      "用 yield 分离前置与后置逻辑；conftest.py 可跨文件共享 fixture",
+      "典型用法：session 级登录一次复用 token，function 级每条用例独立造数清数"
+    ]
+  },
+  {
+    "id": "qa-auto-008",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "自动化用例执行失败时，如何快速定位问题？",
+    "answer_points": [
+      "失败自动截图并保存页面源码（page source），保留现场",
+      "记录详细日志：操作步骤、请求与响应、报错堆栈",
+      "Allure 报告附带截图与步骤信息，便于复现分析",
+      "区分是用例问题（定位失效、等待不足）还是真实缺陷：失败重跑机制辅助甄别"
+    ]
+  },
+  {
+    "id": "qa-auto-009",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "Appium 的工作原理是什么？",
+    "answer_points": [
+      "Appium 采用 C/S 架构：客户端脚本通过 HTTP 向 Appium Server 发送指令",
+      "Android 端底层基于 UIAutomator2/Espresso，iOS 端基于 XCUITest",
+      "Server 将指令转发给手机端的自动化框架驱动真实设备或模拟器执行",
+      "跨平台一套 API，支持 Native、Hybrid、H5 混合应用（需切换 context）"
+    ]
+  },
+  {
+    "id": "qa-auto-010",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "UI 自动化用例不稳定（flaky）的常见原因和对策有哪些？",
+    "answer_points": [
+      "原因：元素加载时序不定、等待不足、弹窗干扰、测试数据污染、环境不稳定",
+      "对策：显式等待替代 sleep，封装统一等待与点击重试",
+      "用例独立与数据隔离，失败自动截图留证，失败用例重跑机制",
+      "精简 UI 自动化范围：核心链路走 UI，其余下沉到接口层（测试金字塔）"
+    ]
+  },
+  {
+    "id": "qa-auto-011",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "哪些测试用例适合自动化？哪些不适合？",
+    "answer_points": [
+      "适合：回归频次高的核心流程、规则固定的数据校验、批量数据驱动场景、跨浏览器兼容验证",
+      "不适合：一次性需求、界面频繁变动未稳定的功能",
+      "不适合：强依赖主观体验的检查（UI 美观、易用性）和探索性测试",
+      "评估投入产出比：自动化收益 = 节省的重复执行成本 - 开发与维护成本"
+    ]
+  },
+  {
+    "id": "qa-auto-012",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "困难",
+    "frequency": "高频",
+    "question": "如果让你设计一个可维护的 Web 自动化测试框架，你会怎么做？",
+    "answer_points": [
+      "技术选型：Selenium/Playwright + pytest + Allure，PO 模式分层",
+      "目录结构：cases（用例）、pages（页面对象）、common（封装）、data（测试数据）、config（多环境配置）",
+      "能力封装：统一浏览器管理、显式等待、日志、失败截图、失败重试",
+      "数据驱动：YAML/Excel 管理用例数据；fixture 管理登录态与造数",
+      "工程化：接入 CI 定时/触发执行，Allure 报告与失败通知，代码评审与用例标签分级（冒烟/回归）"
+    ]
+  },
+  {
+    "id": "qa-auto-013",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "自动化测试接入 CI 流水线时需要考虑哪些问题？",
+    "answer_points": [
+      "触发策略：代码提交触发冒烟，定时跑全量回归，发布前卡点",
+      "环境准备：流水线中自动部署被测环境、准备浏览器/移动设备或远程执行节点",
+      "稳定性保障：失败重试、用例分级（阻塞/非阻塞）、超时控制",
+      "结果闭环：Allure 报告归档、失败通知到群/人、缺陷自动提单，趋势度量"
+    ]
+  },
+  {
+    "id": "qa-auto-014",
+    "language": "test",
+    "topic": "自动化测试",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "App 自动化测试中如何处理系统权限弹窗和广告/升级弹窗？",
+    "answer_points": [
+      "权限弹窗：启动时通过 desired capabilities 设置 autoGrantPermissions 或启动后显式处理",
+      "弹窗兜底：封装统一的弹窗处理逻辑（监听到弹窗元素即关闭），在每个关键操作前调用",
+      "升级弹窗：测试环境关闭升级开关或使用固定版本包",
+      "watcher 机制：主流程执行中异步检测并处理异常弹窗，提升稳定性"
+    ]
+  },
+  {
+    "id": "qa-perf-001",
+    "language": "test",
+    "topic": "性能测试",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "性能测试中关注的核心指标有哪些？",
+    "answer_points": [
+      "响应时间 RT：用户视角的耗时，关注平均值与分位数（P90/P95/P99）",
+      "TPS/QPS：每秒处理的事务数/查询数，衡量系统吞吐能力",
+      "并发用户数与错误率：错误率一般要求控制在很低水平（如 0.1% 以内）",
+      "资源指标：CPU、内存、磁盘 IO、网络带宽利用率",
+      "结合业务定目标，如秒杀场景明确 TPS 目标与最大可接受 RT"
+    ]
+  },
+  {
+    "id": "qa-perf-002",
+    "language": "test",
+    "topic": "性能测试",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "TPS、QPS、吞吐量之间有什么区别和关系？",
+    "answer_points": [
+      "TPS：每秒完成的事务数，一个事务可能包含多个请求（如下单含查询库存+创建订单）",
+      "QPS：每秒查询/请求数，衡量接口级处理能力",
+      "吞吐量：单位时间处理的请求总量，常以 TPS/QPS 或每秒字节数体现",
+      "关系：单接口单请求时 TPS 约等于 QPS；TPS = 并发数 / 平均响应时间（ Little 定律）"
+    ]
+  },
+  {
+    "id": "qa-perf-003",
+    "language": "test",
+    "topic": "性能测试",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "负载测试、压力测试、稳定性测试有什么区别？",
+    "answer_points": [
+      "负载测试：逐步增加并发，验证系统在不同负载下的表现，找到性能拐点",
+      "压力测试：超过正常负载持续加压，考察系统极限能力与崩溃后的恢复能力",
+      "稳定性（耐久）测试：在正常负载下长时间运行（如 7x24 小时），发现内存泄漏、资源耗尽问题",
+      "还有并发测试（同时操作同一资源）与容量测试（确定最大支撑能力）"
+    ]
+  },
+  {
+    "id": "qa-perf-004",
+    "language": "test",
+    "topic": "性能测试",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "一次完整的性能测试流程是什么？",
+    "answer_points": [
+      "需求分析：明确性能指标（TPS 目标、RT 要求、并发量）与业务场景",
+      "场景与脚本设计：模拟真实业务操作，准备压测数据，开发脚本（参数化、关联、断言）",
+      "环境准备与压测执行：尽量贴近生产配置，单机或分布式施压",
+      "监控分析：采集 TPS、RT、错误率及服务器 CPU/内存/数据库指标，定位瓶颈",
+      "优化复测：优化后回归压测验证，输出性能测试报告"
+    ]
+  },
+  {
+    "id": "qa-perf-005",
+    "language": "test",
+    "topic": "性能测试",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "JMeter 的基本元件有哪些？线程组里的 Ramp-up 是什么含义？",
+    "answer_points": [
+      "线程组：设置并发用户数、Ramp-up 时间、循环次数",
+      "取样器（Sampler）：发送请求，如 HTTP 请求；配置元件管理默认值与变量",
+      "断言校验响应，监听器（聚合报告、查看结果树）收集与分析结果",
+      "Ramp-up 是在多长时间内启动全部线程：Ramp-up 越小压力越陡峭；为 0 表示瞬间全部启动"
+    ]
+  },
+  {
+    "id": "qa-perf-006",
+    "language": "test",
+    "topic": "性能测试",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "压测时 TPS 上不去、响应时间越来越长，如何排查？",
+    "answer_points": [
+      "先查压力机自身：JMeter 所在机器 CPU/内存是否打满、线程数与监听器是否消耗过大，必要时分布式压测",
+      "再查网络：带宽是否打满、延迟是否正常",
+      "重点查服务端：CPU、内存/GC、线程池是否耗尽，数据库慢查询与锁竞争，缓存命中率",
+      "方法：随负载升高 TPS 应上升；当 TPS 不再增长甚至下降时即到达瓶颈点，结合监控与链路追踪定位模块"
+    ]
+  },
+  {
+    "id": "qa-perf-007",
+    "language": "test",
+    "topic": "性能测试",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "JMeter 中如何做参数化和关联？",
+    "answer_points": [
+      "参数化：用 CSV Data Set Config 从文件读取多组数据（如账号列表），或用函数/计数器生成动态值",
+      "关联：用后置处理器（正则提取器、JSON 提取器、XPath 提取器）从响应中提取动态值",
+      "提取结果存为变量供后续请求引用，如登录后提取 token 传给下单接口",
+      "目的：保证多用户脚本数据不冲突、上下游接口正确衔接"
+    ]
+  },
+  {
+    "id": "qa-perf-008",
+    "language": "test",
+    "topic": "性能测试",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "设计一个秒杀/下单场景的压测方案，需要考虑什么？",
+    "answer_points": [
+      "场景建模：按真实业务配比组合接口（浏览、登录、下单、支付），设置思考时间与集合点",
+      "数据准备：足量且不冲突的用户、商品、库存数据，避免数据库缓存失真",
+      "施压策略：梯度加压定位拐点，关注瞬时高并发（集合点模拟秒杀开抢）",
+      "监控与校验：TPS、RT、错误率，订单数据一致性与超卖问题，服务器与中间件全链路监控"
+    ]
+  },
+  {
+    "id": "qa-perf-009",
+    "language": "test",
+    "topic": "性能测试",
+    "difficulty": "困难",
+    "frequency": "高频",
+    "question": "如何系统性地定位一个性能瓶颈？",
+    "answer_points": [
+      "分层分析：客户端/网络 → 接入层（Nginx）→ 应用服务 → 缓存 → 数据库 → 下游依赖",
+      "压测复现并同步监控：CPU 高看是否计算密集或 GC 频繁；内存看泄漏；磁盘 IO 与网络带宽看是否打满",
+      "应用层：线程池耗尽、锁竞争、慢方法（APM/链路追踪、火焰图）",
+      "数据库层：慢查询、索引缺失、锁等待；缓存层：命中率低、缓存穿透",
+      "确认瓶颈点后优化并复测验证，形成闭环"
+    ]
+  },
+  {
+    "id": "qa-perf-010",
+    "language": "test",
+    "topic": "性能测试",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "什么情况下需要分布式压测？JMeter 如何实施分布式压测？",
+    "answer_points": [
+      "单机压力机受 CPU、内存、端口、带宽限制，无法发起目标并发量时需要分布式",
+      "架构：一台 Master（控制机）调度多台 Slave（压力机），Slave 执行脚本并回传结果",
+      "实施：各 Slave 启动 jmeter-server，Master 通过 jmeter -R 指定远程节点启动",
+      "注意：参数化数据需分发到各 Slave 且不重复，Master 与 Slave 版本一致，监控各节点自身资源"
+    ]
+  },
+  {
+    "id": "qa-perf-011",
+    "language": "test",
+    "topic": "性能测试",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "如何评估一个系统的容量（最大能支撑多少并发）？",
+    "answer_points": [
+      "通过梯度加压（阶梯式增加并发）观察 TPS、RT、错误率曲线",
+      "找到拐点：TPS 增长停滞或 RT 开始陡增、错误率超过阈值的临界点",
+      "容量水位建议留有余量，按拐点的 70%~80% 作为安全容量",
+      "结合生产流量回放或全链路压测校准，输出容量报告指导扩容与限流阈值"
+    ]
+  },
+  {
+    "id": "qa-perf-012",
+    "language": "test",
+    "topic": "性能测试",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "性能测试报告应该包含哪些内容？",
+    "answer_points": [
+      "测试背景与目标：性能指标要求（TPS、RT、错误率、资源利用率）",
+      "测试环境说明：软硬件配置、网络、数据量级，与生产的差异",
+      "场景与结果：各场景的并发-TPS-RT-错误率数据及趋势曲线",
+      "瓶颈分析与优化建议：定位结论、优化措施、优化前后对比",
+      "结论与风险：是否达标、容量水位、上线建议与遗留风险"
+    ]
+  },
+  {
+    "id": "qa-cicd-001",
+    "language": "test",
+    "topic": "CI/CD与质量效能",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是 CI/CD？持续集成对测试工作有什么意义？",
+    "answer_points": [
+      "CI 持续集成：代码频繁合并到主干并自动构建、自动跑测试，尽早发现集成问题",
+      "CD 持续交付/部署：通过流水线自动将验证过的版本发布到各环境",
+      "对测试的意义：每次提交自动触发冒烟/回归，快速反馈，避免问题堆积到测试阶段",
+      "常用工具：Jenkins、GitLab CI、GitHub Actions 等"
+    ]
+  },
+  {
+    "id": "qa-cicd-002",
+    "language": "test",
+    "topic": "CI/CD与质量效能",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "在 Jenkins 流水线中，测试环节通常如何安排？",
+    "answer_points": [
+      "提交阶段：代码扫描（SonarQube）+ 单元测试，快速反馈",
+      "构建部署后：自动执行接口冒烟测试，决定是否进入完整测试",
+      "测试阶段：接口/UI 自动化回归，可并行分片执行缩短时长",
+      "发布卡点：测试结果不达标则阻塞发布，通过后自动或审批发布"
+    ]
+  },
+  {
+    "id": "qa-cicd-003",
+    "language": "test",
+    "topic": "CI/CD与质量效能",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "什么是质量门禁？流水线中可以设置哪些质量卡点？",
+    "answer_points": [
+      "质量门禁是在流水线各环节设置的准入准出标准，不达标则阻断流程",
+      "常见卡点：单元测试通过率 100%、代码覆盖率阈值（如行覆盖 60%）",
+      "静态扫描无阻断级漏洞、自动化冒烟/回归通过率达标",
+      "性能指标达标（TPS/RT）、缺陷收敛情况（无未关闭的致命/严重缺陷）"
+    ]
+  },
+  {
+    "id": "qa-cicd-004",
+    "language": "test",
+    "topic": "CI/CD与质量效能",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "什么是测试左移和测试右移？",
+    "answer_points": [
+      "测试左移：测试尽早介入，参与需求评审、设计评审，推动开发自测与单元测试，源头预防缺陷",
+      "测试右移：关注线上质量，通过监控告警、灰度发布、线上巡检、用户反馈持续验证",
+      "左移降低缺陷引入成本，右移缩短线上问题发现与恢复时间",
+      "两者结合实现质量内建（Quality Built-in）的全程质量保障"
+    ]
+  },
+  {
+    "id": "qa-cicd-005",
+    "language": "test",
+    "topic": "CI/CD与质量效能",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "代码覆盖率工具有哪些？高覆盖率能说明什么、不能说明什么？",
+    "answer_points": [
+      "常用工具：JaCoCo（Java）、Coverage.py（Python）、Istanbul（JS）",
+      "能说明：哪些代码被测试执行过，帮助发现未覆盖的代码盲区",
+      "不能说明：覆盖不代表断言有效，100% 覆盖也不等于没有缺陷",
+      "应结合变异测试或用例质量评估，避免为覆盖率而凑用例"
+    ]
+  },
+  {
+    "id": "qa-cicd-006",
+    "language": "test",
+    "topic": "CI/CD与质量效能",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "如果团队自动化回归效率低、维护成本高，你会如何改进？",
+    "answer_points": [
+      "分层治理：按测试金字塔下沉用例，UI 只保留核心链路，接口层承担主要回归",
+      "用例治理：清理失效用例、标记优先级分级（P0 冒烟/P1 回归），失败重试与稳定性看板",
+      "工程改进：PO/分层封装降低维护成本，数据驱动与造数工具化",
+      "度量驱动：统计执行时长、稳定性、缺陷逃逸率，用数据验证改进效果并接入 CI 卡点"
+    ]
+  },
+  {
+    "id": "qa-dev-001",
+    "language": "test",
+    "topic": "测试开发",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "测试开发工程师和传统测试工程师有什么区别？",
+    "answer_points": [
+      "测试工程师侧重业务测试执行：用例设计、功能验证、缺陷跟踪",
+      "测试开发侧重用技术手段解决测试效率与质量问题：开发自动化框架、测试平台与工具",
+      "测开要求更强的编码能力（Python/Java）、架构设计与工程化思维",
+      "两者目标一致：保障质量，但测开通过平台化、自动化放大质量保障的效能"
+    ]
+  },
+  {
+    "id": "qa-dev-002",
+    "language": "test",
+    "topic": "测试开发",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "什么是 Mock？什么时候需要 Mock？如何实现？",
+    "answer_points": [
+      "Mock 是用模拟对象替代真实依赖，返回预设结果，使测试不受外部环境影响",
+      "场景：第三方服务不可用/收费（支付、短信）、依赖接口未开发完成、异常场景难以构造（超时、500）",
+      "实现方式：代码级 mock 库（unittest.mock、Mockito）、接口级 Mock 平台（WireMock、Moco）",
+      "网络层拦截：Playwright/Charles 也可拦截请求返回 Mock 数据"
+    ]
+  },
+  {
+    "id": "qa-dev-003",
+    "language": "test",
+    "topic": "测试开发",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "什么是流量回放？它适用于什么测试场景？",
+    "answer_points": [
+      "流量回放是录制线上真实请求流量，在测试环境重新发起并比对结果的技术",
+      "适用场景：重构/升级回归（验证新旧版本行为一致）、核心接口大规模回归",
+      "优势：用例即真实流量，覆盖面广，无需人工设计大量用例",
+      "挑战：数据依赖与写操作隔离（影子库/只读回放）、动态字段（时间、ID）的比对降噪"
+    ]
+  },
+  {
+    "id": "qa-dev-004",
+    "language": "test",
+    "topic": "测试开发",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "如果让你设计一个自动化测试平台，会包含哪些核心模块？",
+    "answer_points": [
+      "用例管理：用例的录入、编辑、评审、版本与标签分级管理",
+      "任务调度：定时/触发执行计划，分布式执行节点管理",
+      "数据与环境管理：多环境配置、测试数据构造与 Mock 服务",
+      "报告与度量：执行报告、通过率与稳定性趋势、失败归因",
+      "集成能力：对接 CI 流水线、缺陷系统与消息通知"
+    ]
+  },
+  {
+    "id": "qa-dev-005",
+    "language": "test",
+    "topic": "测试开发",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "如何设计一个测试数据构造（造数）平台？",
+    "answer_points": [
+      "多造数方式：API 编排造数（保证业务一致性）、SQL 模板、基于规则的数据工厂生成",
+      "数据标签化：按业务场景定义数据模型（如新用户、VIP 用户），参数化生成",
+      "数据生命周期管理：唯一标识、自动清理与回收，避免脏数据累积",
+      "服务能力化：提供接口供自动化用例和手工测试按需取数，支撑数据隔离"
+    ]
+  },
+  {
+    "id": "qa-dev-006",
+    "language": "test",
+    "topic": "测试开发",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "什么是精准测试？它如何解决回归范围大的问题？",
+    "answer_points": [
+      "精准测试通过代码变更分析（diff）与调用链/覆盖率追踪，建立代码与用例的关联",
+      "只推荐执行与本次变更相关的用例，缩小回归范围、缩短回归时间",
+      "实现基础：代码覆盖率采集（如 JaCoCo 增量覆盖）、方法级调用链分析",
+      "风险：关联不全可能漏测，需保留核心冒烟用例兜底"
+    ]
+  },
+  {
+    "id": "qa-sec-001",
+    "language": "test",
+    "topic": "安全测试",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "常见的 Web 安全漏洞有哪些？（举 OWASP Top 10 中几例）",
+    "answer_points": [
+      "注入类：SQL 注入、命令注入，恶意输入被当作语句执行",
+      "XSS 跨站脚本：向页面注入恶意脚本窃取用户信息",
+      "越权访问：水平越权（访问他人数据）与垂直越权（普通用户调管理员接口）",
+      "其他：CSRF 跨站请求伪造、敏感信息泄露、文件上传漏洞、不安全的反序列化"
+    ]
+  },
+  {
+    "id": "qa-sec-002",
+    "language": "test",
+    "topic": "安全测试",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "什么是 SQL 注入？如何测试与防范？",
+    "answer_points": [
+      "原理：用户输入被拼接进 SQL 语句，改变原有语义，可窃取或破坏数据",
+      "测试：在参数中输入单引号、' or '1'='1 等特征串，观察报错与异常返回",
+      "防范：参数化查询/预编译，最小权限数据库账号，输入校验",
+      "测试岗常见验证点：登录框、搜索框、URL 参数等所有外部输入点"
+    ]
+  },
+  {
+    "id": "qa-sec-003",
+    "language": "test",
+    "topic": "安全测试",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "什么是 XSS？反射型和存储型有什么区别？",
+    "answer_points": [
+      "XSS 是将恶意脚本注入到页面中，在其他用户浏览器执行，可窃取 Cookie、伪造操作",
+      "反射型：恶意脚本在 URL/请求参数中，需诱导用户点击，一次性触发",
+      "存储型：恶意脚本存入数据库（如评论区），所有访问该页面的用户都受影响，危害更大",
+      "防范：输出转义、输入过滤、CSP 策略、Cookie 设置 HttpOnly"
+    ]
+  },
+  {
+    "id": "qa-sec-004",
+    "language": "test",
+    "topic": "安全测试",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "什么是越权漏洞？如何测试越权？",
+    "answer_points": [
+      "越权指用户访问或操作了超出其权限的资源，分水平越权与垂直越权",
+      "水平越权：修改请求中的用户 ID/订单 ID 访问其他用户数据（如订单详情接口换 id）",
+      "垂直越权：普通用户直接调用管理员接口（如直接请求删除用户的 URL）",
+      "测试方法：准备两个不同权限账号，互换凭证与资源 ID 重放请求，检查服务端是否鉴权"
+    ]
+  },
+  {
+    "id": "qa-design-001",
+    "language": "test",
+    "topic": "场景设计",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "给你一个登录功能，你如何设计测试用例？",
+    "answer_points": [
+      "功能正常：正确账号密码登录成功并跳转；记住密码、第三方登录",
+      "功能异常：账号/密码为空、错误、不存在、超长输入、特殊字符、大小写敏感、前后空格",
+      "界面与易用性：布局对齐、提示语清晰、密码掩码显示、验证码可刷新",
+      "安全：密码加密传输、错误次数锁定、验证码防爆破、SQL 注入与 XSS 输入",
+      "兼容与性能：多浏览器/移动端兼容、弱网与超时处理、登录接口响应时间"
+    ]
+  },
+  {
+    "id": "qa-design-002",
+    "language": "test",
+    "topic": "场景设计",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "如何测试电商的购物车功能？",
+    "answer_points": [
+      "功能：商品增删改查、数量修改与上限、勾选结算、价格与优惠计算、未登录/登录态合并",
+      "交互与界面：跳转商品详情、缺货/下架商品置灰、全选反选",
+      "数据一致性：多端同步、刷新/重新登录后数据不丢失、与库存和下单数据一致",
+      "异常与边界：商品数量边界（0、上限、超库存）、网络中断时操作、重复点击防抖",
+      "性能与兼容：大数量商品加载性能、不同浏览器/机型兼容"
+    ]
+  },
+  {
+    "id": "qa-design-003",
+    "language": "test",
+    "topic": "场景设计",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "如何测试微信红包功能？",
+    "answer_points": [
+      "功能：发红包（金额、个数、类型拼手气/普通）、抢红包、红包退回、过期退款",
+      "金额校验：单个金额上下限（0.01~200）、总金额与个数匹配、拼手气金额分配总和正确",
+      "并发与一致性：多人同时抢不超发不重复、余额扣减与入账一致",
+      "异常场景：余额不足、支付中断、网络异常、抢已抢完/已过期红包",
+      "安全与性能：防刷机制、高并发下抢红包接口性能与事务一致性"
+    ]
+  },
+  {
+    "id": "qa-design-004",
+    "language": "test",
+    "topic": "场景设计",
+    "difficulty": "困难",
+    "frequency": "高频",
+    "question": "如何测试支付功能（如下单支付）？",
+    "answer_points": [
+      "正常流程：各支付渠道（余额、银行卡、第三方支付）下单-支付-回调-订单状态流转",
+      "金额校验：支付金额与订单金额一致、优惠/运费叠加计算、边界金额（0、0.01、大额）",
+      "异常与中断：支付超时、取消支付、网络中断、重复点击支付按钮（幂等防重复扣款）",
+      "状态一致性：支付成功但回调失败时的补单/对账机制，退款流程",
+      "安全与并发：金额篡改（改请求参数）、重复提交、高并发下的账务一致性"
+    ]
+  },
+  {
+    "id": "qa-design-005",
+    "language": "test",
+    "topic": "场景设计",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "给你一个纸杯，你会从哪些方面测试它？（发散题）",
+    "answer_points": [
+      "功能：能否盛水不漏水、容量是否达标、能否盛冷热不同液体、是否变形",
+      "性能与可靠性：装满水静置多久渗漏、耐温范围、堆叠承压",
+      "易用性：是否防滑易握、杯口饮用是否顺畅、叠放是否易分离",
+      "安全与环保：材料是否食品级、高温下是否释放有害物质、是否可降解",
+      "界面/外观与兼容：外观印刷是否掉色、尺寸是否适配标准杯架"
+    ]
+  },
+  {
+    "id": "qa-design-006",
+    "language": "test",
+    "topic": "场景设计",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "如何测试一部电梯？（发散题）",
+    "answer_points": [
+      "功能：各楼层按钮、开关门、报警按钮、显示屏楼层与方向是否正确，选层后能否取消",
+      "调度逻辑：上下行请求响应顺序、同向优先、满载时跳过外呼",
+      "安全：超载报警与禁止运行、门感应防夹、停电应急（平层、紧急通话、通风）",
+      "性能：升降速度与加减速是否平稳、开关门时间、高峰时段调度效率",
+      "异常：运行中按开门键、门被阻挡反复开关、多人同时呼梯的并发处理"
+    ]
+  }
+]

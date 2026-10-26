@@ -1,0 +1,1500 @@
+[
+  {
+    "id": "fe-js-001",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "JavaScript 有哪些数据类型？如何区分原始类型与引用类型？",
+    "answer_points": [
+      "原始类型：string、number、boolean、null、undefined、symbol、bigint 共 7 种",
+      "引用类型：Object（含 Array、Function、Date、RegExp 等），存储在堆中，变量保存的是引用地址",
+      "typeof 可区分大部分原始类型，但对 null 返回 'object'、对引用类型区分能力有限",
+      "引用类型精确判断可用 Object.prototype.toString.call() 或 instanceof"
+    ]
+  },
+  {
+    "id": "fe-js-002",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "var、let、const 有什么区别？",
+    "answer_points": [
+      "var 存在变量提升且声明会提升到函数顶部，let/const 有暂时性死区，声明前访问报错",
+      "var 是函数作用域，let/const 是块级作用域",
+      "var 可重复声明，let/const 同一作用域不可重复声明",
+      "const 声明时必须初始化且绑定不可重新赋值，但对象属性仍可修改",
+      "var 声明的全局变量会挂载到 window 上，let/const 不会"
+    ]
+  },
+  {
+    "id": "fe-js-003",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是闭包？它有哪些应用场景和注意事项？",
+    "answer_points": [
+      "闭包是函数与其词法作用域的组合，内层函数可以访问外层函数的变量，且外层执行完变量不被销毁",
+      "应用：数据私有化（模块模式）、防抖节流、柯里化、回调中保持状态",
+      "注意事项：闭包引用外层变量会阻止其被回收，使用不当可能造成内存占用过高",
+      "循环中使用闭包需注意变量共享问题，可用 let 块级作用域或立即执行函数解决"
+    ]
+  },
+  {
+    "id": "fe-js-004",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "JavaScript 中 this 的指向由什么决定？有哪些绑定规则？",
+    "answer_points": [
+      "默认绑定：独立函数调用时 this 指向全局对象（严格模式下为 undefined）",
+      "隐式绑定：作为对象方法调用时指向该对象，多层调用取最后一层",
+      "显式绑定：call、apply、bind 可以指定 this，bind 返回绑定了 this 的新函数",
+      "new 绑定：构造函数调用时 this 指向新创建的实例，优先级高于显式绑定",
+      "箭头函数没有自己的 this，继承外层词法作用域的 this，且不可被 call/apply 改变"
+    ]
+  },
+  {
+    "id": "fe-js-005",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "null 和 undefined 有什么区别？",
+    "answer_points": [
+      "undefined 表示变量已声明但未赋值，或函数无返回值时的默认返回",
+      "null 是开发者主动赋的空值，表示'空对象指针'",
+      "typeof null 为 'object'（历史遗留 bug），typeof undefined 为 'undefined'",
+      "转为数值时 undefined 是 NaN，null 是 0",
+      "== 比较时 null == undefined 为 true，=== 为 false"
+    ]
+  },
+  {
+    "id": "fe-js-006",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是原型和原型链？",
+    "answer_points": [
+      "每个函数都有 prototype 属性指向原型对象，每个对象都有 __proto__ 指向其构造函数的 prototype",
+      "访问对象属性时，若自身没有则沿 __proto__ 逐级向上查找，这条链就是原型链，终点是 Object.prototype.__proto__（null）",
+      "构造函数、原型、实例三者通过 prototype 和 constructor、__proto__ 相互关联",
+      "ES6 class 本质是原型继承的语法糖",
+      "应用：实现继承、方法共享，理解 hasOwnProperty 与原型属性的区别"
+    ]
+  },
+  {
+    "id": "fe-js-007",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "== 和 === 有什么区别？常见的隐式类型转换规则有哪些？",
+    "answer_points": [
+      "=== 是严格相等，类型不同直接返回 false，不做转换",
+      "== 允许类型转换：字符串与数字比较时字符串转数字；布尔值先转数字",
+      "null 和 undefined 互相 == 相等，且不等于其他任何值",
+      "对象与原始值比较时对象会先经 ToPrimitive（valueOf/toString）转换",
+      "NaN 不等于任何值包括自身；建议开发中始终使用 ==="
+    ]
+  },
+  {
+    "id": "fe-js-008",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "深拷贝和浅拷贝有什么区别？如何实现深拷贝？",
+    "answer_points": [
+      "浅拷贝只复制第一层，嵌套对象仍是引用：Object.assign、展开运算符、slice 等",
+      "深拷贝递归复制所有层级，常见实现：递归遍历 + WeakMap 处理循环引用",
+      "JSON.parse(JSON.stringify()) 可实现简单深拷贝，但会丢失函数、undefined、Symbol、Date 等",
+      "现代浏览器提供 structuredClone() 原生深拷贝 API",
+      "手写深拷贝需考虑数组、Map、Set、Date、循环引用等边界情况"
+    ]
+  },
+  {
+    "id": "fe-js-009",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "说说浏览器的事件循环机制，宏任务和微任务的执行顺序是怎样的？",
+    "answer_points": [
+      "同步代码在调用栈执行，异步任务完成后回调进入任务队列",
+      "宏任务：setTimeout、setInterval、I/O、UI 渲染、script 整体；微任务：Promise.then、queueMicrotask、MutationObserver",
+      "每轮循环：执行同步代码 → 清空微任务队列 → 执行一个宏任务 → 再清空微任务，如此往复",
+      "微任务在当前宏任务结束后、渲染之前全部执行完",
+      "Node.js 的事件循环分阶段（timers、poll、check 等），v11 后与浏览器行为对齐"
+    ]
+  },
+  {
+    "id": "fe-js-010",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "Promise 的状态流转是怎样的？all、race、allSettled、any 有什么区别？",
+    "answer_points": [
+      "Promise 有 pending/fulfilled/rejected 三种状态，一旦落定不可逆",
+      "then/catch/finally 链式调用，内部异常会被捕获并传递为 rejected",
+      "Promise.all：全部成功才成功，任一失败立即失败；allSettled：等全部落定，返回各自结果状态",
+      "Promise.race：取第一个落定（无论成败）的结果；Promise.any：取第一个成功的结果，全失败才失败",
+      "理解 Promise 需掌握微任务调度与值穿透机制"
+    ]
+  },
+  {
+    "id": "fe-js-011",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "async/await 的原理是什么？它和 Promise 有什么关系？",
+    "answer_points": [
+      "async/await 是 Generator + Promise 的语法糖，本质是用 Generator 函数加自动执行器实现",
+      "async 函数总是返回 Promise，返回值会被包装为 resolved Promise",
+      "await 会暂停 async 函数执行，等待右侧 Promise 落定后再恢复，暂停期间不阻塞主线程",
+      "错误处理用 try/catch 捕获 await 的 rejection，比 .catch 链更直观",
+      "多个无依赖的异步任务应使用 Promise.all 并发，避免 await 串行拖慢性能"
+    ]
+  },
+  {
+    "id": "fe-js-012",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "ES6+ 有哪些常用的新特性？",
+    "answer_points": [
+      "let/const 块级作用域、箭头函数、模板字符串、解构赋值、默认参数、扩展运算符",
+      "Promise、async/await、Generator 等异步方案",
+      "class 语法糖、模块化 import/export、Symbol、Map/Set、Proxy/Reflect",
+      "数组与对象新方法：find、includes、Object.keys/values/entries 等",
+      "ES2020+：可选链 ?.、空值合并 ??、BigInt、Promise.allSettled、顶层 await"
+    ]
+  },
+  {
+    "id": "fe-js-013",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "防抖和节流有什么区别？分别如何实现？",
+    "answer_points": [
+      "防抖：事件触发后延迟执行，若延迟期内再次触发则重新计时，适用于搜索联想、窗口 resize",
+      "节流：固定时间间隔内只执行一次，适用于滚动监听、按钮防重复点击",
+      "防抖实现：setTimeout + clearTimeout 重置定时器；节流实现：时间戳或定时器开关控制",
+      "二者都借助闭包保存定时器/上次执行时间",
+      "防抖关注'最后一次'，节流关注'固定频率'，需按业务场景选择"
+    ]
+  },
+  {
+    "id": "fe-js-014",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "JavaScript 实现继承的方式有哪些？",
+    "answer_points": [
+      "原型链继承：子类原型指向父类实例，缺点是引用属性被所有实例共享",
+      "构造函数继承：call 借用父类构造，缺点是方法无法复用",
+      "组合继承：原型链 + 构造函数结合，但父类构造函数会调用两次",
+      "寄生组合继承：用 Object.create 建立原型关系，是 ES5 最优方案",
+      "ES6 class extends + super，本质是寄生组合继承的语法糖"
+    ]
+  },
+  {
+    "id": "fe-js-015",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "call、apply、bind 有什么区别？如何手写实现？",
+    "answer_points": [
+      "call 和 apply 立即调用并指定 this，区别在于参数分别为逐个传递和数组传递",
+      "bind 返回绑定了 this 的新函数，不立即执行，还支持参数预置（偏函数）",
+      "手写思路：将函数作为目标对象的临时属性调用，利用隐式绑定改变 this，执行后删除该属性",
+      "需处理传入 null/undefined 时指向全局对象、返回函数执行结果等细节",
+      "bind 手写需返回包装函数并处理 new 调用时 this 失效的情况"
+    ]
+  },
+  {
+    "id": "fe-js-016",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "什么是事件冒泡和事件捕获？事件委托的原理是什么？",
+    "answer_points": [
+      "DOM 事件流分三个阶段：捕获（window 到目标）、目标、冒泡（目标回到 window）",
+      "addEventListener 第三个参数控制监听捕获（true）还是冒泡（false，默认）",
+      "stopPropagation 阻止传播，preventDefault 阻止默认行为，二者作用不同",
+      "事件委托利用冒泡把子元素事件统一绑定到父元素，通过 event.target 判断来源",
+      "委托优点：减少监听器数量、动态新增子元素无需重新绑定，适合列表场景"
+    ]
+  },
+  {
+    "id": "fe-js-017",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "JavaScript 中常见的内存泄漏场景有哪些？如何排查？",
+    "answer_points": [
+      "常见场景：意外的全局变量、未清理的定时器与事件监听、闭包长期引用大对象",
+      "脱离 DOM 的节点仍被 JS 引用（detached DOM）、console.log 持有对象引用",
+      "垃圾回收机制：V8 分代回收，新生代用 Scavenge（复制算法），老生代用标记清除/标记整理",
+      "排查工具：Chrome DevTools Memory 面板拍堆快照对比、Performance 观察内存曲线",
+      "治理原则：及时移除监听器与定时器、解绑引用、合理使用 WeakMap/WeakSet"
+    ]
+  },
+  {
+    "id": "fe-js-018",
+    "language": "frontend",
+    "topic": "JavaScript",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "['1','2','3'].map(parseInt) 的输出是什么？为什么？",
+    "answer_points": [
+      "输出 [1, NaN, NaN]，是考察 map 与 parseInt 参数机制的经典题",
+      "map 回调接收三个参数：元素值、索引、数组本身",
+      "parseInt 接收两个参数：待解析字符串和进制基数 radix",
+      "实际执行 parseInt('1',0)、parseInt('2',1)、parseInt('3',2)",
+      "radix 为 0 按十进制解析得 1；radix 为 1 非法得 NaN；'3' 在二进制下非法得 NaN"
+    ]
+  },
+  {
+    "id": "fe-ts-001",
+    "language": "frontend",
+    "topic": "TypeScript",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "TypeScript 中 interface 和 type 有什么区别？",
+    "answer_points": [
+      "interface 主要用于描述对象结构，支持声明合并（同名自动合并），type 不会合并",
+      "type 可以定义联合类型、交叉类型、元组、原始类型别名等，表达能力更强",
+      "interface 支持 extends 继承，type 通过交叉类型 & 实现类似效果",
+      "class 可以实现 interface，也可以用 type 描述的对象类型",
+      "实践约定：定义对象/类结构优先 interface，其余场景用 type"
+    ]
+  },
+  {
+    "id": "fe-ts-002",
+    "language": "frontend",
+    "topic": "TypeScript",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "any、unknown、never、void 有什么区别？",
+    "answer_points": [
+      "any 关闭类型检查，可赋值给任何类型也可被任何类型赋值，应尽量避免",
+      "unknown 是类型安全的 any，使用前必须通过类型收窄才能操作",
+      "void 表示函数没有返回值（或返回值被忽略）",
+      "never 表示永不存在的值，如抛异常的函数、死循环函数、空联合类型",
+      "unknown 常用于 catch 错误对象、第三方数据等类型不确定的场景"
+    ]
+  },
+  {
+    "id": "fe-ts-003",
+    "language": "frontend",
+    "topic": "TypeScript",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "什么是泛型？泛型约束和默认类型怎么用？",
+    "answer_points": [
+      "泛型让类型成为参数，在定义时不确定类型，使用时再指定，提升复用性与类型安全",
+      "可用于函数、接口、类，如 function identity<T>(arg: T): T",
+      "泛型约束：用 extends 限制 T 必须满足某结构，如 <T extends { length: number }>",
+      "泛型默认值：<T = string>，调用方不指定时使用默认类型",
+      "常见搭配：keyof、typeof、条件类型，是工具类型实现的基础"
+    ]
+  },
+  {
+    "id": "fe-ts-004",
+    "language": "frontend",
+    "topic": "TypeScript",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "常用的内置工具类型有哪些？各自的作用是什么？",
+    "answer_points": [
+      "Partial<T> 全部可选、Required<T> 全部必选、Readonly<T> 全部只读",
+      "Pick<T, K> 挑选属性、Omit<T, K> 排除属性、Record<K, V> 构造键值映射对象",
+      "ReturnType<T> 获取函数返回类型、Parameters<T> 获取参数元组",
+      "Exclude/Extract 用于联合类型的差集与交集",
+      "这些工具类型基于映射类型与条件类型实现，理解原理可自行实现 DeepPartial 等变体"
+    ]
+  },
+  {
+    "id": "fe-ts-005",
+    "language": "frontend",
+    "topic": "TypeScript",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "TypeScript 有哪些类型收窄（narrowing）的手段？",
+    "answer_points": [
+      "typeof 判断原始类型，instanceof 判断类实例，in 判断对象是否含某属性",
+      "判别联合（discriminated union）：用共同字面量字段（如 type/kind）区分成员，配合 switch 收窄",
+      "类型谓词函数：function isFish(x): x is Fish 自定义收窄逻辑",
+      "控制流分析：赋值、return、throw 后编译器自动收窄后续代码的类型",
+      "as 断言和 ! 非空断言可强制跳过检查，但会牺牲类型安全，应谨慎使用"
+    ]
+  },
+  {
+    "id": "fe-ts-006",
+    "language": "frontend",
+    "topic": "TypeScript",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "条件类型和 infer 关键字的作用是什么？请举例说明。",
+    "answer_points": [
+      "条件类型形如 T extends U ? X : Y，根据类型关系选择分支，是类型体操的基础",
+      "infer 在 extends 子句中声明待推断的类型变量，如从函数类型中提取返回值类型",
+      "例：type MyReturnType<T> = T extends (...args: any[]) => infer R ? R : never",
+      "条件类型作用于联合类型时会分发（distributive），可用 [T] extends [U] 关闭分发",
+      "应用：实现内置工具类型、DeepReadonly、Promise 解包 Awaited 等高级类型"
+    ]
+  },
+  {
+    "id": "fe-css-001",
+    "language": "frontend",
+    "topic": "HTML/CSS",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是 CSS 盒模型？box-sizing 的两种取值有什么区别？",
+    "answer_points": [
+      "标准盒模型（content-box）：width 只含内容，实际占位 = width + padding + border + margin",
+      "IE/怪异盒模型（border-box）：width 包含 content + padding + border，更易控制尺寸",
+      "通过 box-sizing 切换，现代开发通常全局设置 border-box",
+      "margin 不属于盒子的实际占位但影响布局，垂直方向相邻 margin 会发生折叠",
+      "理解盒模型是布局与尺寸计算问题排查的基础"
+    ]
+  },
+  {
+    "id": "fe-css-002",
+    "language": "frontend",
+    "topic": "HTML/CSS",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是 BFC？触发条件和应用场景有哪些？",
+    "answer_points": [
+      "BFC（块级格式化上下文）是独立的渲染区域，内部布局不受外部影响",
+      "触发条件：overflow 非 visible、float、position absolute/fixed、display inline-block/flex/grid 等",
+      "应用一：清除浮动，父元素形成 BFC 可包裹浮动子元素防止高度塌陷",
+      "应用二：阻止 margin 折叠，把相邻元素包进不同 BFC",
+      "应用三：阻止元素被浮动元素覆盖，实现自适应两栏布局"
+    ]
+  },
+  {
+    "id": "fe-css-003",
+    "language": "frontend",
+    "topic": "HTML/CSS",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "Flex 布局的常用属性有哪些？flex: 1 是什么含义？",
+    "answer_points": [
+      "容器属性：flex-direction、justify-content、align-items、flex-wrap、gap",
+      "子项属性：flex-grow、flex-shrink、flex-basis、align-self、order",
+      "flex: 1 等价于 flex: 1 1 0%，即放大比例 1、缩小比例 1、基准尺寸 0",
+      "与 flex: auto（1 1 auto）的区别在于基准尺寸，影响剩余空间分配结果",
+      "适合一维布局、等分布局、居中、圣杯/导航等常见场景"
+    ]
+  },
+  {
+    "id": "fe-css-004",
+    "language": "frontend",
+    "topic": "HTML/CSS",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "实现一个元素水平垂直居中的方案有哪些？",
+    "answer_points": [
+      "flex 方案：容器 display:flex + justify-content/align-items 均设 center，最常用",
+      "grid 方案：display:grid + place-items:center，代码最简",
+      "绝对定位 + transform：left/top 50% 配合 translate(-50%,-50%)，不依赖子元素尺寸",
+      "绝对定位 + margin:auto：四方向 offset 设为 0 且 margin:auto",
+      "已知尺寸时可用负 margin；行内文本可用 text-align + line-height"
+    ]
+  },
+  {
+    "id": "fe-css-005",
+    "language": "frontend",
+    "topic": "HTML/CSS",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "CSS 选择器优先级（权重）如何计算？",
+    "answer_points": [
+      "优先级从高到低：!important > 内联 style > id > 类/属性/伪类 > 标签/伪元素",
+      "权重按 (id, 类, 标签) 三元组逐级比较，高位相同才比较低位，不会进位",
+      "继承和通配符 * 权重最低，!important 会破坏层叠规则应少用",
+      "权重相同（同来源）时后定义的样式生效，即源码顺序决定",
+      "现代 CSS 还有 @layer 层叠层机制可显式管理优先级"
+    ]
+  },
+  {
+    "id": "fe-css-006",
+    "language": "frontend",
+    "topic": "HTML/CSS",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "position 各取值有什么区别？sticky 是如何工作的？",
+    "answer_points": [
+      "static 默认不定位；relative 相对自身偏移且保留原占位",
+      "absolute 相对最近的非 static 祖先定位，脱离文档流",
+      "fixed 相对视口定位，常用于导航、弹窗；transform 祖先会使 fixed 失效转为相对该祖先",
+      "sticky 是相对与固定定位的混合：滚动到阈值前按 relative 表现，之后固定在设定偏移处",
+      "sticky 生效需要父容器有足够滚动空间且不设置 overflow:hidden"
+    ]
+  },
+  {
+    "id": "fe-css-007",
+    "language": "frontend",
+    "topic": "HTML/CSS",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "响应式布局有哪些实现方案？各有什么适用场景？",
+    "answer_points": [
+      "媒体查询 @media 按断点切换样式，适合整体布局差异大的场景",
+      "百分比 + flex/grid 弹性布局，随容器自适应，是主流方案",
+      "rem 方案：配合 JS 动态设置根字号，曾广泛用于移动端等比缩放",
+      "vw/vh 视口单位直接相对屏幕尺寸，常用于海报、大屏可视化",
+      "现代方案还有容器查询（container queries）、clamp() 流式排版；移动端需正确设置 viewport"
+    ]
+  },
+  {
+    "id": "fe-css-008",
+    "language": "frontend",
+    "topic": "HTML/CSS",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "移动端 1px 边框变粗问题的原因是什么？如何解决？",
+    "answer_points": [
+      "原因：高 DPR 屏幕下 1 CSS 像素映射多个物理像素，1px 边框被渲染成 2~3 物理像素显得更粗",
+      "方案一：用 transform: scale(0.5) 缩放伪元素边框，兼容性最好",
+      "方案二：直接写 0.5px（iOS8+ 支持，安卓兼容性差）",
+      "方案三：设置 viewport 按 devicePixelRatio 缩放整个页面（flexible 方案）",
+      "方案四：使用 border-image 或 box-shadow 模拟细线"
+    ]
+  },
+  {
+    "id": "fe-css-009",
+    "language": "frontend",
+    "topic": "HTML/CSS",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "CSS 动画如何实现？如何做动画性能优化？",
+    "answer_points": [
+      "transition 用于状态间过渡，animation + @keyframes 支持多帧复杂动画",
+      "优先使用 transform 和 opacity 做动画，只触发合成层，不引起重排重绘",
+      "避免动画 top/left/width 等布局属性，会触发频繁 reflow 导致掉帧",
+      "will-change 或 translateZ(0) 可提升为独立合成层，但滥用会增加内存占用",
+      "JS 动画可用 requestAnimationFrame 对齐浏览器刷新节奏"
+    ]
+  },
+  {
+    "id": "fe-css-010",
+    "language": "frontend",
+    "topic": "HTML/CSS",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "什么是层叠上下文？为什么会出现 z-index '失效' 的情况？",
+    "answer_points": [
+      "层叠上下文是三维概念上的渲染分组，z-index 只在同一层叠上下文内比较",
+      "触发条件：根元素、z-index 非 auto 的定位元素、opacity<1、transform/filter 非 none、flex/grid 子项等",
+      "所谓 z-index 失效：元素处于不同的层叠上下文中，比较的是各自父级上下文的层级而非自身 z-index",
+      "排查思路：沿 DOM 向上找最近形成层叠上下文的祖先，比较其层级",
+      "弹窗遮挡、transform 容器内 fixed 失效等 bug 都与层叠上下文相关"
+    ]
+  },
+  {
+    "id": "fe-browser-001",
+    "language": "frontend",
+    "topic": "浏览器",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "从输入 URL 到页面展示，中间发生了什么？",
+    "answer_points": [
+      "浏览器查找缓存并做 DNS 解析，得到服务器 IP",
+      "建立 TCP 连接（HTTPS 还需 TLS 握手），发送 HTTP 请求",
+      "服务器处理并返回响应，浏览器按状态码与缓存策略处理",
+      "解析 HTML 构建 DOM、加载 CSS/JS 构建 CSSOM，合成渲染树后布局与绘制",
+      "JS 加载执行可能阻塞解析，渲染完成后继续处理异步资源与交互"
+    ]
+  },
+  {
+    "id": "fe-browser-002",
+    "language": "frontend",
+    "topic": "浏览器",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "浏览器的渲染流程（关键渲染路径）是怎样的？",
+    "answer_points": [
+      "解析 HTML 生成 DOM 树，解析 CSS 生成 CSSOM 树，二者合成 Render Tree",
+      "布局（Layout/Reflow）计算每个节点的几何位置与尺寸",
+      "绘制（Paint）把节点转成像素，分层（Composite）后由合成线程合成上屏",
+      "CSS 会阻塞渲染，JS 会阻塞 HTML 解析，故 JS 常放底部或用 async/defer",
+      "script 标签 async 与 defer 的区别：async 下载完立即执行，defer 延迟到文档解析后按序执行"
+    ]
+  },
+  {
+    "id": "fe-browser-003",
+    "language": "frontend",
+    "topic": "浏览器",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "Cookie、localStorage、sessionStorage、IndexedDB 有什么区别？",
+    "answer_points": [
+      "Cookie 容量约 4KB，每次请求自动携带，可设置过期时间、HttpOnly、SameSite 等属性",
+      "localStorage 约 5~10MB，永久保存需手动清除，同源共享",
+      "sessionStorage 容量相近但仅在当前标签页会话有效，关闭即清除",
+      "三者均为同步 API，IndexedDB 是异步的客户端数据库，容量大且支持索引与事务",
+      "敏感信息不宜放 localStorage（易被 XSS 读取），登录态常用 HttpOnly Cookie"
+    ]
+  },
+  {
+    "id": "fe-browser-004",
+    "language": "frontend",
+    "topic": "浏览器",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "什么是同源策略？它限制了哪些行为？",
+    "answer_points": [
+      "同源要求协议、域名、端口三者完全一致，否则为跨域",
+      "限制：跨域 AJAX/Fetch 请求响应被拦截、无法读取跨域页面的 DOM 与 Cookie/localStorage",
+      "不受限：script/img/link 等标签的跨域资源加载（这也是 CSRF 能发起的原因之一）",
+      "目的是隔离恶意站点对用户数据的访问，是浏览器安全基石",
+      "跨域读写可通过 CORS、postMessage、document.domain（已不推荐）等方式受控放开"
+    ]
+  },
+  {
+    "id": "fe-browser-005",
+    "language": "frontend",
+    "topic": "浏览器",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "前端跨域有哪些解决方案？各自原理是什么？",
+    "answer_points": [
+      "CORS：服务器设置 Access-Control-Allow-Origin 等响应头，浏览器校验通过后放行，是标准方案",
+      "CORS 非简单请求会先发 OPTIONS 预检，服务器需正确响应预检",
+      "JSONP：利用 script 标签不受同源限制，回调函数接收数据，仅支持 GET 且安全性差",
+      "开发环境用 devServer/Nginx 反向代理把请求转发到同域，线上可用网关转发",
+      "postMessage 用于跨域窗口/iframe 间通信；websocket 不受同源策略限制"
+    ]
+  },
+  {
+    "id": "fe-browser-006",
+    "language": "frontend",
+    "topic": "浏览器",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "浏览器缓存中的强缓存和协商缓存是如何工作的？",
+    "answer_points": [
+      "强缓存：命中则不发请求直接用本地缓存，由 Expires 或 Cache-Control: max-age 控制，状态码 200 (from cache)",
+      "协商缓存：缓存过期后携带 If-Modified-Since / If-None-Match 询问服务器，未变则返回 304 复用缓存",
+      "ETag 优先级高于 Last-Modified，能处理秒级内修改与文件内容未变的情况",
+      "Cache-Control 常用值：no-cache（每次协商）、no-store（不缓存）、public/private",
+      "实践：HTML 用协商缓存，带 hash 的静态资源用 max-age 长缓存 + immutable"
+    ]
+  },
+  {
+    "id": "fe-browser-007",
+    "language": "frontend",
+    "topic": "浏览器",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "什么是 XSS 攻击？有哪些类型和防御手段？",
+    "answer_points": [
+      "XSS 是攻击者在页面注入恶意脚本窃取 Cookie、劫持会话等，分存储型、反射型、DOM 型",
+      "存储型：恶意脚本存入数据库后对所有访问者生效，危害最大",
+      "防御核心：对用户输入输出做转义/过滤，谨慎使用 innerHTML/v-html，改用 textContent",
+      "设置 HttpOnly Cookie 防止脚本读取，配置 CSP 响应头限制脚本来源",
+      "富文本场景用白名单过滤库（如 DOMPurify），URL 参数需校验 javascript: 伪协议"
+    ]
+  },
+  {
+    "id": "fe-browser-008",
+    "language": "frontend",
+    "topic": "浏览器",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "什么是 CSRF 攻击？如何防御？",
+    "answer_points": [
+      "CSRF 利用浏览器自动携带 Cookie 的机制，诱导用户在已登录状态下向目标站发起非自愿请求",
+      "典型形式：恶意页面中的 img/form 自动提交，配合 GET 型敏感操作生效",
+      "防御一：SameSite Cookie 属性限制跨站携带（Lax/Strict）",
+      "防御二：CSRF Token，服务端下发随机 token，请求需携带并校验",
+      "防御三：校验 Referer/Origin 头；敏感操作要求二次验证；XSS 与 CSRF 常组合出现需综合防御"
+    ]
+  },
+  {
+    "id": "fe-browser-009",
+    "language": "frontend",
+    "topic": "浏览器",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "重排（reflow）和重绘（repaint）有什么区别？如何减少？",
+    "answer_points": [
+      "重排：几何属性变化（尺寸、位置、增删节点）导致重新计算布局，开销大",
+      "重绘：外观变化（颜色、背景）不触发布局只需重新绘制，开销较小；重排必然引发重绘",
+      "减少手段：合并 DOM 修改、用 class 一次性切换样式、离线操作（fragment/display:none）",
+      "读写分离：避免在循环中交替读取 offsetTop 和修改样式导致强制同步布局",
+      "动画用 transform/opacity，利用合成层跳过布局与绘制"
+    ]
+  },
+  {
+    "id": "fe-browser-010",
+    "language": "frontend",
+    "topic": "浏览器",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "Chrome 的多进程架构是怎样的？为什么这样设计？",
+    "answer_points": [
+      "浏览器进程负责 UI、网络、存储调度；渲染进程负责页面解析渲染执行 JS，默认每站点实例一个",
+      "还有 GPU 进程、网络进程、插件进程等，各司其职",
+      "优点：单个页面崩溃不影响其他页面、安全沙箱隔离、利用多核提升性能",
+      "渲染进程内主线程负责解析与 JS，合成线程与光栅线程协作完成上屏",
+      "代价是内存占用高，Chrome 会用站点隔离与进程复用策略平衡"
+    ]
+  },
+  {
+    "id": "fe-net-001",
+    "language": "frontend",
+    "topic": "计算机网络",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "HTTP 常见状态码有哪些？各表示什么含义？",
+    "answer_points": [
+      "1xx 信息类：101 Switching Protocols 协议切换",
+      "2xx 成功：200 OK、201 Created、204 No Content",
+      "3xx 重定向：301 永久、302 临时、304 协商缓存未修改",
+      "4xx 客户端错误：400 参数错误、401 未认证、403 无权限、404 不存在、405 方法不允许",
+      "5xx 服务端错误：500 内部错误、502 网关错误、503 服务不可用、504 网关超时"
+    ]
+  },
+  {
+    "id": "fe-net-002",
+    "language": "frontend",
+    "topic": "计算机网络",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "GET 和 POST 有什么区别？",
+    "answer_points": [
+      "语义：GET 用于获取资源应幂等无副作用，POST 用于提交/创建，可能产生副作用",
+      "参数位置：GET 参数在 URL query 中长度受限且会被浏览器历史/日志记录，POST 在请求体中",
+      "缓存：GET 可被浏览器缓存，POST 默认不缓存",
+      "编码：POST 支持多种 Content-Type（json、form-data 等），GET 只有 ASCII URL 编码",
+      "安全性上二者都是明文传输，真正的安全靠 HTTPS 而非 POST"
+    ]
+  },
+  {
+    "id": "fe-net-003",
+    "language": "frontend",
+    "topic": "计算机网络",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "HTTP 和 HTTPS 有什么区别？HTTPS 的加密过程是怎样的？",
+    "answer_points": [
+      "HTTPS = HTTP + TLS，加密传输并验证服务器身份，默认端口 443（HTTP 为 80）",
+      "握手阶段：ClientHello/ServerHello 协商版本与算法，服务器下发数字证书",
+      "客户端验证证书链合法性，用 CA 公钥验签防止中间人伪造",
+      "用非对称加密（或 ECDHE）交换出会话密钥，之后通信使用对称加密，兼顾安全与性能",
+      "TLS 1.3 将握手缩短至 1-RTT 并支持 0-RTT 恢复，移除了不安全算法"
+    ]
+  },
+  {
+    "id": "fe-net-004",
+    "language": "frontend",
+    "topic": "计算机网络",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "HTTP/1.1、HTTP/2、HTTP/3 有哪些主要改进？",
+    "answer_points": [
+      "HTTP/1.1：持久连接 keep-alive、管道化（有缺陷），仍存在队头阻塞",
+      "HTTP/2：二进制分帧、多路复用解决应用层队头阻塞、头部压缩 HPACK、服务器推送",
+      "HTTP/2 仍基于 TCP，丢包时 TCP 层队头阻塞依然存在",
+      "HTTP/3 基于 UDP 的 QUIC 协议，传输层解决队头阻塞、连接迁移、0-RTT 建连",
+      "前端优化启示：HTTP/2 下雪碧图与资源合并的必要性下降，域名分片反而有害"
+    ]
+  },
+  {
+    "id": "fe-net-005",
+    "language": "frontend",
+    "topic": "计算机网络",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "TCP 三次握手和四次挥手的过程是怎样的？",
+    "answer_points": [
+      "三次握手：客户端发 SYN；服务端回 SYN+ACK；客户端回 ACK，双方确认收发能力正常",
+      "两次不够是因为无法确认客户端的接收能力，且要防止历史重复连接造成的混乱",
+      "四次挥手：主动方发 FIN；被动方回 ACK；被动方数据发完再发 FIN；主动方回 ACK",
+      "主动方最后进入 TIME_WAIT 等待 2MSL，确保最后一个 ACK 被对方收到并防止旧报文干扰新连接",
+      "挥手需要四次是因为被动方收到 FIN 时可能还有数据未发送完，ACK 与 FIN 分开发送"
+    ]
+  },
+  {
+    "id": "fe-net-006",
+    "language": "frontend",
+    "topic": "计算机网络",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "HTTP 缓存相关的首部字段有哪些？如何配合使用？",
+    "answer_points": [
+      "Cache-Control 是核心：max-age 指定强缓存时长，no-cache 强制协商，no-store 禁止缓存",
+      "Expires 是 HTTP/1.0 的绝对时间方案，受本地时钟影响，优先级低于 max-age",
+      "协商缓存请求头 If-None-Match/If-Modified-Since 对应响应头 ETag/Last-Modified",
+      "ETag 是内容指纹比 Last-Modified 精确，但分布式服务器生成需保持一致",
+      "Vary 头告诉缓存按指定请求头（如 Accept-Encoding）区分缓存副本"
+    ]
+  },
+  {
+    "id": "fe-net-007",
+    "language": "frontend",
+    "topic": "计算机网络",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "Cookie 的属性有哪些？SameSite 属性的作用是什么？",
+    "answer_points": [
+      "Expires/Max-Age 控制有效期，不设置则为会话 Cookie；Domain/Path 控制生效范围",
+      "Secure 仅 HTTPS 发送；HttpOnly 禁止 JS 读取，可防 XSS 窃取",
+      "SameSite 限制跨站请求是否携带 Cookie：Strict 完全禁止、Lax 允许部分安全跳转、None 需配合 Secure",
+      "SameSite 是防御 CSRF 的重要手段，主流浏览器默认 Lax",
+      "跨域携带 Cookie 还需前端 credentials:'include' 与后端 Access-Control-Allow-Credentials 配合"
+    ]
+  },
+  {
+    "id": "fe-net-008",
+    "language": "frontend",
+    "topic": "计算机网络",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "HTTPS 如何防止中间人攻击？证书校验的流程是怎样的？",
+    "answer_points": [
+      "中间人攻击指攻击者夹在通信双方之间伪造身份转发数据，HTTPS 用数字证书解决身份认证",
+      "服务器证书由 CA 用私钥签名，包含域名、公钥、有效期等信息",
+      "客户端用内置的根 CA 公钥沿证书链逐级验签，确认证书可信且域名匹配、未过期未吊销",
+      "若攻击者伪造证书，验签失败浏览器会发出警告，阻止建立连接",
+      "增强手段：证书透明度（CT）、HSTS 强制 HTTPS、证书固定（pinning）等"
+    ]
+  },
+  {
+    "id": "fe-react-001",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是虚拟 DOM？它解决了什么问题？",
+    "answer_points": [
+      "虚拟 DOM 是用 JS 对象描述的 UI 结构，是真实 DOM 的轻量映射",
+      "状态变化时先生成新虚拟 DOM，再与旧的做 Diff，计算出最小变更后批量更新真实 DOM",
+      "解决手动 DOM 操作繁琐易错的问题，让开发者用声明式方式描述 UI",
+      "合并多次状态更新减少真实 DOM 操作次数，并提供跨平台渲染能力（如 React Native）",
+      "注意：虚拟 DOM 并非总比手动优化快，其价值在于可维护性与性能下限保障"
+    ]
+  },
+  {
+    "id": "fe-react-002",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "受控组件和非受控组件有什么区别？",
+    "answer_points": [
+      "受控组件：表单值由 React state 控制，onChange 同步更新 state，数据流单一可预测",
+      "非受控组件：表单值由 DOM 自身管理，用 ref 在需要时读取",
+      "受控便于实现校验、格式化、联动，是官方推荐方式",
+      "非受控代码量少、性能好，适合文件上传（input type=file 只能非受控）等简单场景",
+      "混用两者（如给了 value 不给 onChange）会触发 React 警告"
+    ]
+  },
+  {
+    "id": "fe-react-003",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "JSX 是什么？为什么 JSX 中不能直接写 if/for 语句？",
+    "answer_points": [
+      "JSX 是 JS 的语法扩展，用来描述 UI 结构，编译后变成 React.createElement / jsx() 函数调用",
+      "JSX 中 {} 只能放表达式（有返回值），而 if/for 是语句没有返回值，所以不能直接嵌入",
+      "条件渲染用三元表达式、&& 短路或提前 return；列表渲染用 map 返回元素数组",
+      "JSX 必须有一个父节点（可用 Fragment <>...</>），属性用驼峰命名如 className、onClick",
+      "理解 JSX 本质是函数调用有助于理解'UI = f(state)'的声明式思想"
+    ]
+  },
+  {
+    "id": "fe-react-004",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "React 组件之间有哪些通信方式？",
+    "answer_points": [
+      "父传子：props 传递数据与回调函数，子组件通过回调把数据传回父组件",
+      "跨层级：Context API 提供/消费全局数据，避免 props 层层透传",
+      "兄弟组件：状态提升到最近共同父组件中转",
+      "全局状态：Redux/Zustand/Jotai 等状态管理库，适合大型应用",
+      "其他：ref 转发暴露子组件方法、自定义事件、URL 参数等"
+    ]
+  },
+  {
+    "id": "fe-react-005",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "useState 和 useEffect 的基本用法及注意事项是什么？",
+    "answer_points": [
+      "useState 返回 [state, setState]，setState 触发组件重新渲染，函数组件中状态独立保存",
+      "更新对象/数组状态必须创建新引用，不能直接修改原对象，否则 React 检测不到变化",
+      "setState 可传入函数式更新 (prev)=>prev+1，避免依赖旧值的闭包问题",
+      "useEffect 处理副作用（请求、订阅、DOM 操作），依赖数组控制执行时机",
+      "useEffect 返回清理函数，在组件卸载或依赖变化前执行，用于取消订阅/清定时器"
+    ]
+  },
+  {
+    "id": "fe-react-006",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "React 为什么引入 Hooks？它解决了类组件的哪些问题？",
+    "answer_points": [
+      "类组件中状态逻辑复用困难，HOC/render props 会造成嵌套地狱，自定义 Hook 可自由抽离复用",
+      "复杂组件的生命周期函数中混杂不相关逻辑，Hooks 可按逻辑关注点拆分组织代码",
+      "class 的 this 指向问题、事件绑定繁琐，函数组件 + Hooks 更简洁",
+      "Hooks 让函数组件拥有状态与副作用能力，利于 Tree-shaking 与编译优化",
+      "限制：只能在函数顶层调用、不能在循环/条件中调用，以保证 Hook 调用顺序稳定"
+    ]
+  },
+  {
+    "id": "fe-react-007",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "useEffect 的依赖数组和'闭包陷阱'是怎么回事？",
+    "answer_points": [
+      "依赖数组决定 effect 何时重新执行：空数组仅挂载后执行一次，省略则每次渲染后都执行",
+      "闭包陷阱：effect 捕获的是当次渲染的变量快照，依赖为空时拿到的是初始值",
+      "典型场景：setInterval 中打印的 count 永远是 0，因为回调引用了首次渲染的 count",
+      "修复方式：补全依赖数组、setState 用函数式更新、或用 useRef 保存最新值",
+      "应遵循 eslint-plugin-react-hooks 的 exhaustive-deps 规则避免此类 bug"
+    ]
+  },
+  {
+    "id": "fe-react-008",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "useMemo 和 useCallback 的作用是什么？什么场景该用？",
+    "answer_points": [
+      "useMemo 缓存计算结果，依赖不变时跳过重算，用于昂贵的派生计算",
+      "useCallback 缓存函数引用，等价于 useMemo 返回函数，用于向子组件传稳定回调",
+      "主要价值是配合 React.memo 保持 props 引用稳定，避免子组件无效重渲染",
+      "不应滥用：缓存本身有开销，普通计算与不依赖引用稳定的场景无需使用",
+      "判断依据：是否出现性能问题、子组件是否做了 memo、值是否传入其他 Hook 的依赖"
+    ]
+  },
+  {
+    "id": "fe-react-009",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "React 列表中 key 的作用是什么？为什么不建议用 index 作为 key？",
+    "answer_points": [
+      "key 帮助 Diff 算法识别元素身份，判断节点是新增、删除还是移动",
+      "key 稳定时 React 可复用 DOM 节点与组件状态，只更新变化部分",
+      "用 index 作 key：列表增删/排序后 index 与元素错位，导致错误复用 DOM 和组件内部状态",
+      "后果示例：输入框内容串行、动画错乱、选中状态错误，以及不必要的重渲染",
+      "应使用数据自带的稳定唯一 id；静态列表用 index 可以接受"
+    ]
+  },
+  {
+    "id": "fe-react-010",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "React 的 Diff 算法（reconciliation）有哪些核心策略？",
+    "answer_points": [
+      "基于两个启发式假设：不同类型的元素产生不同子树；可通过 key 标识跨渲染稳定的子元素",
+      "同层比较：只对比同一层级的节点，把 O(n³) 的树比较降为 O(n)",
+      "元素类型不同（如 div 变 p）直接销毁重建整棵子树，不尝试复用",
+      "列表 Diff 通过 key 建立映射，尽量移动复用已有节点而非重建",
+      "优化建议：保持组件类型稳定、合理设置 key、避免无意义的层级变动"
+    ]
+  },
+  {
+    "id": "fe-react-011",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "React 状态管理方案有哪些？Redux 的核心数据流是怎样的？",
+    "answer_points": [
+      "方案谱系：组件内 useState/useReducer → Context → 专门库 Redux/Zustand/MobX/Jotai",
+      "Redux 三原则：单一数据源、state 只读、用纯函数 reducer 执行修改",
+      "数据流：dispatch(action) → reducer 计算新 state → store 更新 → 订阅的视图刷新",
+      "Redux Toolkit 简化了样板代码，内置 Immer 支持'可变'写法",
+      "选型建议：中小项目 Context 或 Zustand 即可，大型复杂项目用 Redux/RTK Query"
+    ]
+  },
+  {
+    "id": "fe-react-012",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "React 应用有哪些常见的性能优化手段？",
+    "answer_points": [
+      "React.memo 缓存组件，props 浅比较不变则跳过重渲染；配合 useMemo/useCallback 保持引用稳定",
+      "状态合理拆分与下放，避免无关状态变化引起大范围重渲染；Context 按域拆分",
+      "列表场景使用 key、虚拟列表（react-window）减少 DOM 节点数量",
+      "路由级代码分割 React.lazy + Suspense，第三方库按需加载",
+      "用 React DevTools Profiler 定位渲染瓶颈，针对性优化而非盲目 memo"
+    ]
+  },
+  {
+    "id": "fe-react-013",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "React Fiber 架构是什么？解决了什么问题？",
+    "answer_points": [
+      "Fiber 是 React 16 重写的协调引擎，把渲染工作拆成可中断的小单元（Fiber 节点）",
+      "旧版递归 Diff 一旦开始不可中断，大更新会阻塞主线程造成掉帧卡顿",
+      "Fiber 通过链表结构实现可中断恢复：利用 requestIdleCallback/时间切片分片执行，让出主线程",
+      "支持优先级调度：用户交互等高优任务可插队，渲染分为 render（可中断）与 commit（不可中断）两阶段",
+      "Fiber 是并发特性（useTransition、Suspense）的基础"
+    ]
+  },
+  {
+    "id": "fe-react-014",
+    "language": "frontend",
+    "topic": "React",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "setState 是同步的还是异步的？批量更新机制是怎样的？",
+    "answer_points": [
+      "表现取决于执行环境：React 事件与生命周期中表现为'异步'（批量合并），setTimeout/原生事件中早期版本为同步",
+      "React 18 引入自动批处理（Automatic Batching），包括 Promise、setTimeout 中的更新也会合并",
+      "批量更新的目的是合并多次状态变更，减少渲染次数提升性能",
+      "需要立即基于最新 state 计算时用函数式更新；需要在更新后操作 DOM 可用 flushSync 强制同步",
+      "所谓'异步'不是真正异步 API，而是延迟到批处理结束后统一计算渲染"
+    ]
+  },
+  {
+    "id": "fe-vue-001",
+    "language": "frontend",
+    "topic": "Vue",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "Vue 的生命周期钩子有哪些？分别在什么阶段触发？",
+    "answer_points": [
+      "创建阶段：beforeCreate（实例初始化）、created（数据观测完成，可发请求但拿不到 DOM）",
+      "挂载阶段：beforeMount、mounted（真实 DOM 挂载完成，可操作 DOM）",
+      "更新阶段：beforeUpdate、updated（响应式数据变化触发视图重渲染）",
+      "销毁阶段：beforeUnmount、unmounted（Vue3 命名，清理定时器与监听）",
+      "特殊钩子：keep-alive 缓存组件的 activated/deactivated，错误捕获 errorCaptured"
+    ]
+  },
+  {
+    "id": "fe-vue-002",
+    "language": "frontend",
+    "topic": "Vue",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "v-if 和 v-show 有什么区别？如何选择？",
+    "answer_points": [
+      "v-if 是真正的条件渲染，不满足时元素不渲染也不存在于 DOM，切换有销毁重建开销",
+      "v-show 只是切换 CSS display，元素始终渲染在 DOM 中，初始渲染成本高、切换成本低",
+      "v-if 有惰性：初始为假时不做任何事；v-show 无论如何都会渲染",
+      "频繁切换用 v-show，条件很少改变用 v-if",
+      "v-if 与 v-for 同用时 Vue2 中 v-for 优先级更高，Vue3 中 v-if 更高，官方不建议同用"
+    ]
+  },
+  {
+    "id": "fe-vue-003",
+    "language": "frontend",
+    "topic": "Vue",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "Vue 组件间通信有哪些方式？",
+    "answer_points": [
+      "父子：props 向下传值，emit 自定义事件向上通知；v-model 实现双向绑定语法糖",
+      "跨层级：provide/inject 依赖注入，Vue3 中传 ref/reactive 可保持响应式",
+      "兄弟/任意组件：全局状态管理 Pinia（官方推荐）或事件总线",
+      "模板引用：ref 获取子组件实例调用其方法（defineExpose 控制暴露内容）",
+      "attrs（$attrs/fallthrough）用于高阶组件透传未声明的属性"
+    ]
+  },
+  {
+    "id": "fe-vue-004",
+    "language": "frontend",
+    "topic": "Vue",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "computed 和 watch 有什么区别？",
+    "answer_points": [
+      "computed 基于依赖缓存计算结果，依赖不变时重复访问直接取缓存",
+      "computed 必须有返回值，用于模板中的派生数据，不应有副作用",
+      "watch 监听数据变化执行回调，适合异步操作、开销大的副作用",
+      "watch 可监听深层对象（deep:true）、立即执行（immediate:true），回调能拿到新旧值",
+      "选择原则：能用 computed 派生的优先 computed，需要响应变化'做事'时用 watch/watchEffect"
+    ]
+  },
+  {
+    "id": "fe-vue-005",
+    "language": "frontend",
+    "topic": "Vue",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "Vue2 和 Vue3 有哪些主要区别？",
+    "answer_points": [
+      "响应式：Vue2 用 Object.defineProperty，Vue3 用 Proxy，支持新增/删除属性与数组索引监听",
+      "API：Vue3 引入 Composition API 与 <script setup>，逻辑复用能力更强",
+      "性能：编译优化（PatchFlag、静态提升、Block Tree）、更小的包体积、更好的 Tree-shaking",
+      "新特性：Fragment 多根节点、Teleport、Suspense、自定义渲染器 API",
+      "工程：Vue3 对 TypeScript 支持完善，官方生态推荐 Vite + Pinia + Vue Router 4"
+    ]
+  },
+  {
+    "id": "fe-vue-006",
+    "language": "frontend",
+    "topic": "Vue",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "Vue3 的响应式原理是什么？ref 和 reactive 有什么区别？",
+    "answer_points": [
+      "核心：Proxy 代理对象拦截 get/set，配合 Reflect 操作原始对象",
+      "get 时通过 track 进行依赖收集（target -> key -> effect 的 WeakMap/Map/Set 结构），set 时 trigger 触发依赖执行",
+      "reactive 处理对象，返回深层响应式代理，解构会丢失响应式",
+      "ref 包裹基本类型（.value 访问），其内部对对象值也调用 reactive；模板中自动解包",
+      "相比 Vue2：无需递归初始化（惰性代理）、支持 Map/Set/数组索引、无 $set 等补丁 API"
+    ]
+  },
+  {
+    "id": "fe-vue-007",
+    "language": "frontend",
+    "topic": "Vue",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "Composition API 相比 Options API 有什么优势？",
+    "answer_points": [
+      "按逻辑关注点组织代码而非按选项类型拆分，相关逻辑聚合在一起便于维护",
+      "逻辑复用通过组合式函数（composables）实现，比 mixin 更清晰，无命名冲突与来源不明问题",
+      "更好的 TypeScript 类型推导，无需 this 指向困扰",
+      "代码更易压缩与 Tree-shaking，利于打包体积优化",
+      "Options API 仍适合简单组件与学习过渡，二者可混用"
+    ]
+  },
+  {
+    "id": "fe-vue-008",
+    "language": "frontend",
+    "topic": "Vue",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "v-for 中 key 的作用是什么？Vue 的 Diff 算法有什么特点？",
+    "answer_points": [
+      "key 标识节点身份，让 Diff 能准确复用、移动节点，避免就地复用导致的状态错乱",
+      "不建议用 index 作 key，列表变动时会导致组件状态错位与多余 DOM 操作",
+      "Vue2 Diff 采用双端比较（头头、尾尾、头尾、尾头指针），Vue3 采用快速 Diff",
+      "Vue3 引入最长递增子序列算法，最小化节点移动次数",
+      "配合编译期 PatchFlag，Vue3 Diff 只比对动态节点，跳过静态子树，效率大幅提升"
+    ]
+  },
+  {
+    "id": "fe-vue-009",
+    "language": "frontend",
+    "topic": "Vue",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "Vue Router 的 hash 模式和 history 模式有什么区别？",
+    "answer_points": [
+      "hash 模式：URL 带 #，通过 hashchange 事件监听变化，兼容性好无需服务端配合",
+      "history 模式：基于 HTML5 History API（pushState/replaceState），URL 更美观",
+      "history 模式刷新或直达子路由会向服务器请求该路径，需服务端配置回退到 index.html，否则 404",
+      "hash 变化不会发请求，不利于 SEO；history 模式配合 SSR 更友好",
+      "路由守卫分全局（beforeEach）、路由独享（beforeEnter）、组件内守卫，常用于登录鉴权"
+    ]
+  },
+  {
+    "id": "fe-vue-010",
+    "language": "frontend",
+    "topic": "Vue",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "keep-alive 的作用和原理是什么？",
+    "answer_points": [
+      "keep-alive 是内置抽象组件，缓存包裹组件的实例避免重复创建销毁，保留组件状态",
+      "适用场景： Tab 切换、列表页跳详情返回后保留滚动位置与筛选条件",
+      "缓存基于 key 存储 VNode 与组件实例，超出 max 时按 LRU 策略淘汰最久未使用的缓存",
+      "可用 include/exclude 按组件名精确控制缓存范围",
+      "被缓存组件不走 created/unmounted，而是触发 activated/deactivated 钩子处理数据刷新"
+    ]
+  },
+  {
+    "id": "fe-vue-011",
+    "language": "frontend",
+    "topic": "Vue",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "Pinia 相比 Vuex 有什么改进？核心概念有哪些？",
+    "answer_points": [
+      "Pinia 是 Vue3 官方推荐的状态管理库，API 更简洁，去掉了 mutation 层",
+      "核心概念：state（数据）、getters（派生计算）、actions（同步/异步修改逻辑）",
+      "用 defineStore 定义，支持 Composition API 写法，模块天然独立无需嵌套 modules",
+      "TypeScript 支持完善，类型推导开箱即用",
+      "支持插件扩展（如持久化），体积小且对 Vue2 也兼容"
+    ]
+  },
+  {
+    "id": "fe-vue-012",
+    "language": "frontend",
+    "topic": "Vue",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "Vue3 在编译阶段做了哪些性能优化？",
+    "answer_points": [
+      "PatchFlag：编译时标记动态节点的变化类型（文本/属性/class 等），Diff 时只做靶向更新",
+      "Block Tree：按动态节点收集成 Block，跳过静态子树的递归比较",
+      "静态提升：把静态节点/属性提取到渲染函数外，复用 VNode 避免重复创建",
+      "事件监听器缓存（cacheHandlers），避免因内联函数引用变化导致子组件更新",
+      "这些优化让 Vue3 更新性能接近手写 DOM 操作，且不依赖开发者手动优化"
+    ]
+  },
+  {
+    "id": "fe-eng-001",
+    "language": "frontend",
+    "topic": "前端工程化",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "Vite 和 Webpack 有什么区别？为什么 Vite 开发启动快？",
+    "answer_points": [
+      "Vite 开发环境基于浏览器原生 ESM，按需编译当前模块，无需先打包整个应用",
+      "依赖预构建用 esbuild（Go 编写），把 CJS 依赖转 ESM 并合并小模块，速度远快于 JS",
+      "Webpack 是打包式构建，启动需分析整个依赖图并 bundle，项目越大越慢",
+      "Vite 生产构建仍用 Rollup 打包，兼顾兼容性与产物优化",
+      "热更新上 Vite 精确到模块级 ESM HMR，大项目下速度优势明显"
+    ]
+  },
+  {
+    "id": "fe-eng-002",
+    "language": "frontend",
+    "topic": "前端工程化",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "什么是 Tree-shaking？它生效需要什么条件？",
+    "answer_points": [
+      "Tree-shaking 指打包时静态分析并剔除未被使用的代码（死代码消除），减小产物体积",
+      "依赖 ES Module 的静态结构（import/export 在编译期可确定），CommonJS 动态 require 难以分析",
+      "需要打包工具开启生产模式，且副作用需通过 sideEffects 字段声明以免误删",
+      "实践：使用具名导入、避免引入整库（如 lodash 全量）、选择 ESM 版本的依赖",
+      "注意：有副作用的模块（polyfill、全局样式）不会被摇掉，需要显式保留"
+    ]
+  },
+  {
+    "id": "fe-eng-003",
+    "language": "frontend",
+    "topic": "前端工程化",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "ES Module 和 CommonJS 有什么区别？",
+    "answer_points": [
+      "加载方式：ESM 是静态编译时加载，CommonJS 是运行时加载",
+      "输出：ESM 输出值的引用（live binding），CommonJS 输出值的拷贝（缓存结果）",
+      "this 指向：ESM 顶层 this 为 undefined 且默认严格模式，CJS 顶层 this 指向 module.exports",
+      "循环依赖处理：ESM 拿到未初始化的引用会报错（TDZ），CJS 拿到已执行部分的导出",
+      "ESM 支持 Tree-shaking，是浏览器与前端工程化的标准；CJS 主要存在于 Node.js 旧生态"
+    ]
+  },
+  {
+    "id": "fe-eng-004",
+    "language": "frontend",
+    "topic": "前端工程化",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "Webpack 项目有哪些常见的打包优化手段？",
+    "answer_points": [
+      "代码分割：SplitChunks 抽离公共依赖与第三方库，动态 import 实现路由懒加载",
+      "减小体积：Tree-shaking、Terser 压缩、scope hoisting、按需引入组件库",
+      "构建提速：持久化缓存 cache、thread-loader 多线程、缩小 loader 作用范围（include/exclude）",
+      "产物缓存：文件名带 contenthash 配合长效缓存，合理配置 externals 走 CDN",
+      "分析定位：webpack-bundle-analyzer 可视化产物构成，针对性优化大依赖"
+    ]
+  },
+  {
+    "id": "fe-eng-005",
+    "language": "frontend",
+    "topic": "前端工程化",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "Webpack 中 loader 和 plugin 有什么区别？",
+    "answer_points": [
+      "loader 是模块转换器，让 Webpack 能处理非 JS 文件（css、ts、图片），本质是函数，链式从右往左执行",
+      "plugin 基于 Tapable 事件流钩入 Webpack 整个构建生命周期，功能更广泛（压缩、注入 HTML、拷贝资源）",
+      "loader 关注单个文件的内容转换，plugin 关注构建流程的扩展",
+      "编写上：loader 导出处理函数接收源码返回结果；plugin 是带 apply 方法的类，监听 compiler 钩子",
+      "常见例子：babel-loader、css-loader；HtmlWebpackPlugin、MiniCssExtractPlugin"
+    ]
+  },
+  {
+    "id": "fe-eng-006",
+    "language": "frontend",
+    "topic": "前端工程化",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "一个完整的前端 CI/CD 流程通常包含哪些环节？",
+    "answer_points": [
+      "代码提交触发流水线（push/MR webhook），先做 lint、类型检查与单元测试等质量门禁",
+      "构建阶段：安装依赖（锁定版本+缓存）、执行生产构建产物",
+      "部署阶段：产物上传 CDN/静态服务器，灰度发布或蓝绿部署，保留回滚能力",
+      "通知与监控：发布结果通知，接入错误监控与性能监控形成闭环",
+      "常用工具：GitLab CI、GitHub Actions、Jenkins，前端常配合 Docker 与 Nginx"
+    ]
+  },
+  {
+    "id": "fe-eng-007",
+    "language": "frontend",
+    "topic": "前端工程化",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "Babel 的作用是什么？polyfill 又是什么？",
+    "answer_points": [
+      "Babel 是 JS 编译器，把 ES6+ 新语法（箭头函数、class 等）转译为低版本浏览器可执行的 ES5",
+      "工作流程：解析成 AST → 插件对 AST 变换 → 生成目标代码",
+      "Babel 只处理语法，不处理新 API（Promise、Array.from 等），新 API 需要 polyfill",
+      "polyfill 通过 core-js 补齐运行时缺失的 API，可按 browserslist 按需引入（useBuiltIns:'usage'）",
+      "现代方案：@babel/preset-env 按目标浏览器自动决定转译范围与 polyfill 注入"
+    ]
+  },
+  {
+    "id": "fe-eng-008",
+    "language": "frontend",
+    "topic": "前端工程化",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "什么是微前端？常见实现方案和需要解决的问题有哪些？",
+    "answer_points": [
+      "微前端是把大型单体前端拆分为可独立开发、部署、运行的子应用的架构模式",
+      "常见方案：qiankun（基于 single-spa）、Webpack Module Federation、iframe、Web Components",
+      "需解决应用加载与生命周期管理（注册、挂载、卸载）",
+      "需解决隔离问题：JS 沙箱（Proxy 快照沙箱）、CSS 隔离（scoped/Shadow DOM）",
+      "还需处理主子应用通信、公共依赖共享（Module Federation）、统一路由与鉴权等"
+    ]
+  },
+  {
+    "id": "fe-perf-001",
+    "language": "frontend",
+    "topic": "性能优化",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "前端性能优化有哪些常见手段？",
+    "answer_points": [
+      "资源层面：压缩合并、Tree-shaking、代码分割与懒加载、开启 gzip/brotli",
+      "网络层面：CDN 加速、HTTP 缓存策略、HTTP/2 多路复用、preload/prefetch 关键资源",
+      "渲染层面：减少重排重绘、CSS/JS 位置优化、骨架屏、服务端渲染",
+      "图片层面：懒加载、现代格式 WebP/AVIF、响应式 srcset",
+      "方法论：先用 Lighthouse/Performance 量化定位，再针对性优化并验证收益"
+    ]
+  },
+  {
+    "id": "fe-perf-002",
+    "language": "frontend",
+    "topic": "性能优化",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "图片优化有哪些常用方式？",
+    "answer_points": [
+      "选择合适的格式：照片用 WebP/AVIF，图标用 SVG，动图权衡 GIF 与视频",
+      "压缩图片体积，使用 srcset/sizes 按设备分发不同尺寸",
+      "懒加载：原生 loading='lazy' 或 IntersectionObserver 实现，减少首屏请求",
+      "小图标用雪碧图或 iconfont 减少请求数（HTTP/2 下收益降低）",
+      "配合 CDN 与缓存头，占位图/模糊加载（LQIP）提升感知体验"
+    ]
+  },
+  {
+    "id": "fe-perf-003",
+    "language": "frontend",
+    "topic": "性能优化",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "如何优化首屏加载速度？",
+    "answer_points": [
+      "减小首屏 JS/CSS 体积：路由懒加载、按需引入、删除无用依赖、压缩混淆",
+      "关键资源优先：内联关键 CSS、preload 首屏资源、JS 使用 defer 避免阻塞解析",
+      "网络优化：CDN、HTTP/2、合理缓存策略、DNS 预解析 dns-prefetch",
+      "骨架屏或 SSR 让首屏内容更早可见，提升感知性能",
+      "用 LCP 作为核心衡量指标，通过 Lighthouse/WebPageTest 定位瓶颈"
+    ]
+  },
+  {
+    "id": "fe-perf-004",
+    "language": "frontend",
+    "topic": "性能优化",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "Core Web Vitals 包含哪些指标？如何优化？",
+    "answer_points": [
+      "LCP（最大内容绘制）：衡量加载速度，目标 ≤2.5s，优化图片体积、CDN、preload、SSR",
+      "INP（交互到下次绘制，已取代 FID）：衡量交互响应，优化长任务拆分、减少主线程阻塞",
+      "CLS（累积布局偏移）：衡量视觉稳定性，目标 ≤0.1，给图片/广告位预留尺寸、避免动态插入内容",
+      "FID（首次输入延迟）：旧指标，衡量首次交互延迟，同样靠减少 JS 阻塞优化",
+      "通过 Search Console、web-vitals 库上报真实用户数据（RUM）持续监控"
+    ]
+  },
+  {
+    "id": "fe-perf-005",
+    "language": "frontend",
+    "topic": "性能优化",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "长列表渲染卡顿怎么办？虚拟列表的原理是什么？",
+    "answer_points": [
+      "问题：上万条数据一次性渲染产生大量 DOM 节点，内存与渲染耗时激增",
+      "虚拟列表只渲染可视区域内的节点（加少量缓冲），滚动时复用并替换内容",
+      "实现要素：容器固定高度 + 滚动监听，按 scrollTop 计算起始索引，用占位元素撑起总高度",
+      "定高场景实现简单，动态高度需要预估+测量修正（如 react-virtualized 方案）",
+      "其他手段：分页加载、时间分片（requestIdleCallback）、Canvas 渲染"
+    ]
+  },
+  {
+    "id": "fe-perf-006",
+    "language": "frontend",
+    "topic": "性能优化",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "如何定位和分析一个页面的性能瓶颈？",
+    "answer_points": [
+      "先用 Lighthouse/WebPageTest 得到整体评分与核心指标，确定是加载还是运行时问题",
+      "Chrome Performance 面板录制交互过程，分析主线程火焰图找长任务（Long Task）",
+      "区分瓶颈类型：网络（瀑布图）、JS 执行（火焰图）、渲染（重排重绘/掉帧）",
+      "Memory 面板拍快照对比排查内存泄漏，Coverage 面板找未使用的 JS/CSS",
+      "线上通过 PerformanceObserver + web-vitals 上报真实用户指标，结合埋点定位劣化版本"
+    ]
+  },
+  {
+    "id": "fe-node-001",
+    "language": "frontend",
+    "topic": "Node与SSR",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "Node.js 的事件循环与浏览器的事件循环有什么区别？",
+    "answer_points": [
+      "Node 事件循环分阶段执行：timers → pending callbacks → idle/prepare → poll → check → close callbacks",
+      "setTimeout 在 timers 阶段执行，setImmediate 在 check 阶段执行",
+      "process.nextTick 与 Promise 微任务在阶段切换间执行，nextTick 优先级最高",
+      "浏览器只有宏任务/微任务两级模型；Node v11 后与浏览器行为对齐（每个宏任务后清空微任务）",
+      "理解阶段模型可解释 setTimeout(fn,0) 与 setImmediate 执行顺序不确定的问题"
+    ]
+  },
+  {
+    "id": "fe-node-002",
+    "language": "frontend",
+    "topic": "Node与SSR",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "SSR 和 CSR 有什么区别？各自优缺点是什么？",
+    "answer_points": [
+      "CSR（客户端渲染）：返回空 HTML + JS，浏览器下载执行 JS 后渲染页面",
+      "SSR（服务端渲染）：服务器直接生成完整 HTML 返回，首屏可见更快",
+      "SSR 优点：首屏快（FP/LCP 好）、利于 SEO；缺点：服务器压力大、架构复杂、TTFB 可能变慢",
+      "CSR 优点：交互体验流畅、服务端压力小；缺点：首屏白屏时间长、SEO 差",
+      "折中方案：SSG 静态站点生成、ISR 增量静态再生成、SSR+CSR 同构混合渲染"
+    ]
+  },
+  {
+    "id": "fe-node-003",
+    "language": "frontend",
+    "topic": "Node与SSR",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "SSR 同构应用的流程是什么？什么是 hydration（注水）？",
+    "answer_points": [
+      "同构：同一套组件代码既在服务端渲染 HTML，又在客户端接管交互",
+      "流程：服务端匹配路由 → 预取数据 → 渲染 HTML 并把初始数据注入 window.__INITIAL_STATE__",
+      "hydration：客户端 JS 加载后，在不重新渲染 DOM 的前提下为服务端 HTML 绑定事件与状态",
+      "常见问题：服务端与客户端渲染结果不一致（hydration mismatch），如直接访问 window、时间随机值",
+      "框架支持：Next.js（React）、Nuxt（Vue）封装了完整的 SSR/SSG 能力"
+    ]
+  },
+  {
+    "id": "fe-node-004",
+    "language": "frontend",
+    "topic": "Node与SSR",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "Node.js 在前端工程中有哪些常见应用场景？",
+    "answer_points": [
+      "BFF（Backend For Frontend）层：聚合后端微服务接口，为前端定制数据格式",
+      "SSR 服务端渲染服务（Next.js/Nuxt 运行载体）",
+      "构建工具与脚手架：Vite/Webpack、CLI 工具、自动化脚本均基于 Node",
+      "接口 Mock、代理服务器、本地开发服务",
+      "Node 单线程事件驱动模型适合 IO 密集场景，不适合 CPU 密集计算（可用 worker_threads）"
+    ]
+  },
+  {
+    "id": "fe-design-001",
+    "language": "frontend",
+    "topic": "场景设计",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "如何设计一套前端登录鉴权方案？",
+    "answer_points": [
+      "登录成功后服务端下发 token（如 JWT），配合 refresh token 机制减少重复登录",
+      "存储权衡：localStorage 易用但怕 XSS，HttpOnly Cookie 更安全但需防 CSRF",
+      "请求拦截器统一携带 token，响应拦截器处理 401 自动刷新或跳转登录",
+      "路由层用导航守卫做登录校验与权限路由（按角色动态注册路由/菜单）",
+      "按钮级权限通过自定义指令/组件封装，权限数据由后端下发而非前端硬编码"
+    ]
+  },
+  {
+    "id": "fe-design-002",
+    "language": "frontend",
+    "topic": "场景设计",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "如何实现大文件上传（分片、断点续传、秒传）？",
+    "answer_points": [
+      "用 File.slice 把文件切成固定大小的分片，配合 SparkMD5/web-worker 计算文件唯一 hash",
+      "秒传：上传前先传 hash 询问服务端，已存在则直接返回成功",
+      "分片并发上传：控制并发数（如 3~5 个），携带 hash 与分片序号，失败分片自动重试",
+      "断点续传：服务端记录已上传分片，重传前查询并跳过已完成部分",
+      "全部完成后请求服务端合并分片并校验完整性；需考虑进度展示与页面关闭恢复"
+    ]
+  },
+  {
+    "id": "fe-design-003",
+    "language": "frontend",
+    "topic": "场景设计",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "如何设计一个前端监控系统（错误、性能、行为）？",
+    "answer_points": [
+      "错误监控：window.onerror/unhandledrejection 捕获 JS 错误，资源加载错误用捕获阶段监听，框架错误用 errorHandler/ErrorBoundary",
+      "性能监控：Performance API 与 web-vitals 采集 FP/LCP/INP/CLS 等指标",
+      "行为监控：埋点 PV/UV、点击事件、接口成功率与耗时（拦截 fetch/XHR）",
+      "上报策略：sendBeacon 保证页面关闭时可靠发送，采样、批量、错峰上报减少性能影响",
+      "数据侧需做 sourcemap 还原堆栈、错误聚合去重、告警阈值与用户行为回放"
+    ]
+  },
+  {
+    "id": "fe-design-004",
+    "language": "frontend",
+    "topic": "场景设计",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "如何实现一个限制并发数的 Promise 请求调度器？",
+    "answer_points": [
+      "维护正在执行的任务数与等待队列，设定最大并发上限 max",
+      "任务入队时若当前并发未满则立即执行，否则进入队列等待",
+      "任务完成（finally）后并发数减一，并从队列取出下一个任务执行",
+      "每个任务封装为 Promise，执行结果/异常透传给调用方",
+      "扩展点：支持优先级队列、超时取消、失败重试；典型应用是分片上传与批量请求控制"
+    ]
+  }
+]

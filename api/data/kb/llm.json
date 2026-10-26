@@ -1,0 +1,1401 @@
+[
+  {
+    "id": "llm-base-001",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是大语言模型（LLM）？它与传统 NLP 小模型的主要区别是什么？",
+    "answer_points": [
+      "LLM 是基于 Transformer 架构、在海量文本上预训练的超大规模参数模型（通常十亿级以上），以预测下一个 token 为基本训练目标",
+      "区别体现在参数规模、训练数据量、所需算力以及能力范式上：小模型面向单一任务微调，大模型具备上下文学习、指令遵循和涌现能力",
+      "大模型可通过提示词零样本/少样本完成多种任务，小模型一般需要针对任务专门训练",
+      "代价是推理成本高、存在幻觉、部署资源需求大"
+    ]
+  },
+  {
+    "id": "llm-base-002",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "请简述 Transformer 的整体架构及其相比 RNN/LSTM 的优势。",
+    "answer_points": [
+      "由 Encoder-Decoder 堆叠而成，每层包含多头自注意力、前馈网络、残差连接和 LayerNorm；主流 LLM 多采用仅解码器结构",
+      "自注意力机制使任意两个位置可直接交互，擅长建模长距离依赖",
+      "序列内计算可并行，训练效率远高于 RNN 的逐步串行计算",
+      "缺点是自注意力复杂度随序列长度呈平方增长，长序列成本高"
+    ]
+  },
+  {
+    "id": "llm-base-003",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "自注意力机制中的 Q、K、V 分别是什么？注意力分数如何计算？",
+    "answer_points": [
+      "输入向量分别乘以三个可学习矩阵得到 Query、Key、Value",
+      "用 Q 与所有 K 做点积得到相似度，除以 sqrt(d_k) 缩放后做 softmax 得到权重",
+      "权重对 V 加权求和得到输出，即 Attention(Q,K,V)=softmax(QK^T/sqrt(d_k))V",
+      "缩放是为了防止维度大时点积过大导致 softmax 梯度消失"
+    ]
+  },
+  {
+    "id": "llm-base-004",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "多头注意力（Multi-Head Attention）为什么比单头注意力更好？",
+    "answer_points": [
+      "将 Q/K/V 投影到多个子空间分别计算注意力，再拼接融合，不同头可捕捉不同类型的依赖关系（语法、语义、指代等）",
+      "增强了模型表达能力，相当于在多个表示子空间并行提取特征",
+      "各头计算相互独立，可并行实现，工程开销可控",
+      "实践中头数过多收益递减，后续出现 MQA/GQA 等减少 KV 头数的变体"
+    ]
+  },
+  {
+    "id": "llm-base-005",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "Transformer 为什么需要位置编码？常见位置编码方案有哪些？",
+    "answer_points": [
+      "自注意力本身对输入顺序不敏感（置换不变），必须显式注入位置信息",
+      "原始 Transformer 使用正弦/余弦绝对位置编码，可外推到更长序列",
+      "可学习位置嵌入（如 BERT）简单直接但长度受训练限制",
+      "旋转位置编码 RoPE 通过旋转矩阵编码相对位置，是主流 LLM（LLaMA 等）的标配；ALiBi 用线性偏置增强外推性"
+    ]
+  },
+  {
+    "id": "llm-base-006",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "RoPE（旋转位置编码）的原理是什么？它有哪些优点？",
+    "answer_points": [
+      "对 Q、K 向量按维度两两分组，施加与位置相关的旋转矩阵，使内积结果天然只依赖相对位置",
+      "兼具绝对位置注入与相对位置建模，不引入额外参数",
+      "对长序列友好，配合 NTK、YaRN 等插值方法可扩展上下文长度",
+      "实现高效，被 LLaMA、Qwen 等主流开源模型广泛采用"
+    ]
+  },
+  {
+    "id": "llm-base-007",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "Encoder-only、Decoder-only、Encoder-Decoder 三类架构分别有什么特点？主流 LLM 为什么选 Decoder-only？",
+    "answer_points": [
+      "Encoder-only（BERT）用双向注意力，适合理解类任务如分类、抽取，不适合生成",
+      "Encoder-Decoder（T5）适合序列到序列任务如翻译、摘要，结构较复杂",
+      "Decoder-only（GPT 系列）用因果掩码单向注意力，天然适配自回归生成",
+      "Decoder-only 结构简单、统一以 next token prediction 训练，few-shot/指令泛化表现好，工程与推理优化成熟，因此成为主流"
+    ]
+  },
+  {
+    "id": "llm-base-008",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "Decoder 中的因果掩码（Causal Mask）是什么？为什么需要它？",
+    "answer_points": [
+      "是一个下三角掩码，在注意力计算时将当前位置之后的注意力分数置为负无穷，使 softmax 后权重为零",
+      "保证每个位置只能看到自身及之前的 token，符合自回归生成的因果约束",
+      "防止训练时偷看未来信息造成标签泄漏，保证训练与推理行为一致"
+    ]
+  },
+  {
+    "id": "llm-base-009",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "LayerNorm 在 Transformer 中的作用是什么？Pre-LN 和 Post-LN 有何区别？",
+    "answer_points": [
+      "LayerNorm 对单个样本的特征维度做归一化，稳定激活分布、缓解梯度消失、加速收敛",
+      "Post-LN 将归一化放在残差之后，原始论文方案，深层训练易不稳定、需小心调学习率",
+      "Pre-LN 将归一化放在子层之前，梯度路径更顺畅，深层模型训练更稳定，是现代 LLM 的主流选择",
+      "RMSNorm 去掉均值中心化、计算更省，被 LLaMA 等模型采用"
+    ]
+  },
+  {
+    "id": "llm-base-010",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "为什么现代 LLM 普遍使用 SwiGLU/GeLU 替代 ReLU 作为 FFN 激活函数？",
+    "answer_points": [
+      "ReLU 在负区间梯度为零，存在神经元死亡问题，且表达能力有限",
+      "GeLU 平滑非单调，按输入大小概率性激活，训练稳定性和效果更好",
+      "SwiGLU 引入门控机制（sigmoid 门控分支与线性分支相乘），增强表达与非线性拟合能力",
+      "实验证明在同等预算下 SwiGLU 类激活收敛更快、下游任务更优，成为 PaLM/LLaMA 标配"
+    ]
+  },
+  {
+    "id": "llm-base-011",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是 Tokenizer？BPE 分词的基本思想是什么？",
+    "answer_points": [
+      "Tokenizer 将原始文本切分为 token 序列并映射为 id，是文本进入模型的第一步",
+      "BPE 从字符级词表出发，迭代合并语料中出现频率最高的相邻 token 对，逐步扩大词表",
+      "在词表大小与序列长度之间折中，能处理未登录词（拆成子词）",
+      "中文场景常用 SentencePiece 直接对无空格文本训练；分词粒度影响模型效率与多语言能力"
+    ]
+  },
+  {
+    "id": "llm-base-012",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "什么是涌现能力（Emergent Ability）和 Scaling Law？它们对模型开发有何指导意义？",
+    "answer_points": [
+      "Scaling Law：模型损失随参数量、数据量、计算量呈幂律下降，可用于预测扩大规模的收益",
+      "涌现能力：某些能力（如上下文学习、思维链推理）在规模超过阈值后突然出现，小模型不具备",
+      "指导意义：按算力预算最优分配参数与数据配比（如 Chinchilla 的数据-参数平衡）",
+      "实践中先用小模型做 scaling 实验拟合曲线，再外推大模型的训练配置，降低试错成本"
+    ]
+  },
+  {
+    "id": "llm-base-013",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "大模型的训练通常分为哪几个阶段？各阶段的目标是什么？",
+    "answer_points": [
+      "预训练：在海量无标注文本上做 next token prediction，获得通用语言与知识能力",
+      "监督微调 SFT：用指令-回答数据教会模型遵循指令、对齐输出格式",
+      "偏好对齐：RLHF/DPO 用人类偏好数据让回答更有用、诚实、无害",
+      "部分场景还有领域继续预训练（Continue Pretraining），补充垂直领域知识后再做 SFT"
+    ]
+  },
+  {
+    "id": "llm-base-014",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "什么是困惑度（Perplexity）？它能完全代表模型效果好坏吗？",
+    "answer_points": [
+      "困惑度是模型对测试文本概率的度量，等于交叉熵损失的指数，越低表示模型对文本预测越确定",
+      "适合衡量语言建模本身的拟合程度和预训练收敛情况",
+      "不能反映指令遵循、事实准确性、推理等下游能力，PPL 低不代表回答好",
+      "需要结合下游任务基准、人工评估和业务指标综合判断"
+    ]
+  },
+  {
+    "id": "llm-base-015",
+    "language": "llm",
+    "topic": "大模型基础",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "FlashAttention 为什么能加速注意力计算？它优化的是什么？",
+    "answer_points": [
+      "标准实现会把 N×N 注意力矩阵物化到 HBM，显存读写开销为 O(N^2)，访存成为瓶颈",
+      "FlashAttention 采用分块计算（tiling），在 SRAM 中分块计算注意力并用在线 softmax（running max/sum）逐步归一化",
+      "全程不落完整的注意力矩阵，大幅减少 HBM 读写，省的是 IO 而非 FLOPs",
+      "结果是注意力计算显存占用降为线性、速度提升数倍，序列越长收益越大"
+    ]
+  },
+  {
+    "id": "llm-train-001",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是 SFT（监督微调）？它和继续预训练有什么区别？",
+    "answer_points": [
+      "SFT 用指令-回答对数据在预训练模型上做有监督训练，让模型学会按指令作答、对齐对话格式",
+      "继续预训练仍用无标注/弱标注的原始语料做 next token prediction，目的是补充领域知识与术语分布",
+      "典型路径是先领域继续预训练再 SFT；SFT 数据量小但质量要求高",
+      "SFT 通常只计算 answer 部分的 loss（mask 掉 prompt），避免模型学着去生成问题"
+    ]
+  },
+  {
+    "id": "llm-train-002",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "LoRA 微调的原理是什么？为什么能大幅降低训练成本？",
+    "answer_points": [
+      "冻结原模型权重，假设微调引起的权重增量是低秩的，用两个小矩阵 A（d×r）和 B（r×d）的乘积近似，只训练 BA",
+      "r 远小于 d（如 8~64），可训练参数量降到原来的千分之几，显存中 optimizer states 大幅减少",
+      "推理时可将 BA 合并回原权重，不增加任何推理延迟",
+      "经验上 r、alpha、dropout 及作用层（一般加在注意力 q/v 或全部线性层）是主要调参点"
+    ]
+  },
+  {
+    "id": "llm-train-003",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "QLoRA 相比 LoRA 做了什么改进？",
+    "answer_points": [
+      "QLoRA 将冻结的基座权重量化到 4bit（NF4 格式）存储，只反量化参与前向计算，LoRA 适配器保持高精度训练",
+      "引入双重量化（量化量化常数本身）和分页优化器（paged optimizer）应对显存峰值",
+      "使单张 24GB 消费级显卡即可微调 65B 级模型",
+      "代价是量化带来少量精度损失，且训练吞吐略低于高精度 LoRA"
+    ]
+  },
+  {
+    "id": "llm-train-004",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "全参数微调与 LoRA 如何取舍？什么场景下必须全参？",
+    "answer_points": [
+      "数据量小、算力有限、任务与预训练分布差距不大时优先 LoRA，成本低且不易过拟合",
+      "需要大幅改变模型行为（新语言能力、深度领域知识注入、修改词表）或追求极致效果时选全参",
+      "全参微调显存开销约为参数量的十几倍（权重+梯度+Adam 状态），需要多卡并行",
+      "工程上也可折中：先 LoRA 快速验证数据与任务可行性，再决定是否全参"
+    ]
+  },
+  {
+    "id": "llm-train-005",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "困难",
+    "frequency": "高频",
+    "question": "微调一个 7B 模型，全参数微调大概需要多少显存？如何估算？",
+    "answer_points": [
+      "混合精度训练下：FP16 权重 2 字节/参数 + FP32 梯度 4 字节 + Adam 一阶二阶动量各 4 字节 + FP32 主权重 4 字节，约 16 字节/参数",
+      "7B 模型静态状态约 7×16≈112GB，再加激活值（随 batch 和序列长度增长）",
+      "因此全参微调 7B 通常需要多张 80GB A100/H100，配合 ZeRO 分片",
+      "LoRA 冻结主干后只需存权重 + 少量适配器优化器状态，单卡 24GB 即可；激活值可用梯度检查点压缩"
+    ]
+  },
+  {
+    "id": "llm-train-006",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "RLHF 的完整流程是什么？PPO 在其中扮演什么角色？",
+    "answer_points": [
+      "第一步 SFT 得到初始策略模型；第二步收集人类对多个回答的排序数据，训练奖励模型 RM",
+      "第三步用 PPO 强化学习优化策略模型：RM 给回答打分作为奖励，同时加 KL 惩罚防止偏离 SFT 模型太远",
+      "PPO 通过截断重要性采样比率稳定策略更新，是经典的 on-policy 算法",
+      "整套流程需同时维护 policy、reference、reward、critic 四个模型，显存与工程复杂度高"
+    ]
+  },
+  {
+    "id": "llm-train-007",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "DPO 相比 RLHF 有什么优势？它的损失函数在优化什么？",
+    "answer_points": [
+      "DPO 跳过奖励模型和强化学习，直接在偏好对（chosen/rejected）上做二分类式优化，把对齐转化为监督学习",
+      "损失函数增大策略模型相对参考模型在 chosen 上的对数概率差与 rejected 上的差距",
+      "训练只需 policy 和 reference 两个模型，流程简单、稳定性好、显存开销低",
+      "局限是依赖偏好数据质量、容易在分布外泛化差；beta 参数控制偏离参考模型的程度"
+    ]
+  },
+  {
+    "id": "llm-train-008",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "SFT 数据构造有哪些关键原则？如何提升指令数据质量？",
+    "answer_points": [
+      "质量优先于数量：数千到数万条高质量数据常优于百万条低质数据（LIMA 观点）",
+      "覆盖任务类型与指令多样性，避免分布单一导致模型只会套模板",
+      "清洗去重、过滤错误答案与有害内容，统一输出格式与风格",
+      "可用 Self-Instruct/Evol-Instruct 让强模型合成并演化数据，再人工抽检；注意控制与评测集的重合泄漏"
+    ]
+  },
+  {
+    "id": "llm-train-009",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "什么是灾难性遗忘？微调时如何缓解？",
+    "answer_points": [
+      "模型在新任务上训练后，原有的通用能力（知识、指令遵循）明显下降",
+      "混入一定比例的通用指令数据做多任务训练（replay）",
+      "降低学习率、减少训练轮数，或用 LoRA 等只更新少量参数的方法限制漂移",
+      "正则手段如 EWC、对重要参数加约束；训练中用通用基准持续监控能力变化"
+    ]
+  },
+  {
+    "id": "llm-train-010",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "ZeRO 分布式训练的三个阶段分别切分什么？",
+    "answer_points": [
+      "ZeRO-1 只切分优化器状态（optimizer states）到各卡，每卡只更新自己负责的参数分片",
+      "ZeRO-2 在 1 的基础上再切分梯度，每卡只保留对应分片的梯度",
+      "ZeRO-3 进一步切分模型参数本身，前向/反向时按需 all-gather，显存节省最大但通信开销也最大",
+      "配合 CPU/NVMe offload（ZeRO-Offload/Infinity）可在有限 GPU 上训练更大模型"
+    ]
+  },
+  {
+    "id": "llm-train-011",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "混合精度训练的原理是什么？为什么会有 loss scaling？",
+    "answer_points": [
+      "前向和反向用 FP16/BF16 计算以加速并省显存，同时保留 FP32 主权重用于参数更新，避免精度损失",
+      "FP16 表示范围小，梯度值易下溢为 0，loss scaling 将损失放大 S 倍使梯度进入可表示区间，更新前再除回",
+      "BF16 动态范围与 FP32 相当，基本不需要 loss scaling，是大模型训练的主流选择",
+      "实践中结合梯度裁剪和动态 loss scale 监控溢出来保证训练稳定"
+    ]
+  },
+  {
+    "id": "llm-train-012",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "训练大模型时常见的 Loss 尖刺（spike）与发散问题如何排查和处理？",
+    "answer_points": [
+      "常见原因：学习率过大、数据脏样本/异常 batch、数值溢出（FP16）、初始化或归一化不当",
+      "手段：warmup 渐进提升学习率、梯度裁剪、跳过异常 batch（检测 grad norm 突增时 skip 并回滚 checkpoint）",
+      "数据侧做异常检测与去毒；数值侧改用 BF16 或提高关键算子精度",
+      "持续监控 grad norm、loss 曲线与激活分布，尖刺后从最近健康 checkpoint 恢复并调低学习率"
+    ]
+  },
+  {
+    "id": "llm-train-013",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "微调时学习率、batch size、epoch 等超参数通常如何设置？",
+    "answer_points": [
+      "SFT 学习率一般在 1e-5~2e-5（全参）或 1e-4 量级（LoRA），比预训练低一个数量级",
+      "全局 batch 通过梯度累积凑到几十~几百条样本；warmup 比例 3% 左右，余弦或线性衰减",
+      "epoch 通常 1~3 个，过多易过拟合和灾难性遗忘，用验证集 loss 或下游指标早停",
+      "序列长度影响显存与收敛，需配合 packing 或按长度分桶提升吞吐"
+    ]
+  },
+  {
+    "id": "llm-train-014",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "什么是奖励黑客（Reward Hacking）？RLHF 中如何防范？",
+    "answer_points": [
+      "策略模型学会迎合奖励模型的偏好漏洞而非真正变好，如输出冗长、堆砌奉承话、格式投机",
+      "根因是 RM 是不完美代理，策略分布偏离训练分布后 RM 打分失真",
+      "手段：加 KL 散度惩罚限制策略偏离参考模型、限制优化步数与 reward 上限",
+      "迭代式更新 RM（在线/迭代 RLHF）、多 RM 集成投票、结合规则奖励与人工抽检"
+    ]
+  },
+  {
+    "id": "llm-train-015",
+    "language": "llm",
+    "topic": "训练与微调",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "蒸馏（Knowledge Distillation）在大模型领域怎么用？",
+    "answer_points": [
+      "用大模型（教师）生成思维链/答案数据，训练小模型（学生）模仿其输出分布，如各 R1-Distill 系列",
+      "软标签蒸馏对齐 logits 分布（KL 散度），硬标签蒸馏直接 SFT 教师生成的数据",
+      "可在保持接近教师能力的同时大幅降低推理成本，适合端侧与高并发场景",
+      "注意教师偏差的继承与能力上限受学生容量限制；数据多样性对蒸馏效果影响大"
+    ]
+  },
+  {
+    "id": "llm-infer-001",
+    "language": "llm",
+    "topic": "推理与部署",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是 KV Cache？为什么它是自回归推理的必需品？",
+    "answer_points": [
+      "自回归生成每步都要用新 token 的 Q 与全部历史 K/V 做注意力，若每步重算历史 K/V，复杂度随长度平方增长",
+      "KV Cache 把已算出的每层 K、V 缓存起来，新 token 只需计算自己的 K/V 并追加，每步降为一次增量注意力",
+      "代价是显存占用随 序列长度×并发数 线性增长，长上下文高并发时 KV Cache 可占显存一半以上",
+      "优化手段：GQA/MQA 减少 KV 头、KV Cache 量化、PagedAttention 分页管理"
+    ]
+  },
+  {
+    "id": "llm-infer-002",
+    "language": "llm",
+    "topic": "推理与部署",
+    "difficulty": "困难",
+    "frequency": "高频",
+    "question": "KV Cache 的显存占用如何估算？给一个 7B 模型的例子。",
+    "answer_points": [
+      "公式：2 × batch × 层数 × KV头数 × head_dim × 序列长度 × 每元素字节数（K 和 V 两份）",
+      "以 32 层、hidden 4096、FP16 的 7B 模型为例，单请求 4K 上下文约 2×32×4096×4096×2 ≈ 1GB",
+      "并发 64 个请求就需要 60GB+，这就是为什么高并发场景必须优化 KV Cache",
+      "GQA 把 KV 头从 32 减到 8，显存直接降为 1/4；再叠加 INT8 量化可再减半"
+    ]
+  },
+  {
+    "id": "llm-infer-003",
+    "language": "llm",
+    "topic": "推理与部署",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "LLM 推理的 Prefill 和 Decode 两个阶段的瓶颈分别是什么？",
+    "answer_points": [
+      "Prefill 一次性并行处理整个 prompt，是计算密集型（compute-bound），决定首 token 延迟 TTFT",
+      "Decode 逐 token 串行生成，每步要读取全部权重和 KV Cache 但只算一个 token，是访存密集型（memory-bound），决定每 token 延迟 TPOT",
+      "两阶段对硬件资源需求不同，因此出现 PD 分离（Prefill/Decode 分离部署）架构",
+      "优化取向不同：Prefill 靠算力与算子优化，Decode 靠量化、KV Cache 压缩、投机解码"
+    ]
+  },
+  {
+    "id": "llm-infer-004",
+    "language": "llm",
+    "topic": "推理与部署",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "vLLM 的 PagedAttention 解决了什么问题？Continuous Batching 又是什么？",
+    "answer_points": [
+      "传统 KV Cache 按最大长度预分配连续显存，内部碎片与外部碎片严重，显存利用率常不足四成",
+      "PagedAttention 借鉴操作系统分页思想，把 KV Cache 切成固定大小的 block 按需分配，通过块表映射逻辑块到物理块，几乎消除碎片",
+      "Continuous Batching（连续批处理/动态批）按 token 粒度调度：请求完成即退出、新请求随时加入，不必等整批结束",
+      "两者叠加让 GPU 利用率和吞吐显著提升，是 vLLM 成为在线高并发推理事实标准的核心"
+    ]
+  },
+  {
+    "id": "llm-infer-005",
+    "language": "llm",
+    "topic": "推理与部署",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "模型量化是什么？PTQ 和 QAT 有什么区别？常见的 INT8/INT4 量化有什么 trade-off？",
+    "answer_points": [
+      "量化把 FP16/BF16 权重（或激活）用低比特整数表示，压缩显存并加速访存受限的 decode 阶段",
+      "PTQ（训练后量化）直接用少量校准数据量化，成本低部署快，代表有 GPTQ、AWQ、GGUF",
+      "QAT（量化感知训练）在训练中模拟量化误差，精度保持更好但成本高",
+      "trade-off：INT8 通常几乎无损，INT4 显存压缩 4 倍但精度有可见损失，上线前必须做任务集精度回归"
+    ]
+  },
+  {
+    "id": "llm-infer-006",
+    "language": "llm",
+    "topic": "推理与部署",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "GPTQ、AWQ、GGUF 三种量化方案的思路和适用场景有何不同？",
+    "answer_points": [
+      "GPTQ 逐层基于二阶 Hessian 信息做误差补偿，把量化误差摊到剩余权重，服务端 GPU 部署常用",
+      "AWQ 基于激活感知：识别对激活影响大的重要权重通道加以保护（缩放而非量化），边缘与低比特场景精度更好",
+      "GGUF 是 llama.cpp 生态的格式，支持 CPU/消费级硬件、分片存储，适合本地和端侧推理",
+      "选型：服务端高吞吐常用 W8A8 或 INT4+KV 量化；本地低资源选 GGUF/AWQ 4bit"
+    ]
+  },
+  {
+    "id": "llm-infer-007",
+    "language": "llm",
+    "topic": "推理与部署",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "什么是投机解码（Speculative Decoding）？它加速的前提是什么？",
+    "answer_points": [
+      "用一个小的草稿模型快速连续猜出 k 个候选 token，再由大模型一次前向并行验证，接受其中正确的部分",
+      "验证是并行的一次前向，与逐 token 串行 decode 相比减少了大模型的串行步数，输出分布严格等价于原模型",
+      "前提：草稿模型与大模型分布足够接近（接受率高），且草稿模型本身足够快",
+      "适用于 decode 访存受限的场景；变体有 Medusa（多头草稿）、EAGLE 等"
+    ]
+  },
+  {
+    "id": "llm-infer-008",
+    "language": "llm",
+    "topic": "推理与部署",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "vLLM、TGI、TensorRT-LLM、llama.cpp 这几个推理框架如何选型？",
+    "answer_points": [
+      "vLLM：PagedAttention+连续批处理，GPU 在线高并发吞吐最优，OpenAI 兼容 API，社区生态广，是服务端主流",
+      "TGI：HuggingFace 出品，工程完备（流式、监控、量化齐全），与 HF 生态衔接顺畅",
+      "TensorRT-LLM：NVIDIA 深度优化，极致低延迟，适合对延迟敏感且有 NV 硬件的产线，但适配成本高",
+      "llama.cpp：纯 C/C++、GGUF 量化，适合 CPU/边缘/Mac 本地离线场景，不面向高并发"
+    ]
+  },
+  {
+    "id": "llm-infer-009",
+    "language": "llm",
+    "topic": "推理与部署",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "temperature、top_p、top_k 分别控制什么？如何搭配调参？",
+    "answer_points": [
+      "temperature 缩放 logits：小于 1 使分布更尖锐输出更确定，大于 1 更随机更有创造性",
+      "top_k 只从概率最高的 k 个 token 中采样，top_p（nucleus）只从累积概率达 p 的最小集合中采样",
+      "通常 top_k 与 top_p 二选一或配合 temperature 使用；三者共同作用于采样分布",
+      "严肃业务（客服、代码、抽取）用低 temperature 保确定性；创意场景可适当调高"
+    ]
+  },
+  {
+    "id": "llm-infer-010",
+    "language": "llm",
+    "topic": "推理与部署",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "线上 LLM 服务延迟高、吞吐上不去，你会从哪几个层面排查？",
+    "answer_points": [
+      "先量化指标：TTFT/TPOT、QPS、显存占用与碎片、排队长度，分清是 Prefill 慢、Decode 慢还是排队问题",
+      "首 token 慢且 prompt 长：查 Prefill 算力、开启 prefix caching；TPOT 随并发上涨：查 KV Cache 挤占与 batch 策略",
+      "显存 OOM/碎片：上 PagedAttention、KV 量化、限制最大并发；计算侧确认 FlashAttention 等算子生效",
+      "优化顺序：先免费手段（continuous batching、调 batch、量化），再付费手段（更大显存卡、多卡并行、投机解码），最后考虑换小模型，改动前后用同一任务集做延迟分布与效果回归"
+    ]
+  },
+  {
+    "id": "llm-infer-011",
+    "language": "llm",
+    "topic": "推理与部署",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "什么是流式输出（Streaming/SSE）？它对用户体验和系统设计有什么影响？",
+    "answer_points": [
+      "服务端按 token 增量返回（SSE/WebSocket），用户边生成边看，感知延迟从总时长降为 TTFT",
+      "提升体验的同时要求网关/负载均衡支持长连接，连接数与超时策略需重新设计",
+      "客户端需处理断连重试与内容拼接；中断时服务端要能及时取消推理释放资源",
+      "对内容安全审核提出挑战：需要边生成边审核或事后兜底撤回"
+    ]
+  },
+  {
+    "id": "llm-infer-012",
+    "language": "llm",
+    "topic": "推理与部署",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "多卡推理中的张量并行（Tensor Parallelism）原理是什么？有什么代价？",
+    "answer_points": [
+      "把同一层的权重矩阵按列/行切到多张卡上，每张卡算一部分，通过 all-reduce/all-gather 合并结果",
+      "使单卡放不下的超大模型（如 70B）可以跨卡部署，同时摊薄显存压力",
+      "代价是每层都有集合通信，跨机带宽（NVLink vs IB）直接决定加速比，通信占比随卡数上升",
+      "推理常用 TP 降低延迟；对吞吐优先的场景，小模型用多副本数据并行往往更划算"
+    ]
+  },
+  {
+    "id": "llm-prompt-001",
+    "language": "llm",
+    "topic": "Prompt 工程",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "一个高质量 Prompt 通常包含哪些要素？",
+    "answer_points": [
+      "角色与目标：明确模型身份和要完成的任务",
+      "上下文与背景：提供必要的领域知识、输入数据和约束",
+      "任务指令与步骤：动作具体、可拆解，避免歧义",
+      "输出格式规范：JSON/表格/字数等结构化要求，必要时给 few-shot 示例，并说明边界情况如何处理"
+    ]
+  },
+  {
+    "id": "llm-prompt-002",
+    "language": "llm",
+    "topic": "Prompt 工程",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是 Few-shot Prompting？它和 Zero-shot、Fine-tuning 如何取舍？",
+    "answer_points": [
+      "Few-shot 在 prompt 中给几个输入-输出示例，让模型通过上下文学习模仿格式与风格，无需训练",
+      "Zero-shot 成本最低但复杂任务效果不稳；Few-shot 显著提升格式稳定性，代价是占用上下文 token",
+      "示例数量与多样性有边际收益递减，一般 3~8 个即可，示例顺序也会影响结果",
+      "当任务逻辑复杂、调用频繁且 prompt 过长时，微调比堆 few-shot 更经济稳定"
+    ]
+  },
+  {
+    "id": "llm-prompt-003",
+    "language": "llm",
+    "topic": "Prompt 工程",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是 Chain-of-Thought（思维链）？如何触发？适用什么任务？",
+    "answer_points": [
+      "让模型在给出最终答案前先输出中间推理步骤，把复杂问题分解为可推导的子步骤",
+      "触发方式：few-shot 示例中包含推理过程，或直接加『让我们一步一步思考』等引导语（zero-shot CoT）",
+      "对数学、逻辑、多步推理任务提升显著；简单事实问答收益小反而浪费 token",
+      "工程上常结合 self-consistency：采样多条推理路径投票取多数答案，进一步提升准确率"
+    ]
+  },
+  {
+    "id": "llm-prompt-004",
+    "language": "llm",
+    "topic": "Prompt 工程",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "如何让大模型稳定输出结构化 JSON？JSON 解析失败怎么兜底？",
+    "answer_points": [
+      "Prompt 中给出明确的 schema/字段说明和示例，要求只输出 JSON、不要多余文本",
+      "使用模型厂商的 JSON mode/response_format，或 vLLM 等的 guided decoding（约束解码按 schema 限制 token 空间）",
+      "代码侧兜底：正则提取、json 修复库、失败时带错误信息重试并限制次数",
+      "结构化输出场景建议低 temperature，并在评测集中统计解析成功率作为指标"
+    ]
+  },
+  {
+    "id": "llm-prompt-005",
+    "language": "llm",
+    "topic": "Prompt 工程",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "什么是 Prompt Injection（提示注入）？在应用层如何防御？",
+    "answer_points": [
+      "攻击者在用户输入或检索内容中嵌入恶意指令，劫持模型忽略系统提示、泄露信息或执行危险操作",
+      "间接注入更危险：恶意指令藏在网页/文档里，被 RAG 或 Agent 读取后触发",
+      "防御：系统提示明确指令优先级、输入过滤与转义、将不可信内容与指令隔离（分隔符/结构化通道）",
+      "对工具调用加权限与白名单、敏感操作二次确认、输出侧做泄漏检测，定期进行红队测试"
+    ]
+  },
+  {
+    "id": "llm-prompt-006",
+    "language": "llm",
+    "topic": "Prompt 工程",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "System Prompt、User Prompt、Assistant 消息在对话中各起什么作用？上下文顺序有什么讲究？",
+    "answer_points": [
+      "System Prompt 设定角色、规则与全局约束，优先级最高，一般放在对话开头",
+      "User 是用户输入，Assistant 是历史回复，多轮对话按时间顺序拼接构成上下文",
+      "模型对开头和结尾的内容更敏感（lost in the middle），关键指令可放在 system 或紧邻问题的位置",
+      "超长对话需要做摘要压缩或滑窗，避免 system 指令被截断丢失"
+    ]
+  },
+  {
+    "id": "llm-prompt-007",
+    "language": "llm",
+    "topic": "Prompt 工程",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "什么是 ReAct 模式？它和纯 CoT 有什么区别？",
+    "answer_points": [
+      "ReAct 将推理（Thought）与行动（Action/工具调用）交替进行：思考→调用工具→观察结果→再思考，直至得出答案",
+      "纯 CoT 只有内部推理，无法获取外部信息；ReAct 让模型能用搜索、计算器等工具纠正知识盲区、减少幻觉",
+      "适合需要实时信息、多步操作的 Agent 场景；代价是调用轮次多、延迟与 token 成本高",
+      "工程实现通常基于 Function Calling 而非纯文本解析，循环要设最大步数与超时保护"
+    ]
+  },
+  {
+    "id": "llm-prompt-008",
+    "language": "llm",
+    "topic": "Prompt 工程",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "Prompt 版本管理和效果评估在工程中应该怎么做？",
+    "answer_points": [
+      "Prompt 纳入版本管理（Git 或专用平台），每次修改记录变更原因与负责人，支持快速回滚",
+      "建立离线评测集：固定输入+期望输出/评分标准，改动 prompt 后跑回归对比通过率",
+      "线上 A/B 实验对比新旧 prompt 的业务指标（解决率、满意度、转化）",
+      "注意不同模型版本对同一 prompt 的敏感度，模型升级时必须重新评测"
+    ]
+  },
+  {
+    "id": "llm-prompt-009",
+    "language": "llm",
+    "topic": "Prompt 工程",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "长上下文场景下，Prompt 中资料的摆放顺序会影响模型表现吗？",
+    "answer_points": [
+      "会，存在 Lost in the Middle 现象：模型更关注上下文开头和结尾的内容，容易忽略中间部分",
+      "将最重要、置信度最高的资料（如 rerank 分数最高的段落）放在开头或结尾",
+      "次要的补充信息放中间；必要时先做上下文压缩，删掉与问题无关的句子",
+      "可通过 needle-in-a-haystack 测试验证具体模型在不同位置的检索利用能力"
+    ]
+  },
+  {
+    "id": "llm-prompt-010",
+    "language": "llm",
+    "topic": "Prompt 工程",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "如何降低大模型输出中的幻觉？从 Prompt 角度有哪些手段？",
+    "answer_points": [
+      "要求模型基于给定资料回答，资料中没有的信息明确说不知道（grounding 约束）",
+      "要求输出引用来源/证据片段，便于校验且倒逼模型忠于原文",
+      "拆分复杂问题、用 CoT 显式推理减少跳跃性错误；对关键事实提供 few-shot 示范拒答方式",
+      "降低 temperature、对同一问题多次采样做一致性校验；Prompt 手段需与 RAG、后校验结合才可靠"
+    ]
+  },
+  {
+    "id": "llm-rag-001",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是 RAG？它解决了大模型的什么问题？",
+    "answer_points": [
+      "检索增强生成：先从外部知识库检索相关文档片段，再把片段作为上下文注入 Prompt 让模型基于资料生成回答",
+      "解决模型知识截止、私有/领域知识缺失的问题，无需重新训练",
+      "通过提供事实依据显著降低幻觉，且回答可附引用来源、可追溯",
+      "相比微调，知识更新成本低（改库即可），适合知识频繁变化的业务"
+    ]
+  },
+  {
+    "id": "llm-rag-002",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "一个完整的 RAG 系统包含哪些核心环节（Pipeline）？",
+    "answer_points": [
+      "离线侧：文档解析与清洗→切块（Chunking）→Embedding 向量化→写入向量库建索引",
+      "在线侧：Query 理解/改写→检索召回 Top-K→Rerank 精排→拼装上下文→LLM 生成答案",
+      "配套环节：评估（RAGAS 等）、badcase 分析、知识库的持续更新与失效管理",
+      "面试回答时可按数据流顺序讲清每一环的选型与取舍"
+    ]
+  },
+  {
+    "id": "llm-rag-003",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "文档切块（Chunking）有哪些策略？块大小如何权衡？",
+    "answer_points": [
+      "固定长度切块简单高效但易切断语义；递归切块按段落/句子边界切，语义完整性更好",
+      "通常保留 10%~20% 重叠窗口，避免关键信息正好落在切分点上",
+      "块太大：噪声多、embedding 语义被稀释、占用上下文；块太小：上下文不完整、答案碎片化",
+      "结构化文档（条款、API 文档）优先按结构元数据切块；进阶可用语义切块或小chunk索引大chunk召回"
+    ]
+  },
+  {
+    "id": "llm-rag-004",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "Embedding 模型在 RAG 中的作用是什么？如何选型？",
+    "answer_points": [
+      "把文本映射为高维向量，使语义相近的文本在向量空间距离近，支撑语义检索",
+      "选型维度：中英文能力、向量维度（影响存储与速度）、最大输入长度、领域适配性",
+      "参考 MTEB/C-MTEB 榜单，通用可选 BGE-M3、text-embedding-3 系列等",
+      "垂直领域（法律、医疗）效果差时可用领域语料对 embedding 做微调；换模型需全量重建索引"
+    ]
+  },
+  {
+    "id": "llm-rag-005",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "为什么生产环境普遍用混合检索（Hybrid Search）而不是纯向量检索？",
+    "answer_points": [
+      "纯向量检索擅长语义泛化但精确匹配差：产品型号、专有名词、错误码等关键词常被漏掉",
+      "关键词检索（BM25/倒排）精确匹配强但无法理解同义与语义关联",
+      "混合检索两路并行召回，用 RRF（倒数排名融合）或加权归一化合并结果，兼顾精确与语义",
+      "实践中再加 metadata 过滤（时间、类目）和 Rerank，形成召回-融合-精排的漏斗"
+    ]
+  },
+  {
+    "id": "llm-rag-006",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "为什么需要 Rerank？Bi-Encoder 和 Cross-Encoder 有什么区别？",
+    "answer_points": [
+      "向量召回用 Bi-Encoder 双塔分别编码 Query 和文档，文档向量可离线预计算，速度快但交互浅、精度有限",
+      "Rerank 用 Cross-Encoder 将 Query 与候选文档拼接输入同一模型逐对打分，交互充分、精度高但计算贵",
+      "漏斗架构：Bi-Encoder 从百万级召回 Top-100，Cross-Encoder 精排出 Top-5 给 LLM，平衡成本与效果",
+      "常用 BGE-Reranker 等开源模型；Rerank 延迟需控制在预算内，候选过多时要做截断"
+    ]
+  },
+  {
+    "id": "llm-rag-007",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "主流向量数据库（Milvus、FAISS、Chroma、Elasticsearch）如何选型？",
+    "answer_points": [
+      "FAISS 是检索库而非完整数据库，极致性能、适合嵌入现有 Python 服务，但缺持久化与分布式管理",
+      "Milvus 云原生、存算分离，支撑亿级向量与高并发，适合有 K8s 运维能力的生产环境",
+      "Chroma/LanceDB 轻量嵌入式，适合原型与中小规模应用，类似向量版 SQLite",
+      "ES/OpenSearch 可一套系统同时做倒排与向量检索，天然适合混合检索；索引算法上 HNSW 快但吃内存，数据超内存可考虑 DiskANN 类磁盘索引"
+    ]
+  },
+  {
+    "id": "llm-rag-008",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "RAG 检索效果不好时，你会从哪些环节排查优化？",
+    "answer_points": [
+      "先定位问题在召回还是生成：人工检查 Top-K 是否包含正确答案，含而答错是生成问题，不含是检索问题",
+      "检索侧：优化切块策略、换更强 embedding、加查询改写/HyDE、上混合检索与 Rerank",
+      "生成侧：优化 Prompt（grounding 约束、引用要求）、调整上下文排序对抗 lost in the middle",
+      "建立带标准答案的评测集，用 Hit Rate/MRR 评估召回，用忠实度评估生成，数据驱动迭代而非拍脑袋"
+    ]
+  },
+  {
+    "id": "llm-rag-009",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "什么是 HyDE 和查询改写（Query Rewriting）？它们解决什么问题？",
+    "answer_points": [
+      "用户原始问题往往口语化、含多意图或与答案在向量空间距离远，直接检索效果差",
+      "查询改写：用 LLM 补全省略、拆解多意图问题为多个子查询、结合对话历史重写指代，再分别检索",
+      "HyDE：先让 LLM 生成一段假设性答案（允许有错误），用其向量去检索，因为答案与真实文档语义更接近，召回率更高",
+      "代价是额外一次 LLM 调用带来的延迟与成本，适合复杂查询场景"
+    ]
+  },
+  {
+    "id": "llm-rag-010",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "什么是 Agentic RAG / GraphRAG？它们解决传统 RAG 的什么短板？",
+    "answer_points": [
+      "传统 RAG 单次检索难以应对多跳问题（答案散落在多篇文档且需推理串联）",
+      "Agentic RAG 把检索当作工具，模型基于中间结果反思、生成新查询、迭代多轮检索直至信息充分",
+      "GraphRAG 用知识图谱显式建模实体关系，多跳问题沿图路径推理，还能做全局主题总结",
+      "代价是延迟、成本与工程复杂度显著上升，应在简单 RAG 无法满足时再引入"
+    ]
+  },
+  {
+    "id": "llm-rag-011",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "RAG 系统的幻觉问题如何治理？",
+    "answer_points": [
+      "源头治理：保证知识库质量（清洗、去重、版本管理），召回不到时明确拒答而非硬答",
+      "过程约束：Prompt 要求仅基于给定资料回答并输出引用，低 temperature 生成",
+      "结果校验：答案与检索片段做忠实度（faithfulness）校验，不通过则重试或转人工",
+      "评估闭环：用 RAGAS 等指标持续监控忠实度与答案相关性，建立幻觉 badcase 库定向优化"
+    ]
+  },
+  {
+    "id": "llm-rag-012",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "如何评估一个 RAG 系统的效果？RAGAS 的核心指标有哪些？",
+    "answer_points": [
+      "检索侧指标：Hit Rate、MRR、Recall@K，衡量正确文档是否被召回及排名",
+      "生成侧指标：faithfulness（答案是否忠于检索内容，抗幻觉）、answer relevance（答案与问题的相关性）",
+      "RAGAS 用 LLM 自动打分上述维度，无需人工标注即可批量评估",
+      "配套人工抽检与业务指标（解决率、采纳率），注意 LLM 评估器本身的偏差需校准"
+    ]
+  },
+  {
+    "id": "llm-rag-013",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "RAG 和微调（Fine-tuning）该如何选择？二者能结合吗？",
+    "answer_points": [
+      "RAG 解决知识与事实问题：知识频繁更新、需可追溯引用、私有数据不出域时优先 RAG",
+      "微调解决行为与能力问题：需要改变输出风格/格式、掌握领域术语表达、稳定执行特定任务模式",
+      "判断口诀：模型不懂的知识用 RAG 补，模型不会做的事用微调教",
+      "实践中常结合：微调让模型学会利用检索资料作答的格式与拒答策略，RAG 提供动态知识"
+    ]
+  },
+  {
+    "id": "llm-rag-014",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "如何设计一个支撑千万级文档的高并发 RAG 系统？",
+    "answer_points": [
+      "规模估算：千万文档切块后向量可达亿级，需分布式向量库（Milvus 分片）或 DiskANN 类磁盘索引控制内存",
+      "检索链路：多路召回（向量+BM25）→RRF 融合→Rerank，每级设缓存；热点 query 结果缓存、embedding 缓存",
+      "架构解耦：检索服务（CPU 密集）与 LLM 推理服务（GPU 密集）独立扩缩容，异步化与队列削峰",
+      "数据侧：增量索引更新、文档版本与失效管理；可用性上做多副本、降级策略（检索失败时纯 LLM 兜底并提示）"
+    ]
+  },
+  {
+    "id": "llm-rag-015",
+    "language": "llm",
+    "topic": "RAG",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "PDF、表格、扫描件等复杂文档入库时有哪些坑？如何处理？",
+    "answer_points": [
+      "PDF 解析易出现乱码、页眉页脚噪声、多栏顺序错乱，需版面分析（layout analysis）后按阅读顺序重组",
+      "表格直接切块会丢失行列语义，可转 Markdown/HTML 保留结构，或生成表格摘要单独向量化",
+      "扫描件需 OCR，注意 OCR 错误会传导到检索与生成；图片信息可结合多模态模型做 caption",
+      "保留文档元数据（来源、章节、页码）用于过滤与引用溯源；入库质量决定 RAG 上限，值得投入"
+    ]
+  },
+  {
+    "id": "llm-agent-001",
+    "language": "llm",
+    "topic": "Agent",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "什么是 AI Agent？一个 Agent 系统通常包含哪些核心组件？",
+    "answer_points": [
+      "Agent 是以 LLM 为决策核心，能自主感知环境、规划步骤、调用工具并迭代执行直至完成目标的系统",
+      "核心组件：规划（Planning，任务分解与反思）、记忆（Memory，短期上下文与长期存储）、工具（Tools，函数/API 调用）、执行循环",
+      "与普通对话的区别在于闭环行动能力：观察→思考→行动→再观察",
+      "工程上需要状态管理、错误恢复、步数与成本上限等护栏"
+    ]
+  },
+  {
+    "id": "llm-agent-002",
+    "language": "llm",
+    "topic": "Agent",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "Function Calling（工具调用）的原理是什么？模型怎么学会调用工具？",
+    "answer_points": [
+      "开发者以 JSON Schema 描述工具的名称、参数与说明，随请求一起发给模型",
+      "模型在生成时输出结构化的工具调用请求（工具名+参数），由应用层执行真实函数并把结果回传给模型继续生成",
+      "能力来源：SFT 阶段用大量工具调用轨迹数据训练，使模型学会何时调用、如何填参",
+      "注意：模型本身不执行任何代码，执行与权限控制完全在应用层"
+    ]
+  },
+  {
+    "id": "llm-agent-003",
+    "language": "llm",
+    "topic": "Agent",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "什么是 MCP（Model Context Protocol）？它解决了什么问题？",
+    "answer_points": [
+      "MCP 是 Anthropic 提出的开放协议，标准化了 LLM 应用与外部工具/数据源之间的连接方式",
+      "采用客户端-服务器架构：工具/资源以 MCP Server 形式暴露，Agent 作为 Client 统一接入",
+      "解决 N×M 集成问题：过去每个应用要单独适配每个工具，现在工具实现一次即可被所有兼容客户端复用",
+      "类似 LLM 领域的 USB-C 接口；落地时要关注鉴权、权限边界与工具描述质量"
+    ]
+  },
+  {
+    "id": "llm-agent-004",
+    "language": "llm",
+    "topic": "Agent",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "Agent 的记忆系统怎么设计？短期记忆和长期记忆如何实现？",
+    "answer_points": [
+      "短期记忆即当前会话上下文：超长时做滑动窗口、摘要压缩或只保留关键状态，防止撑爆窗口",
+      "长期记忆：将用户画像、偏好、历史结论向量化存入向量库，需要时检索注入 Prompt（类似 RAG）",
+      "还可区分程序性记忆（学到的技能/流程）与情景记忆（历史事件），用结构化存储管理",
+      "关键挑战：记忆写入的筛选（什么值得记）、过期与冲突处理、隐私合规"
+    ]
+  },
+  {
+    "id": "llm-agent-005",
+    "language": "llm",
+    "topic": "Agent",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "Agent 的规划（Planning）能力有哪些实现方式？任务分解怎么做？",
+    "answer_points": [
+      "单次规划：让模型一次性把复杂任务拆成子任务清单（Plan-and-Execute），再逐步执行",
+      "迭代规划：ReAct 式每步根据观察结果决定下一步，灵活但步数多、成本高",
+      "反思机制：执行失败后让模型自我批评（Reflexion），修正计划重试，提升成功率",
+      "工程上要限制最大步数、给子任务设超时与回退策略，防止死循环"
+    ]
+  },
+  {
+    "id": "llm-agent-006",
+    "language": "llm",
+    "topic": "Agent",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "Agent 出现死循环、工具调用失败、目标漂移时如何治理？",
+    "answer_points": [
+      "硬约束：最大步数/最大 token/超时熔断，超限即终止并返回当前最佳结果",
+      "工具调用失败：错误信息结构化回传让模型自我修正，重试限次数，多次失败降级为人工或兜底回复",
+      "目标漂移：每 N 步让模型对照原始目标自检，system prompt 中强化任务边界",
+      "可观测性：记录完整轨迹（trace）便于复盘 badcase；关键操作引入人工确认节点"
+    ]
+  },
+  {
+    "id": "llm-agent-007",
+    "language": "llm",
+    "topic": "Agent",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "多 Agent 系统（Multi-Agent）相比单 Agent 有什么优势和挑战？",
+    "answer_points": [
+      "优势：角色专业化分工（规划者/执行者/评审者），类似软件团队，复杂任务通过协作提升质量",
+      "典型模式：主管-下属编排（Orchestrator）、辩论/互评、流水线串行",
+      "挑战：通信与状态同步复杂、错误会沿链路放大、token 成本成倍增长、调试困难",
+      "实践中单 Agent+好工具能解决就不要上多 Agent；多 Agent 更适合长链路、可拆分的复杂任务"
+    ]
+  },
+  {
+    "id": "llm-agent-008",
+    "language": "llm",
+    "topic": "Agent",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "LangChain / LlamaIndex 这类框架在 Agent 与 RAG 开发中提供什么价值？有什么坑？",
+    "answer_points": [
+      "封装了模型调用、Prompt 模板、检索、工具、记忆等通用组件，快速搭建原型",
+      "提供丰富的集成生态（各家模型、向量库、工具的适配器），减少胶水代码",
+      "坑：抽象层厚导致调试困难、版本变动快、默认行为不一定适合生产",
+      "建议：原型期用框架提速，核心链路（Prompt、检索策略、评估）要理解原理并能脱离框架自实现"
+    ]
+  },
+  {
+    "id": "llm-agent-009",
+    "language": "llm",
+    "topic": "Agent",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "Agent 调用工具时如何保证安全性？",
+    "answer_points": [
+      "权限最小化：工具按只读/读写分级，危险操作（删除、支付、发消息）单独管控",
+      "参数校验：对模型生成的参数做 schema 校验与业务规则校验，防止越权与注入",
+      "人机协同：高风险动作强制人工确认（human-in-the-loop），保留审批日志",
+      "运行时隔离：代码执行类工具放沙箱/容器；全链路审计日志便于追责与回放"
+    ]
+  },
+  {
+    "id": "llm-agent-010",
+    "language": "llm",
+    "topic": "Agent",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "如何让 Agent 的输出结果可观测、可评估？",
+    "answer_points": [
+      "全链路 Trace：记录每一步的思考、工具调用入参出参、耗时与 token 消耗（LangSmith/Langfuse 等）",
+      "离线评估：构造任务集，用成功率、步数、成本等指标对比不同方案",
+      "在线监控：任务完成率、人工接管率、用户满意度等业务的指标埋点",
+      "LLM-as-Judge 自动评判轨迹质量，配合人工抽检校准"
+    ]
+  },
+  {
+    "id": "llm-agent-011",
+    "language": "llm",
+    "topic": "Agent",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "设计一个能操作浏览器的 Web Agent，核心技术难点有哪些？",
+    "answer_points": [
+      "环境感知：把网页 DOM/无障碍树或截图压缩成模型可理解的表示，控制 token 规模",
+      "动作空间设计：点击、输入、滚动等操作的结构化定义与元素定位（xpath/坐标）",
+      "长链路任务的可靠性：页面状态变化、弹窗验证码等异常处理，步数多导致误差累积",
+      "安全与成本：操作不可逆性需确认机制，视觉方案 token 成本高，需缓存与提前终止策略"
+    ]
+  },
+  {
+    "id": "llm-agent-012",
+    "language": "llm",
+    "topic": "Agent",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "Agent 场景下如何控制 token 成本和延迟？",
+    "answer_points": [
+      "减少轮次：合理规划工具粒度，能一次并行调用的工具不串行；设置最大步数",
+      "压缩上下文：历史轨迹摘要化，工具返回结果裁剪只留关键字段，过期观察及时清理",
+      "分级用模：简单步骤（路由、参数填充）用小模型，关键决策用大模型",
+      "缓存：相同工具结果、重复子问题的答案做缓存；流式输出降低感知延迟"
+    ]
+  },
+  {
+    "id": "llm-mm-001",
+    "language": "llm",
+    "topic": "多模态",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "多模态大模型（VLM）的基本架构是怎样的？图像如何进入语言模型？",
+    "answer_points": [
+      "典型架构：视觉编码器（如 ViT/SigLIP）提取图像特征 → 投影层/连接器对齐到语言模型的嵌入空间 → LLM 统一处理视觉与文本 token",
+      "图像被切成 patch 编码为一串视觉 token，与文本 token 拼接后一起做注意力计算",
+      "代表结构：LLaVA 的线性投影、Qwen-VL 的 cross-attention 连接器",
+      "训练分阶段：先对齐训练（只训连接器），再指令微调全链路"
+    ]
+  },
+  {
+    "id": "llm-mm-002",
+    "language": "llm",
+    "topic": "多模态",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "CLIP 的对比学习原理是什么？它为什么能成为多模态的基础？",
+    "answer_points": [
+      "用图像编码器和文本编码器分别编码，训练目标是把配对的图文在嵌入空间拉近、不配对的推远（对比损失 InfoNCE）",
+      "在 4 亿级图文对上训练后获得强大的零样本分类与跨模态检索能力",
+      "其视觉编码器被广泛复用到 VLM 中，文本-图像对齐思路也影响 embedding 检索与文生图",
+      "局限：对细粒度关系、计数、空间位置理解弱，后续工作用更高分辨率与更细粒度监督改进"
+    ]
+  },
+  {
+    "id": "llm-mm-003",
+    "language": "llm",
+    "topic": "多模态",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "在文档智能场景中，传统 OCR 流水线与多模态大模型方案如何取舍？",
+    "answer_points": [
+      "传统方案（OCR+版面分析+规则/NLP）链路成熟、成本低、结果可控可解释，适合格式固定的票据单据",
+      "VLM 方案端到端理解版面、表格、手写体，泛化性强，适合版式多样、语义抽取复杂的场景",
+      "VLM 成本高、有幻觉风险，关键字段需校验兜底；混合方案常见：OCR 文本+图像一起喂给模型",
+      "选型看准确率要求、吞吐量、单页成本与数据隐私（本地部署需求）"
+    ]
+  },
+  {
+    "id": "llm-mm-004",
+    "language": "llm",
+    "topic": "多模态",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "文生图模型（Diffusion）的基本原理是什么？",
+    "answer_points": [
+      "扩散模型训练时学习给加噪图像去噪，推理时从纯噪声出发逐步去噪生成图像",
+      "文本条件通过文本编码器（如 CLIP/T5）注入，用 cross-attention 引导生成内容",
+      "Latent Diffusion（Stable Diffusion）在潜空间做扩散，大幅降低算力需求",
+      "可控生成扩展：ControlNet 加结构控制、LoRA 定制风格；评测常用 FID、CLIP Score 与人工偏好"
+    ]
+  },
+  {
+    "id": "llm-mm-005",
+    "language": "llm",
+    "topic": "多模态",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "视频/音频等多模态能力接入 LLM 应用时有哪些工程挑战？",
+    "answer_points": [
+      "模态 token 化成本高：视频帧序列产生海量视觉 token，需抽帧、压缩或分层编码",
+      "实时性：语音场景要求低延迟，常用流式 ASR→LLM→流式 TTS 三段流水线，端到端语音模型是新方向",
+      "同步与对齐：跨模态信息的时间对齐（音画同步、字幕对齐）影响理解质量",
+      "成本与稳定性：多模态推理资源消耗大，需要独立的容量规划与降级策略"
+    ]
+  },
+  {
+    "id": "llm-eval-001",
+    "language": "llm",
+    "topic": "评测",
+    "difficulty": "基础",
+    "frequency": "高频",
+    "question": "常见的大模型评测榜单/基准有哪些？如何看待榜单排名？",
+    "answer_points": [
+      "综合能力：MMLU、C-Eval、CMMLU；推理数学：GSM8K、MATH；代码：HumanEval、MBPP；对齐与对话：MT-Bench、AlignBench",
+      "榜单可作初筛参考，但存在刷榜与数据泄漏（训练集污染）问题，高分不代表业务表现",
+      "关注评测方式：客观题可自动判分，开放题多依赖 GPT-4 裁判或人工，存在裁判偏差",
+      "最终应以贴近自身业务的私有评测集为准"
+    ]
+  },
+  {
+    "id": "llm-eval-002",
+    "language": "llm",
+    "topic": "评测",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "如何为业务构建一套自动化的大模型评测体系？",
+    "answer_points": [
+      "建评测集：从真实业务日志采样+人工构造边界 case，标注期望答案或评分标准，覆盖典型与长尾场景",
+      "判分方式：有标准答案用精确匹配/规则；开放回答用 LLM-as-Judge 按 rubric 打分，并与人工标注对齐校准",
+      "流程：纳入 CI，模型或 Prompt 变更自动触发回归评测，生成对比报告",
+      "防泄漏：评测集不进训练数据，定期更新；指标与线上业务指标（解决率、满意度）建立关联"
+    ]
+  },
+  {
+    "id": "llm-eval-003",
+    "language": "llm",
+    "topic": "评测",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "LLM-as-Judge（用大模型评判大模型）有哪些优势和偏差？",
+    "answer_points": [
+      "优势：无需人工标注即可规模化评估开放式回答，成本低、迭代快",
+      "常见偏差：位置偏差（偏好先/后出现的答案）、冗长偏差（偏好更长回答）、自我偏好（偏爱自家模型输出）",
+      "缓解：交换答案顺序多次评判取一致结果、用详细 rubric 逐项打分、多裁判模型投票",
+      "必须定期用人工标注抽检校准一致性（如 Cohen's Kappa），关键发布决策不能完全依赖自动评分"
+    ]
+  },
+  {
+    "id": "llm-eval-004",
+    "language": "llm",
+    "topic": "评测",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "如何评估模型的幻觉率和事实准确性？",
+    "answer_points": [
+      "构造事实性评测集：基于知识库的问答对，判断回答与标准事实是否一致（如 TruthfulQA、FEVER 思路）",
+      "RAG 场景用 faithfulness 指标：答案中的每个论断能否被检索片段支撑，可用 NLI 模型或 LLM 判定",
+      "要求模型输出引用来源，自动校验引用与结论的对应关系",
+      "统计拒答正确率：对知识库没有的问题，模型应拒答而非编造，该指标与准确率同等重要"
+    ]
+  },
+  {
+    "id": "llm-eval-005",
+    "language": "llm",
+    "topic": "评测",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "线上大模型应用如何做好效果监控与持续评估？",
+    "answer_points": [
+      "离线层：版本发布前跑固定评测集回归，守住质量底线",
+      "在线层：埋点采集用户反馈（点赞点踩、采纳、转人工率、会话解决率）作为代理指标",
+      "抽样层：定期抽真实会话由人工或 LLM 裁判打分，发现分布漂移与新 badcase",
+      "闭环：badcase 归类入评测集，驱动 Prompt/检索/模型迭代；灰度发布+A/B 实验验证改动收益"
+    ]
+  },
+  {
+    "id": "llm-eval-006",
+    "language": "llm",
+    "topic": "评测",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "什么是评测数据污染（Data Contamination）？如何检测与避免？",
+    "answer_points": [
+      "模型训练数据中混入了评测基准的题目，导致评测分数虚高、失去参考价值",
+      "检测：n-gram 重叠分析、检查模型对题目能否逐字复现、用发布时间在训练截止之后的新题复测",
+      "避免：训练侧对语料与主流基准做去重清洗；评测侧使用私有/动态更新的评测集",
+      "解读榜单时优先看抗污染设计的基准（如 LiveBench、实时更新的竞技场）"
+    ]
+  },
+  {
+    "id": "llm-eng-001",
+    "language": "llm",
+    "topic": "工程化",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "训练语料的数据管道通常包含哪些处理环节？",
+    "answer_points": [
+      "采集与去重：多源语料合并，文档级近似去重（MinHash/SimHash）与段落级精确去重",
+      "清洗过滤：去乱码、去模板样板文本、语言识别、质量分类器打分过滤低质内容",
+      "安全合规：PII 个人信息脱敏、有害内容过滤、版权与授权审查",
+      "配比与打包：不同来源/领域数据按比例混合（数据配比显著影响能力分布），统一 tokenize 成训练格式"
+    ]
+  },
+  {
+    "id": "llm-eng-002",
+    "language": "llm",
+    "topic": "工程化",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "分布式训练有哪些并行方式？分别切分什么？",
+    "answer_points": [
+      "数据并行：每卡存完整模型，切分数据，all-reduce 同步梯度；最简单但显存冗余大",
+      "张量并行：把单层权重矩阵切到多卡，层内通信频繁，一般限于单机 NVLink 内",
+      "流水线并行：把不同层放到不同卡，按 micro-batch 流水执行，存在气泡空泡",
+      "ZeRO/FSDP：切分优化器状态/梯度/参数到各卡按需聚合；大模型训练通常是 3D 并行组合"
+    ]
+  },
+  {
+    "id": "llm-eng-003",
+    "language": "llm",
+    "topic": "工程化",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "如何把一个大模型封装成高可用的在线推理服务？",
+    "answer_points": [
+      "推理层：用 vLLM/TGI 起 OpenAI 兼容服务，开启连续批处理，按并发与上下文长度规划显存与副本数",
+      "接入层：网关做鉴权、限流、负载均衡与 SSE 流式转发；多副本滚动发布与健康检查",
+      "弹性与降级：排队削峰、超时熔断，过载时降级到小模型或缩短输出；GPU 资源池化调度",
+      "可观测：TTFT/TPOT/吞吐/显存/错误率全指标监控告警，日志脱敏留存"
+    ]
+  },
+  {
+    "id": "llm-eng-004",
+    "language": "llm",
+    "topic": "工程化",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "大模型应用的 token 成本如何核算与优化？",
+    "answer_points": [
+      "核算：按 输入token单价×输入量+输出token单价×输出量 估算，区分命中缓存的重复前缀（prompt caching 可大幅降价）",
+      "降输入：压缩 Prompt、精简检索上下文、历史对话摘要化、复用前缀让缓存命中",
+      "降输出：限制 max_tokens、引导模型简洁作答、简单任务路由到小模型",
+      "架构层：高频固定任务改微调小模型一次投入替代长期 API 成本；监控每会话成本设预算告警"
+    ]
+  },
+  {
+    "id": "llm-eng-005",
+    "language": "llm",
+    "topic": "工程化",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "大模型应用面临哪些安全风险？如何建立防护体系？",
+    "answer_points": [
+      "输入侧：Prompt 注入、越狱攻击、恶意文件（RAG 读入含指令的文档）",
+      "输出侧：有害内容、隐私数据泄漏、幻觉误导、代码生成引入漏洞",
+      "防护：输入过滤与意图识别、系统提示隔离、输出安全审核（分类模型+关键词+LLM 复核）、敏感信息脱敏",
+      "体系化：权限最小化、工具白名单、审计日志、红队测试与安全评估纳入发布流程"
+    ]
+  },
+  {
+    "id": "llm-design-001",
+    "language": "llm",
+    "topic": "场景设计",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "设计一个企业智能客服系统，技术方案怎么选？核心难点是什么？",
+    "answer_points": [
+      "架构：意图路由层 + RAG 知识库问答（FAQ/文档）+ 工具调用（查订单、办业务）+ 人工转接兜底",
+      "难点一准确率：知识库治理、混合检索+Rerank、答案引用溯源、置信度低时拒答转人工",
+      "难点二多轮与业务办理：对话状态管理、槽位收集、与业务系统的工具集成及权限控制",
+      "运营闭环：badcase 回流优化知识库，监控解决率/转人工率/满意度；成本上分级用模与缓存"
+    ]
+  },
+  {
+    "id": "llm-design-002",
+    "language": "llm",
+    "topic": "场景设计",
+    "difficulty": "中等",
+    "frequency": "高频",
+    "question": "设计一个企业内部知识库问答系统，从 0 到 1 的落地步骤是什么？",
+    "answer_points": [
+      "需求与数据盘点：明确问答边界，收集文档源（Wiki/PDF/表格），评估数据质量与更新频率",
+      "搭建 RAG 基线：解析清洗→切块→Embedding→向量库→混合检索+Rerank→生成，先跑通再优化",
+      "评测驱动迭代：建业务评测集，分召回/生成定位 badcase，针对性优化切块、检索与 Prompt",
+      "工程化上线：权限隔离（不同部门可见范围不同）、增量更新、引用溯源、反馈收集与监控，灰度推广"
+    ]
+  },
+  {
+    "id": "llm-design-003",
+    "language": "llm",
+    "topic": "场景设计",
+    "difficulty": "中等",
+    "frequency": "中频",
+    "question": "设计一个代码助手（Code Copilot 类）产品，需要考虑哪些技术点？",
+    "answer_points": [
+      "上下文构建：当前文件、光标上下文、相关文件检索（import/语义相似）、仓库级索引，是效果的关键",
+      "模型能力：代码补全用 FIM（fill-in-the-middle）训练的模型追求低延迟，对话/生成用指令模型",
+      "延迟与成本：补全场景要求毫秒级首 token，常配小模型+本地缓存；采纳率是核心指标",
+      "安全合规：代码不出域（私有化部署选项）、训练代码版权、生成代码的漏洞与许可证扫描"
+    ]
+  },
+  {
+    "id": "llm-design-004",
+    "language": "llm",
+    "topic": "场景设计",
+    "difficulty": "困难",
+    "frequency": "中频",
+    "question": "设计一个数据分析 Agent（自然语言查数据库），如何保证查询正确与安全？",
+    "answer_points": [
+      "语义层：提供表结构、字段注释、示例 SQL 与业务口径作为上下文，减少模型猜 schema 的错误",
+      "生成与校验：模型生成 SQL→语法解析→规则校验（禁删改、限行数、敏感表拦截）→可解释说明",
+      "执行安全：只读账号、行列级权限、超时与资源限制、结果行数截断；高危库走审批",
+      "正确性闭环：执行报错回传让模型自我修正（有限次）；典型问题沉淀为语义层示例持续提升准确率"
+    ]
+  },
+  {
+    "id": "llm-design-005",
+    "language": "llm",
+    "topic": "场景设计",
+    "difficulty": "基础",
+    "frequency": "中频",
+    "question": "设计一个会议纪要/长文档总结功能，文档超过模型上下文怎么办？",
+    "answer_points": [
+      "分治策略：Map-Reduce——分段摘要再汇总摘要，注意段落间指代与术语一致性",
+      "增量式 Refine：逐段滚动更新全局摘要，保留结构化要点（决议、待办、负责人）",
+      "检索式：先按议题/章节切块建索引，按用户关注点检索相关部分再定向总结",
+      "质量保障：输出固定模板（议题/结论/行动项）、关键数字与人名做事实校验，支持定位原文出处"
+    ]
+  }
+]
